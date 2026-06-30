@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Build an AI Agent That Audits Your Own Code | Jesse Moraga</title>
+<meta name="description" content="A plain-English guide to building a self-auditing AI agent system: adversarial review, fail-closed design, idempotency, and sandboxing — from an operator w">
+<link rel="canonical" href="https://jessemoraga.com/2026/06/14/how-to-build-an-ai-agent-that-audits-your-own-code/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/06/14/how-to-build-an-ai-agent-that-audits-your-own-code/">
+<meta property="og:title" content="How to Build an AI Agent That Audits Your Own Code">
+<meta property="og:description" content="A plain-English guide to building a self-auditing AI agent system: adversarial review, fail-closed design, idempotency, and sandboxing — from an operator w">
+<meta property="article:published_time" content="2026-06-14T21:29:08-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#2A2820;background:#F1EFE6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#39362B}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#2A2820}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#2A2820}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img,.post-content iframe{max-width:100%;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#6D44C2;padding:2px 7px;border-radius:6px}
+</style>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Jun 14, 2026 &middot; 26 min read</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,52px); line-height:1.08; letter-spacing:-0.03em; margin:18px 0 0;">How to Build an AI Agent That Audits Your Own Code</h1>
+  </div>
+  <div class="post-content">
+<p><!--META: A self-taught operator's deep guide to AI agents that audit your own code: a worked silent bug, adversarial review, fail-closed design, idempotency, single-lead orchestration, and sandboxing — with real Python.--></p>
+<div style="max-width:760px;margin:0 auto;background:#06080a;color:#c9d4e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.7;border-radius:14px;overflow:hidden;border:1px solid #1b2430">
+<p>  <!-- terminal hero --></p>
+<div style="background:#0a0e13;padding:18px 22px;border-bottom:1px solid #1b2430">
+<div style="display:flex;gap:8px;margin-bottom:16px">
+      <span style="width:12px;height:12px;border-radius:50%;background:#f87171;display:inline-block"></span><br />
+      <span style="width:12px;height:12px;border-radius:50%;background:#fbbf24;display:inline-block"></span><br />
+      <span style="width:12px;height:12px;border-radius:50%;background:#34d399;display:inline-block"></span>
+    </div>
+<div style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#56b6f2;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">// TECHNICALLY SPEAKING</div>
+<h1 style="margin:0;color:#eaf1f8;font-size:30px;line-height:1.25;font-weight:800">How to Build an AI Agent That Audits Your Own Code — Adversarial Review, Fail-Closed Design, Idempotency, and Sandboxed Agents</h1>
+<div style="font-family:ui-monospace,Menlo,monospace;color:#5b6b7c;font-size:13px;margin-top:14px">$ <span style="color:#34d399">whoami</span> &amp;&amp; <span style="color:#34d399">deploy &#8211;if-and-only-if-verified</span></div>
+<div style="font-family:ui-monospace,Menlo,monospace;color:#5b6b7c;font-size:12px;margin-top:8px">Updated 2026-06-14</div>
+</p></div>
+<div style="padding:26px 24px">
+<p style="font-size:19px;color:#eaf1f8"><strong>I don&#8217;t trust my own code. So I built an AI team that doesn&#8217;t trust it either.</strong></p>
+<p>I&#8217;m a self-taught operator. No CS degree. I run a real California field-services business on software I wrote myself, and the thing nobody warns you about is the bug that <em>passes</em>. It compiles. Your tests are green. And it still quietly does the wrong thing in production three weeks later, because somewhere a function logged &#8220;done&#8221; without checking that the thing it claimed to do actually happened.</p>
+<p>That bug is the whole enemy. Not the crash. The crash you see. The <strong>silent</strong> one is the killer, the one that reports success and lies. So before I name a single concept, let me show you one. I want you to feel it first.</p>
+<p>    <!-- worked example of the silent bug --></p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#f87171;font-size:13px;margin-bottom:6px;margin-top:24px">// EXHIBIT A — the bug that passes every test</p>
+<div style="background:#0a0e13;border:1px solid #2a1518;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8;margin:0 0 16px;color:#c9d4e0">
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">charge_customer</span>(account_id, cents):</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">try</span>:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;payments.charge(account_id, cents)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">except</span> Exception:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">pass</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;log.info(<span style="color:#34d399">&#8220;charged %s cents to %s&#8221;</span>, cents, account_id)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">return</span> <span style="color:#fbbf24">True</span></div>
+</p></div>
+<p>Read it slow. The function takes money. It wraps the charge in a <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#f87171;font-family:ui-monospace,Menlo,monospace">try</code>. If the charge throws — network blip, the card declines, the payment service is down — the <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#f87171;font-family:ui-monospace,Menlo,monospace">except</code> eats it. Then, no matter what happened, it logs &#8220;charged&#8221; and returns <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">True</code>.</p>
+<p>Here&#8217;s why it&#8217;s so dangerous. Your test mocks the payment client, calls the function, and asserts it returns <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">True</code>. It does. Green. Your test for the failure case mocks the client to raise, calls the function, asserts it &#8220;doesn&#8217;t crash.&#8221; It doesn&#8217;t crash. Green. The function passes <em>every</em> test you&#8217;d naturally write, because it was built to always succeed on paper. It cannot fail in a way your assertions can see.</p>
+<p>Now ship it. A month later the payment provider has a bad afternoon. Charges silently fail. Your logs are a wall of green &#8220;charged&#8221; lines. Your dashboard says revenue is fine. Nothing pages you, because nothing threw. You find out when a customer who got the goods never got billed, or worse, when you go to reconcile and the money isn&#8217;t there. The log lied for a month and you believed it, because you wrote it to lie.</p>
+<p>The rest of this guide is the answer to one question: <strong>how do I never write that again, and how do I build a machine that catches it when I do anyway?</strong> Five ideas. For each one I&#8217;ll name the principle, explain the real theory underneath it in plain English, hand you working Python, and call out the mistake almost everybody makes. You don&#8217;t need my system. You need the concepts. Take them.</p>
+<p>    <!-- table of contents --></p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:18px 20px;margin:24px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">$ cat contents.md</div>
+<ol style="margin:0;padding-left:20px;color:#9fb0c0">
+<li style="margin-bottom:6px"><a href="#adversarial" style="color:#56b6f2;text-decoration:none">Adversarial verification beats approval review</a></li>
+<li style="margin-bottom:6px"><a href="#failclosed" style="color:#56b6f2;text-decoration:none">Verify, then claim — and fail closed</a></li>
+<li style="margin-bottom:6px"><a href="#idempotency" style="color:#56b6f2;text-decoration:none">Idempotency: it will fire twice, design for it</a></li>
+<li style="margin-bottom:6px"><a href="#orchestration" style="color:#56b6f2;text-decoration:none">Single-lead orchestration: one brain, many hands</a></li>
+<li style="margin-bottom:6px"><a href="#sandbox" style="color:#56b6f2;text-decoration:none">Sandbox the verifier — it&#8217;s an attack surface</a></li>
+<li style="margin-bottom:6px"><a href="#together" style="color:#56b6f2;text-decoration:none">Putting it all together: the full pipeline</a></li>
+<li style="margin-bottom:0"><a href="#philosophy" style="color:#56b6f2;text-decoration:none">The philosophy: hope vs. proof</a></li>
+</ol></div>
+<p>    <!-- ============ SECTION 1 ============ --></p>
+<h2 id="adversarial" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">1. Adversarial verification beats approval review</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>Don&#8217;t ask a reviewer &#8220;does this look good?&#8221; Point a reviewer at your code and tell it to <strong>break the thing</strong>. Default to &#8220;this is wrong&#8221; and force the code to survive the attack. One credible objection blocks the ship. Not a vote. A veto.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY IT WORKS</p>
+<p>There&#8217;s a piece of real philosophy of science under this, and it changes how you think about <em>every</em> test you write. Karl Popper&#8217;s idea of <a href="https://en.wikipedia.org/wiki/Falsifiability" style="color:#56b6f2;text-decoration:none">falsifiability</a> says you can never <em>prove</em> a general claim true by piling up examples that agree with it. The precise version of the claim is this: &#8220;my code is correct&#8221; is a universal statement — it asserts something about <em>every</em> possible input. A test is a single observation. No finite stack of agreeing observations can confirm a statement about an infinite set. But <em>one</em> disagreeing observation refutes it instantly. A thousand passing tests don&#8217;t prove your code is correct. They prove it didn&#8217;t break on those thousand inputs. The only move that ever actually carries information is a serious attempt to refute the claim that fails anyway. Survive a real attack and you&#8217;ve learned something. Collect another green checkmark and you&#8217;ve learned almost nothing.</p>
+<p>Think of it like a structural engineer. He doesn&#8217;t certify a bridge by watching a thousand cars roll across and saying &#8220;looks solid.&#8221; He loads it past spec, on purpose, hunting for the failure point. The information lives in the stress test, not the smooth traffic. Your tests should drive the truck at the bridge, not coast across it.</p>
+<p>Now layer in a very human problem: <a href="https://en.wikipedia.org/wiki/Confirmation_bias" style="color:#56b6f2;text-decoration:none">confirmation bias</a>. Ask anyone, a person or a model, &#8220;this looks fine, right?&#8221; and they&#8217;re wired to find the reason it&#8217;s fine. Language models are especially eager to agree; their whole training pulls toward the helpful, agreeable answer. A reviewer whose default is approval is a reviewer who will rationalize your bug into a feature. You have to <em>flip the incentive</em>. A reviewer told to assume the code is broken, and to earn its way to &#8220;okay&#8221; by failing to break it, surfaces things a friendly read will never see. The attitude is the entire trick. Same model, different instruction, completely different result.</p>
+<p>And the veto rule matters as much as the attitude. If five reviewers &#8220;vote&#8221; and the majority says ship, you&#8217;ve built a machine that averages away your one sharp skeptic. But damage doesn&#8217;t average. A single reviewer who can <em>demonstrate</em> real harm is correct no matter how many others shrugged. Truth here isn&#8217;t a popularity contest; it&#8217;s whether the attack lands. So one credible objection, one P0, holds the whole thing.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:13px;margin-bottom:2px;margin-top:22px">// APPLY IT</p>
+<p>Two changes, today, no fleet of agents required. First, fix your review prompt. Most people write the weak one on the left. Write the one on the right.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#f87171;font-size:12.5px;margin-bottom:6px;margin-top:18px">// WEAK — invites agreement</p>
+<div style="background:#0a0e13;border:1px solid #2a1518;border-radius:10px;padding:14px 16px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.75;margin:0 0 14px;color:#9fb0c0">
+<div>&#8220;Here&#8217;s a diff. Review this and let me know if it looks good.&#8221;</div>
+</p></div>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:12.5px;margin-bottom:6px">// STRONG — demands an attack</p>
+<div style="background:#0a0e13;border:1px solid #14241a;border-radius:10px;padding:14px 16px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.75;margin:0 0 16px;color:#c9d4e0">
+<div><span style="color:#5b6b7c">You are a skeptic. Your default verdict is BROKEN.</span></div>
+<div><span style="color:#5b6b7c">Do not summarize the diff. Do not be agreeable.</span></div>
+<div>Find the single input that makes it do the wrong thing:</div>
+<div>&nbsp;&nbsp;empty / null / huge / duplicate / out-of-order /</div>
+<div>&nbsp;&nbsp;the dependency timing out mid-call.</div>
+<div>If you find one, output: P0, the input, the wrong result.</div>
+<div>You may only return PASS if you tried to break it and failed.</div>
+</p></div>
+<p>Second, write your tests as <em>attacks</em>, not confirmations. A confirmation test proves the happy path works, which you already believed. An attack test goes hunting for the input that breaks it. Same function, two completely different tests:</p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.8;margin:0 0 16px;color:#c9d4e0">
+<div><span style="color:#5b6b7c"># CONFIRMATION — proves what you already believe</span></div>
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">test_charge_works</span>():</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">assert</span> charge_customer(<span style="color:#34d399">&#8220;acct_1&#8221;</span>, <span style="color:#fbbf24">500</span>) <span style="color:#5b6b7c">is</span> <span style="color:#fbbf24">True</span></div>
+<div>&nbsp;</div>
+<div><span style="color:#5b6b7c"># ATTACKS — go hunting for the wrong result</span></div>
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">test_zero_and_negative_rejected</span>():</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">for</span> bad <span style="color:#5b6b7c">in</span> (<span style="color:#fbbf24">0</span>, <span style="color:#fbbf24">-1</span>, <span style="color:#fbbf24">10**12</span>):</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">with</span> pytest.raises(ValueError):</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charge_customer(<span style="color:#34d399">&#8220;acct_1&#8221;</span>, bad)</div>
+<div>&nbsp;</div>
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">test_provider_down_does_not_report_success</span>():</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;payments.charge = mock_raising(TimeoutError)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">with</span> pytest.raises(TimeoutError):</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charge_customer(<span style="color:#34d399">&#8220;acct_1&#8221;</span>, <span style="color:#fbbf24">500</span>)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">assert</span> <span style="color:#5b6b7c">not</span> log.contains(<span style="color:#34d399">&#8220;charged&#8221;</span>)&nbsp;&nbsp;<span style="color:#5b6b7c"># the lie</span></div>
+<div>&nbsp;</div>
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">test_same_request_twice_charges_once</span>():</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;charge_customer(<span style="color:#34d399">&#8220;acct_1&#8221;</span>, <span style="color:#fbbf24">500</span>, key=<span style="color:#34d399">&#8220;r-9&#8221;</span>)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;charge_customer(<span style="color:#34d399">&#8220;acct_1&#8221;</span>, <span style="color:#fbbf24">500</span>, key=<span style="color:#34d399">&#8220;r-9&#8221;</span>)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">assert</span> payments.charge.call_count == <span style="color:#fbbf24">1</span></div>
+</p></div>
+<p>That last test fails against Exhibit A, which is the point. Then give different reviewers different jobs so they don&#8217;t all chase the same obvious thing — one hunts swallowed errors, one hunts the security and money paths, one just checks the happy path still works. Then honor the veto. If one of them shows real damage, you don&#8217;t ship until you&#8217;ve <em>answered</em> it. Not out-voted it. Answered it.</p>
+<div style="border-left:4px solid #fbbf24;background:#0d0b07;padding:12px 18px;margin:22px 0;border-radius:0 8px 8px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:12px;letter-spacing:1px;margin-bottom:4px">WHAT PEOPLE GET WRONG</div>
+<div style="color:#eaf1f8">They re-run the reviewer until it says yes. You ask, it flags something real, you don&#8217;t like the answer, you re-roll for a friendlier verdict and ship that one. That&#8217;s not review, that&#8217;s laundering. The first credible &#8220;BROKEN&#8221; is the signal — the later &#8220;looks fine&#8221; is just you fishing for permission you already decided to take.</div>
+</p></div>
+<p>Here&#8217;s why I&#8217;ll never run without it. On a recent build, the adversarial pass caught three real failures that had already passed compile <em>and</em> the author&#8217;s own green tests:</p>
+<p>    <!-- live log feed --></p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.9;margin:22px 0">
+<div><span style="color:#56b6f2">INFO</span> fix shipped · tests green · compile clean</div>
+<div><span style="color:#f87171">P0&nbsp;&nbsp;</span> reviewer-2: &#8220;this &#8216;cancel&#8217; path emails the user it&#8217;s done, but the underlying record is still live. it lied.&#8221;</div>
+<div><span style="color:#f87171">P0&nbsp;&nbsp;</span> reviewer-1: &#8220;void targets the base id; the real record has a suffix. it&#8217;ll miss and orphan it.&#8221;</div>
+<div><span style="color:#fbbf24">HOLD</span> ship blocked · 2 vetoes outstanding</div>
+<div><span style="color:#34d399">OK&nbsp;&nbsp;</span> root-caused, re-fixed, re-verified</div>
+<div><span style="color:#34d399">DONE</span> 1,092 tests green · 0 vetoes · pushed</div>
+</p></div>
+<p>Every one of those was a &#8220;success&#8221; the system was about to report to a human. Green tests didn&#8217;t catch them. A reviewer told to <em>distrust</em> did.</p>
+<div style="border-left:4px solid #f87171;background:#0e0a0a;padding:12px 18px;margin:22px 0;border-radius:0 8px 8px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#f87171;font-size:12px;letter-spacing:1px;margin-bottom:4px">KEY TAKEAWAY</div>
+<div style="color:#eaf1f8">Confirmation makes you feel safe. Refutation makes you safe. Build the reviewer that tries to prove you wrong, write your tests as attacks, and let one honest objection stop the ship.</div>
+</p></div>
+<p>    <!-- ============ SECTION 2 ============ --></p>
+<h2 id="failclosed" style="color:#34d399;font-size:23px;border-left:3px solid #34d399;padding-left:12px;margin-top:40px">2. Verify, then claim — and fail closed</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>Never log &#8220;done&#8221; until you&#8217;ve checked that the thing you claim you did actually committed. And on anything that touches money or matters: when you&#8217;re not sure it worked, <strong>refuse. Don&#8217;t proceed.</strong> A log line is a claim. Evidence is re-reading the state and confirming it changed.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY IT WORKS</p>
+<p>This one has a beautiful, almost cruel piece of theory behind it: the <a href="https://en.wikipedia.org/wiki/Two_Generals%27_Problem" style="color:#56b6f2;text-decoration:none">Two Generals Problem</a>. Two generals on opposite hills have to attack at the same time, and the only way to coordinate is to send messengers through a valley where messengers get captured. General A sends &#8220;attack at dawn.&#8221; Did it arrive? He needs a confirmation back. General B sends one. Did <em>that</em> arrive? Now B needs a confirmation of the confirmation. It never bottoms out. The proven result — and it really is proven, not a vibe — is that over an unreliable channel, no finite number of messages can make both sides <em>certain</em> they agree.</p>
+<p>Your code lives in that valley constantly. You call an API to cancel something. The call returns. But think about what the return value actually witnesses. It witnesses that a response came back. It does <em>not</em> witness that the action committed, because the failure mode you fear most is exactly the one where the action <em>succeeds</em> on the far side and the acknowledgment gets lost on the way home. You logged &#8220;cancelled.&#8221; That log proves you <em>sent the order and got some response</em>. It does not prove the world changed. The log is the messenger you can&#8217;t confirm. So you treat it as a claim and you go look: re-read the record, confirm the new state with your own eyes, before you tell a human it&#8217;s done.</p>
+<p>The second half is design philosophy straight from safety engineering: <a href="https://en.wikipedia.org/wiki/Fail-safe" style="color:#56b6f2;text-decoration:none">fail-safe vs. fail-deadly</a>. A dead-man&#8217;s brake on a train fails <em>closed</em> — lose power, lose the operator, the brake engages and the train stops. The safe state is the default state. A traffic light that loses its controller and goes dark instead of flashing red has failed <em>open</em>, into the dangerous direction, and now there&#8217;s a four-way intersection with no rules. Look at how most software fails: it hits a snag, swallows the exception, logs a cheerful success, and rolls on. That&#8217;s the dark intersection. The error vanishes and the machine keeps moving as if nothing happened. Every silent killer I&#8217;ve ever chased lived in a fail-open path. Flip them. When unsure, stop.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:13px;margin-bottom:2px;margin-top:22px">// APPLY IT</p>
+<p>Take Exhibit A from the top of this guide and rewrite it the right way. No swallowed error. A read-back that confirms the charge actually landed. And a money branch that fails closed — uncertain means refuse and alert a human, never &#8220;probably fine, keep going.&#8221;</p>
+<div style="background:#0a0e13;border:1px solid #14241a;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.8;margin:0 0 16px;color:#c9d4e0">
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">charge_customer</span>(account_id, cents):</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">if</span> cents &lt;= <span style="color:#fbbf24">0</span> <span style="color:#5b6b7c">or</span> cents &gt; MAX_CHARGE:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">raise</span> ValueError(<span style="color:#34d399">f&#8221;refusing implausible charge: {cents}&#8221;</span>)</div>
+<div>&nbsp;</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">try</span>:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receipt = payments.charge(account_id, cents)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">except</span> (TimeoutError, payments.ApiError) <span style="color:#5b6b7c">as</span> e:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c"># uncertain → fail CLOSED. do not claim success.</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log.error(<span style="color:#34d399">&#8220;charge FAILED acct=%s cents=%s err=%s&#8221;</span>, account_id, cents, e)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert_human(<span style="color:#34d399">&#8220;charge uncertain&#8221;</span>, account_id, cents, e)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">raise</span></div>
+<div>&nbsp;</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c"># READ-BACK: don&#8217;t trust the receipt, confirm the world changed.</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;state = payments.fetch(receipt.id)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">if</span> state.status != <span style="color:#34d399">&#8220;captured&#8221;</span> <span style="color:#5b6b7c">or</span> state.amount != cents:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert_human(<span style="color:#34d399">&#8220;charge unconfirmed&#8221;</span>, receipt.id, state)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">raise</span> RuntimeError(<span style="color:#34d399">f&#8221;charge not confirmed: {state.status}&#8221;</span>)</div>
+<div>&nbsp;</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;log.info(<span style="color:#34d399">&#8220;charged %s cents to %s (confirmed)&#8221;</span>, cents, account_id)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">return</span> receipt.id</div>
+</p></div>
+<p>The shape to internalize is three lines wide: <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#34d399;font-family:ui-monospace,Menlo,monospace">do_thing()</code>, then <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#34d399;font-family:ui-monospace,Menlo,monospace">assert fetch_state() == expected</code>, then and only then <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#34d399;font-family:ui-monospace,Menlo,monospace">log("done")</code>. The middle line is the one nobody writes and the one that catches the lie. Then hunt your codebase for three patterns and treat all three as bugs on sight: <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#f87171;font-family:ui-monospace,Menlo,monospace">except: pass</code>, a bare <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#f87171;font-family:ui-monospace,Menlo,monospace">except Exception</code> that logs success anyway, and any &#8220;done&#8221; written without a read-back.</p>
+<div style="border-left:4px solid #fbbf24;background:#0d0b07;padding:12px 18px;margin:22px 0;border-radius:0 8px 8px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:12px;letter-spacing:1px;margin-bottom:4px">WHAT PEOPLE GET WRONG</div>
+<div style="color:#eaf1f8">They log the intent and call it confirmation. &#8220;I called cancel(), so I&#8217;ll log &#8216;cancelled.'&#8221; But you logged that you <em>tried</em>, not that it <em>happened</em>. The fix is one cheap read-back. The bug is treating &#8220;I sent the order&#8221; and &#8220;the world changed&#8221; as the same fact. They are two different facts separated by an unreliable valley.</div>
+</p></div>
+<div style="border-left:4px solid #34d399;background:#070d0a;padding:12px 18px;margin:22px 0;border-radius:0 8px 8px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:12px;letter-spacing:1px;margin-bottom:4px">KEY TAKEAWAY</div>
+<div style="color:#eaf1f8">A log line is a claim, not proof. Do the thing, read the state back, confirm it changed — then log. And when you&#8217;re unsure, fail closed: refuse, alert, stop.</div>
+</p></div>
+<p>    <!-- ============ SECTION 3 — NEW: IDEMPOTENCY ============ --></p>
+<h2 id="idempotency" style="color:#56b6f2;font-size:23px;border-left:3px solid #56b6f2;padding-left:12px;margin-top:40px">3. Idempotency: it will fire twice, design for it</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>Anything triggered by a webhook, a timer, a retry, or a queue <strong>will eventually fire twice</strong>. Not might. Will. So you design every such action to be safe to repeat: a stable dedup key plus a time window, decided up front, not bolted on after the double-charge.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY IT WORKS</p>
+<p>This pairs with fail-closed, and it comes from the same valley. Remember the Two Generals: you can&#8217;t be sure your message arrived. So what does a sane system do when it&#8217;s unsure? It <em>retries</em>. That&#8217;s the correct behavior. The retry is the cure for the lost message. But the retry creates a new problem: maybe the first attempt actually landed and only the acknowledgment got lost. Now you&#8217;ve done the thing twice.</p>
+<p>This is why <strong>&#8220;exactly-once&#8221; is a myth</strong> at the level of raw message delivery. You don&#8217;t get to choose between &#8220;once&#8221; and &#8220;twice.&#8221; Your real menu is <em>at-most-once</em> (never retry, sometimes silently drop the action) or <em>at-least-once</em> (always retry, sometimes do it twice). At-most-once loses things, which is unacceptable for a charge or a serve or an email. So every serious system picks at-least-once. And the way you turn at-least-once back into the <em>effect</em> of exactly-once is <a href="https://en.wikipedia.org/wiki/Idempotence" style="color:#56b6f2;text-decoration:none">idempotency</a>: you make the operation safe to apply repeatedly, so the second, third, and tenth delivery all collapse to the same result as the first.</p>
+<p>Idempotence is a precise math word, not a buzzword. An operation is idempotent if applying it twice equals applying it once. Multiplying by one is idempotent: do it a hundred times, same number. Setting a field to a value is idempotent. <em>Adding</em> to a field is not — run it twice and you&#8217;ve doubled it. Your job is to take a naturally non-idempotent action (&#8220;charge $5&#8221;, &#8220;send the email&#8221;) and wrap it so the system as a whole behaves idempotently. Stripe built its entire API around this; you pass an <a href="https://docs.stripe.com/api/idempotent_requests" style="color:#56b6f2;text-decoration:none">idempotency key</a> with a charge, and if the same key shows up again they return the original result instead of charging twice. You can build the same guard yourself in about ten lines.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:13px;margin-bottom:2px;margin-top:22px">// APPLY IT</p>
+<p>Pick a key that&#8217;s stable across retries of the <em>same</em> logical event — the webhook&#8217;s event id, or a hash of the meaningful fields — never something fresh like the current timestamp or a new UUID per call. Record it before you act. If you&#8217;ve seen it inside the window, skip. A small TTL store (Redis, a SQLite table, a Postgres row with an expiry) is plenty.</p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.8;margin:0 0 16px;color:#c9d4e0">
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">seen_before</span>(namespace, key, ttl_seconds=<span style="color:#fbbf24">86400</span>):</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">&#8220;&#8221;&#8221;True if we&#8217;ve already handled this key inside the window.</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">Atomic insert: the FIRST caller wins, everyone after is a dup.&#8221;&#8221;&#8221;</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;dedup_key = <span style="color:#34d399">f&#8221;{namespace}:{key}&#8221;</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c"># SET &#8230; NX = set only if absent; returns None if it already existed</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;won_the_race = redis.set(dedup_key, <span style="color:#34d399">&#8220;1&#8221;</span>, nx=<span style="color:#fbbf24">True</span>, ex=ttl_seconds)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">return</span> won_the_race <span style="color:#5b6b7c">is</span> <span style="color:#fbbf24">None</span></div>
+<div>&nbsp;</div>
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">handle_payment_webhook</span>(event):</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c"># the provider&#8217;s event id is stable across their retries</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">if</span> seen_before(<span style="color:#34d399">&#8220;payment_webhook&#8221;</span>, event.id):</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log.info(<span style="color:#34d399">&#8220;dup webhook %s, skipping&#8221;</span>, event.id)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">return</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;fulfill_order(event.order_id)&nbsp;&nbsp;<span style="color:#5b6b7c"># runs exactly once per event</span></div>
+</p></div>
+<p>One sharp edge worth naming: the atomic insert matters. If you &#8220;check, then set&#8221; in two steps, two copies of the webhook arriving in the same millisecond both check (neither seen), both set, both proceed — you&#8217;ve reintroduced the exact bug you were trying to kill. Use a single atomic operation (<code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#56b6f2;font-family:ui-monospace,Menlo,monospace">SET NX</code>, or a unique-constraint insert that throws on the dup) so exactly one caller wins the race.</p>
+<div style="border-left:4px solid #fbbf24;background:#0d0b07;padding:12px 18px;margin:22px 0;border-radius:0 8px 8px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:12px;letter-spacing:1px;margin-bottom:4px">WHAT PEOPLE GET WRONG</div>
+<div style="color:#eaf1f8">They build the dedup key from something that changes on every call — a fresh UUID, <code style="background:#0a0e13;padding:1px 5px;border-radius:4px;color:#f87171;font-family:ui-monospace,Menlo,monospace">datetime.now()</code>, an auto-increment id minted inside the handler. Then every retry gets a brand-new key, every key looks unseen, and the guard never fires. A dedup key that isn&#8217;t stable across retries is decorative. The key has to be the same fingerprint the second time the same event shows up.</div>
+</p></div>
+<div style="border-left:4px solid #56b6f2;background:#070b0e;padding:12px 18px;margin:22px 0;border-radius:0 8px 8px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:12px;letter-spacing:1px;margin-bottom:4px">KEY TAKEAWAY</div>
+<div style="color:#eaf1f8">Exactly-once delivery is a myth. You get at-least-once plus a dedup key, and that combination behaves like once. Choose a stable key and a TTL before you write the action, not after the double-charge.</div>
+</p></div>
+<p>    <!-- ============ SECTION 4 — ORCHESTRATION ============ --></p>
+<h2 id="orchestration" style="color:#fbbf24;font-size:23px;border-left:3px solid #fbbf24;padding-left:12px;margin-top:40px">4. Single-lead orchestration: one brain, many hands</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>One lead model holds the plan and the context. It never does the grunt work itself. It fans the labor out to specialized workers running in parallel, and it scopes each worker to its own file so the fleet can&#8217;t collide.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY IT WORKS</p>
+<p>This is the supervisor pattern, and it rests on one of the oldest ideas in software: <a href="https://en.wikipedia.org/wiki/Separation_of_concerns" style="color:#56b6f2;text-decoration:none">separation of concerns</a>. Holding the whole plan and doing the detailed work are two different jobs, and they fight each other for the same scarce resource — attention. A model deep in the weeds of one file loses the thread of the overall goal. A model holding the goal can&#8217;t also be elbow-deep in four files at once without its focus smearing across all of them. There&#8217;s a real limit to how much context any one worker can hold sharply, human or model, and you spend it badly when one entity tries to plan and execute simultaneously. So you split the roles. One context-holder decides <em>what</em> and <em>in what order</em>. A set of workers each do one <em>how</em> and report back. Think of a contractor and his trades: the contractor doesn&#8217;t pick up the wrench, and the plumber doesn&#8217;t redraw the blueprint. Each holds exactly the context their job needs.</p>
+<p>The &#8220;one file per worker&#8221; rule is the quiet genius, and it comes straight from how you avoid a race condition. If two workers can edit the same lines, you&#8217;ve got a merge conflict at best and silent clobbering at worst — one overwrites the other&#8217;s work and nobody notices. Give each worker exclusive ownership of its own file and there is <em>nothing to collide on</em>. No shared mutable state, no merge, no race. You didn&#8217;t manage the conflict, you designed it out of existence. And the workers stay stateless: they read what they need, do the work, write it back, and forget. The durable state lives in the files and in version control, never in a worker&#8217;s head — because a worker&#8217;s head evaporates the moment it finishes.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:13px;margin-bottom:2px;margin-top:22px">// APPLY IT</p>
+<p>When a task is big enough to parallelize, split it by <em>resource</em>, not by vague topic. Assign each unit of work an owner that touches files nobody else touches. Keep the lead out of the implementation. Here&#8217;s the shape, stripped to a sketch:</p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.8;margin:0 0 16px;color:#c9d4e0">
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">lead_orchestrate</span>(task):</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c"># the LEAD plans. it does not edit code.</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;plan = lead.decompose(task)&nbsp;&nbsp;<span style="color:#5b6b7c"># [(file, instruction), &#8230;]</span></div>
+<div>&nbsp;</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c"># each worker OWNS one file. no two share a path → no race.</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;owned = {step.file <span style="color:#5b6b7c">for</span> step <span style="color:#5b6b7c">in</span> plan}</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">assert</span> len(owned) == len(plan), <span style="color:#34d399">&#8220;two workers, one file = race&#8221;</span></div>
+<div>&nbsp;</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">with</span> ThreadPoolExecutor() <span style="color:#5b6b7c">as</span> pool:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;results = pool.map(run_worker, plan)&nbsp;&nbsp;<span style="color:#5b6b7c"># parallel</span></div>
+<div>&nbsp;</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">return</span> lead.reconcile(results)&nbsp;&nbsp;<span style="color:#5b6b7c"># lead reassembles</span></div>
+<div>&nbsp;</div>
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">run_worker</span>(step):</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c"># stateless: read file → edit → write → forget</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;src = read(step.file)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;patched = worker.apply(step.instruction, src)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;write(step.file, patched)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">return</span> (step.file, <span style="color:#34d399">&#8220;done&#8221;</span>)</div>
+</p></div>
+<p>That <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">assert</code> line is doing real work — it&#8217;s the rule &#8220;no two workers share a file&#8221; turned into code that refuses to run if you broke it. Anything that has to survive goes to disk or to git, because a worker&#8217;s memory is gone the second it returns.</p>
+<p>    <!-- flow diagram --></p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#9fb0c0;margin:22px 0">
+<div style="color:#56b6f2">LEAD ──┐</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─▶ <span style="color:#fbbf24">worker · module_a.py</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─▶ <span style="color:#fbbf24">worker · module_b.py</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─▶ <span style="color:#fbbf24">worker · module_c.py</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─▶ <span style="color:#fbbf24">worker · module_d.py</span></div>
+<div style="margin-top:8px;color:#5b6b7c">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;one file each → no shared lines → <span style="color:#34d399">nothing to collide on</span></div>
+</p></div>
+<div style="border-left:4px solid #fbbf24;background:#0d0b07;padding:12px 18px;margin:22px 0;border-radius:0 8px 8px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:12px;letter-spacing:1px;margin-bottom:4px">WHAT PEOPLE GET WRONG</div>
+<div style="color:#eaf1f8">They let parallel workers share state — a common scratch file, one branch everybody commits to, a global dict they all mutate. Then they spend the next day debugging a heisenbug that only shows up when two workers happen to overlap. Parallelism without partitioned ownership isn&#8217;t speed, it&#8217;s a race condition you scheduled on purpose. Partition first, parallelize second.</div>
+</p></div>
+<div style="border-left:4px solid #34d399;background:#070d0a;padding:12px 18px;margin:22px 0;border-radius:0 8px 8px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:12px;letter-spacing:1px;margin-bottom:4px">KEY TAKEAWAY</div>
+<div style="color:#eaf1f8">Separate the planner from the doers, and partition the doers so no two can touch the same lines. You don&#8217;t manage races you never created.</div>
+</p></div>
+<p>    <!-- ============ SECTION 5 — SANDBOX ============ --></p>
+<h2 id="sandbox" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:40px">5. Sandbox the verifier — it&#8217;s an attack surface</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>Your trust boundary sits wherever you execute someone else&#8217;s code. When you let an agent run unsupervised, the gate that checks its work runs the agent&#8217;s <em>own tests</em>. That test is now code you&#8217;re running. So the test is attack surface, and you lock it down at every layer.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY IT WORKS</p>
+<p>Here&#8217;s the subtle bug, the kind you only see once you let agents run on their own overnight. The naive way to gate an agent&#8217;s fix is: run its tests. But sit with what that means. The agent <em>writes</em> a test, and your gate <em>executes</em> it. Picture the dangerous gate in one line:</p>
+<div style="background:#0a0e13;border:1px solid #2a1518;border-radius:10px;padding:14px 16px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.75;margin:0 0 16px;color:#c9d4e0">
+<div><span style="color:#5b6b7c"># the gate that runs whatever the agent wrote — with YOUR privileges</span></div>
+<div>subprocess.run([<span style="color:#34d399">&#8220;pytest&#8221;</span>, agent_written_test_file])</div>
+</p></div>
+<p>If the agent writes a test that imports a live module and charges a card, your &#8220;safety check&#8221; just charged the card. Restricting which tools the agent can call doesn&#8217;t save you, because the gate runs the test <em>outside</em> the agent&#8217;s sandbox, with your credentials, on your machine.</p>
+<p>This is a textbook <a href="https://en.wikipedia.org/wiki/Confused_deputy_problem" style="color:#56b6f2;text-decoration:none">confused deputy problem</a>. Your gate is the &#8220;deputy&#8221; — a trusted program with real authority. The agent has no authority of its own, but it can hand the deputy an instruction (a test file) that the deputy then carries out <em>using the deputy&#8217;s power</em>. The agent tricks your trusted process into doing the damage on its behalf. It&#8217;s the same shape as a classic privilege bug where a low-privilege caller gets a high-privilege service to misuse its access. Once you see your test runner as a deputy that will faithfully execute whatever the agent wrote, you stop trusting the test by default.</p>
+<p>The defense is <a href="https://en.wikipedia.org/wiki/Defense_in_depth_(computing)" style="color:#56b6f2;text-decoration:none">defense in depth</a>: not one wall, but layers, so any single one failing doesn&#8217;t end the world. No individual control here is perfect — a static scan can be fooled, a stub env might miss a path. Stacked, they make the worst case a commit I throw away.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:13px;margin-bottom:2px;margin-top:22px">// APPLY IT</p>
+<p>Replace the one dangerous line with the layered version. Scan the test <em>before</em> you run it, run it with no real credentials, and only on a throwaway branch:</p>
+<div style="background:#0a0e13;border:1px solid #14241a;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.8;margin:0 0 16px;color:#c9d4e0">
+<div>BANNED = (<span style="color:#34d399">&#8220;import payments&#8221;</span>, <span style="color:#34d399">&#8220;requests.&#8221;</span>, <span style="color:#34d399">&#8220;os.environ&#8221;</span>, <span style="color:#34d399">&#8220;socket&#8221;</span>)</div>
+<div>&nbsp;</div>
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">gate</span>(test_file):</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;src = read(test_file)</div>
+<div>&nbsp;</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c"># LAYER 1 — static scan BEFORE running a single line</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">for</span> bad <span style="color:#5b6b7c">in</span> BANNED:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">if</span> bad <span style="color:#5b6b7c">in</span> src:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">raise</span> Rejected(<span style="color:#34d399">f&#8221;test reaches live surface: {bad}&#8221;</span>)</div>
+<div>&nbsp;</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c"># LAYER 2 — no real creds exist; stub env, allowlisted PATH</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;env = {<span style="color:#34d399">&#8220;PATH&#8221;</span>: SAFE_PATH, <span style="color:#34d399">&#8220;PAY_KEY&#8221;</span>: <span style="color:#34d399">&#8220;sk_test_fake&#8221;</span>}</div>
+<div>&nbsp;</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c"># LAYER 3 — throwaway worktree, never main, never live data</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">return</span> subprocess.run(</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span style="color:#34d399">&#8220;pytest&#8221;</span>, test_file], cwd=throwaway_worktree(),</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;env=env, timeout=<span style="color:#fbbf24">60</span>)</div>
+</p></div>
+<p>In plain terms, the layers are: each agent runs in its own throwaway git worktree with a credential-free stub environment, so there are no live secrets for it to reach. A restricted tool allowlist — edit files and run the test runner, that&#8217;s it, no arbitrary shell. A static scan that rejects any agent-written test that imports a live module, touches the network, or reads secrets, <em>before</em> the gate runs it. And work that lands on a dated branch only, never main, never live data, so the worst case is a bad commit thrown away with one command.</p>
+<p>That&#8217;s the difference between &#8220;I gave an AI write access&#8221; and a system you can actually sleep through. The agent is powerful inside a box that can&#8217;t hurt anything outside it. The general rule outlasts my setup: <strong>find the exact line where your process runs input you didn&#8217;t write, and treat everything that crosses it as hostile until proven otherwise.</strong></p>
+<div style="border-left:4px solid #fbbf24;background:#0d0b07;padding:12px 18px;margin:22px 0;border-radius:0 8px 8px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:12px;letter-spacing:1px;margin-bottom:4px">WHAT PEOPLE GET WRONG</div>
+<div style="color:#eaf1f8">They trust the test because the agent &#8220;is on their side.&#8221; The agent isn&#8217;t malicious — but it doesn&#8217;t have to be. It just has to write a test that imports the wrong module while trying to be thorough, and your gate runs it with full privileges. Intent doesn&#8217;t matter at a trust boundary. Capability does. Sandbox the code, not the motive.</div>
+</p></div>
+<div style="border-left:4px solid #f87171;background:#0e0a0a;padding:12px 18px;margin:22px 0;border-radius:0 8px 8px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#f87171;font-size:12px;letter-spacing:1px;margin-bottom:4px">KEY TAKEAWAY</div>
+<div style="color:#eaf1f8">The code that checks the work is part of the attack surface. If a test you didn&#8217;t write runs with your privileges, sandbox it like the hostile input it is — scan it, starve it of credentials, and run it somewhere disposable.</div>
+</p></div>
+<p>    <!-- ============ SECTION 6 — PUTTING IT TOGETHER ============ --></p>
+<h2 id="together" style="color:#34d399;font-size:23px;border-left:3px solid #34d399;padding-left:12px;margin-top:40px">Putting it all together: the full pipeline</h2>
+<p>Five ideas in isolation are five tips. Wired into one flow they become a machine that turns &#8220;I think this works&#8221; into &#8220;this survived everything I could throw at it.&#8221; Here&#8217;s the whole pipeline as one pass, with each idea doing its job:</p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:18px 20px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.9;margin:22px 0;color:#c9d4e0">
+<div><span style="color:#56b6f2">1 PLAN</span>&nbsp;&nbsp;&nbsp;&nbsp;lead reads the task, decomposes it, assigns one file per worker</div>
+<div><span style="color:#fbbf24">2 FAN-OUT</span>&nbsp;workers run in parallel — no shared lines, nothing to collide on</div>
+<div><span style="color:#fbbf24">3 BUILD</span>&nbsp;&nbsp;&nbsp;each writes the fix <span style="color:#5b6b7c">+</span> an ATTACK test (empty/huge/dup/dep-down)</div>
+<div><span style="color:#f87171">4 GATE</span>&nbsp;&nbsp;&nbsp;&nbsp;tests run SANDBOXED — static-scanned, no creds, throwaway worktree</div>
+<div><span style="color:#f87171">5 REVIEW</span>&nbsp;&nbsp;adversarial reviewers, default BROKEN, hunt the input that breaks it</div>
+<div><span style="color:#f87171">6 VETO</span>&nbsp;&nbsp;&nbsp;&nbsp;ONE credible P0 blocks the ship — not a vote, a veto</div>
+<div><span style="color:#34d399">7 FIX</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;root-cause it in-turn, re-run from step 3, don&#8217;t out-vote the objection</div>
+<div><span style="color:#34d399">8 VERIFY</span>&nbsp;&nbsp;read the state back — confirm the world changed, fail closed if not</div>
+<div><span style="color:#34d399">9 SHIP</span>&nbsp;&nbsp;&nbsp;&nbsp;dedup key on the trigger so a retry can&#8217;t run the whole thing twice</div>
+</p></div>
+<p>Walk it once in english. A task comes in. The <strong>lead</strong> plans and hands each worker a file nobody else owns, so the parallel run has no races to manage (idea 4). Each worker writes its fix and an <strong>attack</strong> test, not a confirmation test — it&#8217;s trying to break its own work (idea 1). Those tests hit a <strong>sandboxed gate</strong>: scanned before they run, starved of credentials, executed on a throwaway branch, so a test that reaches for something live dies harmless (idea 5). What survives the gate goes to <strong>adversarial reviewers</strong> whose default is &#8220;this is broken&#8221; (idea 1 again), and a single credible <strong>P0 vetoes</strong> the ship. A veto sends it back to be root-caused <em>now</em>, not noted for later. Only when nothing can break it does it <strong>verify</strong> — read the state back, confirm it committed, fail closed if it didn&#8217;t (idea 2). And the trigger that kicked the whole thing off carries a <strong>dedup key</strong>, so if the webhook fires twice the pipeline doesn&#8217;t run twice (idea 3).</p>
+<p>That&#8217;s the composition. Adversarial review finds the bug. Fail-closed refuses to lie about it. Idempotency keeps a retry from doubling it. Orchestration lets the work go fast without colliding. Sandboxing means the whole thing can run while I sleep without burning the house down. Pull any one out and the machine springs a leak exactly where that idea was holding.</p>
+<div style="border-left:4px solid #34d399;background:#070d0a;padding:12px 18px;margin:22px 0;border-radius:0 8px 8px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:12px;letter-spacing:1px;margin-bottom:4px">KEY TAKEAWAY</div>
+<div style="color:#eaf1f8">The five ideas aren&#8217;t a menu, they&#8217;re a chain: plan, fan out, attack-test, sandbox-gate, adversarial-review with a veto, fix in-turn, verify by read-back, ship behind a dedup key. Each one covers the gap the next one can&#8217;t.</div>
+</p></div>
+<p>    <!-- ============ PHILOSOPHY ============ --></p>
+<h2 id="philosophy" style="color:#eaf1f8;font-size:23px;border-left:3px solid #ff7a3c;padding-left:12px;margin-top:40px">The philosophy: hope vs. proof</h2>
+<p>Strip away the agents and the orchestration and there&#8217;s one sentence underneath all of it:</p>
+<div style="border-left:4px solid #ff7a3c;padding:6px 0 6px 18px;margin:24px 0;color:#eaf1f8;font-size:19px;font-style:italic">Fail-open is hope. Fail-closed is proof. The whole system is just a machine for turning the first one into the second.</div>
+<p>Most software is built on hope. It hopes the API call landed. It hopes the input is shaped the way the happy path assumes. It hopes the retry didn&#8217;t double the charge. It hopes the test that passed actually tested the thing. Hope is a fine feeling and a terrible engineering control. Every place you hope, a silent bug can move in, because hope produces no evidence. It just keeps going and assumes the best — which is exactly what Exhibit A did, all the way to the bank.</p>
+<p>The flip side is a posture I&#8217;ll defend to anyone: &#8220;I don&#8217;t trust my own code&#8221; is not a weakness. It&#8217;s a discipline. Philosophers have a name close to it: <strong>epistemic humility</strong>, knowing the limits of what you actually know. You don&#8217;t <em>know</em> your code is right. You can&#8217;t. So you stop claiming it and you build the thing that checks. The reviewer that tries to refute you, the read-back that confirms the world changed, the dedup key that assumes the message will arrive twice, the sandbox that assumes the worst: none of that is paranoia. It&#8217;s you taking your own uncertainty seriously enough to engineer around it.</p>
+<p>Finding problems was never the scary part. <strong>Shipping blind is.</strong> The standard isn&#8217;t &#8220;no bugs ever.&#8221; That&#8217;s a fantasy, and anyone selling it is lying. The standard is &#8220;nothing reaches a human unverified.&#8221; Building the machine that enforces that automatically, while I sleep, that&#8217;s the actual job.</p>
+<p>I didn&#8217;t learn this in a classroom. I learned it because a quiet bug in software I run my operation on can become a very loud problem at the worst possible moment. When that&#8217;s the stakes, you stop hoping your code is right and you build the thing that proves it. You can build it too. Go find one <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#f87171;font-family:ui-monospace,Menlo,monospace">except: pass</code> in your codebase right now and close it. That&#8217;s the first brick.</p>
+<p>    <!-- whoami footer --></p>
+<div style="margin-top:34px;background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#9fb0c0">
+<div>$ <span style="color:#34d399">whoami</span></div>
+<div style="color:#c9d4e0;margin-top:6px">Jesse Moraga — self-taught operator. I build the systems and run a real California field-services business on them. No CS degree required.</div>
+<div style="margin-top:10px">$ <span style="color:#34d399">links</span></div>
+<div style="margin-top:6px"><a href="https://github.com/JesseMoraga" style="color:#56b6f2;text-decoration:none">github.com/JesseMoraga</a> &nbsp;·&nbsp; <a href="https://jessemoraga.com" style="color:#56b6f2;text-decoration:none">jessemoraga.com</a> &nbsp;·&nbsp; <a href="mailto:jesse@jessemoraga.com" style="color:#56b6f2;text-decoration:none">jesse@jessemoraga.com</a></div>
+</p></div>
+</p></div>
+</div>
+
+  </div>
+</article>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>

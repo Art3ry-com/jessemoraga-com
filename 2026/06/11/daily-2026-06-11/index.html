@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Server-side confirm gate for an AI phone agent — stops a mishear before it runs | Jesse Moraga</title>
+<meta name="description" content="How a structural name-confirm gate keeps an AI skip-trace agent from running on bad input — built by a California operator with no CS degree.">
+<link rel="canonical" href="https://jessemoraga.com/2026/06/11/daily-2026-06-11/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/06/11/daily-2026-06-11/">
+<meta property="og:title" content="Server-side confirm gate for an AI phone agent — stops a mishear before it runs">
+<meta property="og:description" content="How a structural name-confirm gate keeps an AI skip-trace agent from running on bad input — built by a California operator with no CS degree.">
+<meta property="article:published_time" content="2026-06-11T08:00:41-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#2A2820;background:#F1EFE6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#39362B}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#2A2820}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#2A2820}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img,.post-content iframe{max-width:100%;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#6D44C2;padding:2px 7px;border-radius:6px}
+</style>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Jun 11, 2026 &middot; 2 min read</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,52px); line-height:1.08; letter-spacing:-0.03em; margin:18px 0 0;">Server-side confirm gate for an AI phone agent — stops a mishear before it runs</h1>
+  </div>
+  <div class="post-content">
+<div style="background:#06080a;color:#c9d3da;border-radius:18px;overflow:hidden;font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.7;border:1px solid #14323a">
+<div style="background:#0b1014;border-bottom:1px solid #14323a">
+<div style="display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid #11252b"><span style="width:11px;height:11px;border-radius:50%;background:#f87171;display:inline-block"></span><span style="width:11px;height:11px;border-radius:50%;background:#fbbf24;display:inline-block"></span><span style="width:11px;height:11px;border-radius:50%;background:#34d399;display:inline-block"></span><span style="margin-left:8px;color:#6b7785;font-family:monospace;font-size:12px">jesse@blog&#160;:&#160;~/blog&#160;&#8212;&#160;zsh</span></div>
+<div style="padding:24px 28px 26px;font-family:ui-monospace,Menlo,monospace">
+<div style="color:#6b7785;font-size:13px;margin-bottom:10px"><span style="color:#34d399">$</span> git log &#8211;oneline -1 skip_trace/confirm_gate.py</div>
+<div style="color:#34d399;font-size:12px;letter-spacing:1px;margin-bottom:8px">// TECHNICALLY SPEAKING</div>
+<h1 style="font-size:30px;line-height:1.15;margin:0 0 12px;color:#ffffff;letter-spacing:-.5px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;font-weight:800">Server-side confirm gate for an AI phone agent — stops a mishear before it runs</h1>
+<p style="color:#9fb0ba;font-size:16px;max-width:640px;margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif">How I built a structural name-confirm gate so the skip-trace agent can&#8217;t take action on a name it hasn&#8217;t echoed back and had confirmed.<span style="color:#34d399">▌</span></p>
+</div>
+</div>
+<div style="padding:14px 28px 0">
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## THE NEWS HOOK</h2>
+<p style="color:#c4c9d8;margin:0 0 14px">LWN covered <a href="https://lwn.net/SubscriberLink/1077035/c7e7c14fbd60fae9/" style="color:#56b6f2;text-decoration:none">an AI agent running amok across Fedora and other systems</a> — taking real actions on bad input because nothing in the architecture said &#8220;stop and check first.&#8221; I read that while I was mid-way through ripping out the exact same failure mode from my own skip-trace agent. Good timing.</p>
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## WHAT THE OLD DESIGN GOT WRONG</h2>
+<p style="color:#c4c9d8;margin:0 0 14px">The agent was stateful about the readback step — it tracked whether a name had been confirmed in a session object the LLM could influence. That means if the model got confused, or the session state was missing, the gate could just&#8230; pass. I had a fallback, but it failed open. A mishear on a phone call could have triggered a real search on the wrong name. That&#8217;s not a logging problem or a retry problem. That&#8217;s a design problem.</p>
+<div style="background:#0b1014;border:1px solid #14323a;border-radius:10px;overflow:hidden;margin:0 0 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px">
+<div style="padding:4px 0">
+<div style="padding:3px 14px;background:rgba(248,113,113,.10);color:#f87171">&#8211; if session.get(&#8220;name_confirmed&#8221;) or fallback_ok: # LLM could influence this</div>
+<div style="padding:3px 14px;background:rgba(52,211,153,.10);color:#34d399">+ if not call_id or not confirmed_name: raise HardStop(&#8220;gate fails closed&#8221;)</div>
+</div>
+</div>
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## WHAT I SHIPPED INSTEAD</h2>
+<p style="color:#c4c9d8;margin:0 0 14px">The gate is now server-side and structural. The agent echoes the name back on the call. The caller confirms it. That confirmation is recorded on the server before the search function is even reachable. No <span style="color:#56b6f2">call_id</span>, no <span style="color:#e5c07b">confirmed_name</span> — no search. Full stop. The LLM doesn&#8217;t get a vote on whether the gate is open. It literally cannot reach the tool.</p>
+<div style="background:#0b1014;border:1px solid #14323a;border-radius:10px;padding:14px 16px;margin:0 0 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px">
+<span style="color:#6b7785"># server-side gate — called before search tool is exposed to the agent</span><br />
+<span style="color:#56b6f2">def</span> <span style="color:#e5c07b">require_name_confirm</span>(call_id: <span style="color:#34d399">str</span>, confirmed_name: <span style="color:#34d399">str</span>) -&gt; <span style="color:#34d399">None</span>:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#56b6f2">if</span> <span style="color:#56b6f2">not</span> call_id <span style="color:#56b6f2">or</span> <span style="color:#56b6f2">not</span> confirmed_name:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f87171">raise</span> <span style="color:#e5c07b">HardStop</span>(<span style="color:#34d399">&#8220;name confirm gate: fails closed — no call_id or confirmed_name&#8221;</span>)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6b7785"># only reachable if both are present and set server-side</span><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#34d399">return</span>
+</div>
+<p style="color:#c4c9d8;margin:0 0 14px">I also cleaned up the acknowledgment messages so the agent&#8217;s verbal responses don&#8217;t include PII. Sarah takes the request and moves on — she doesn&#8217;t repeat a name back in a way that could leak it into a log. The echo happens only in the structured confirm step, which is where it belongs. See more build notes in <a href="https://jessemoraga.com/category/technology/" style="color:#56b6f2;text-decoration:none">the TECHNICALLY SPEAKING archive</a>, and the code lives at</p>
+
+  </div>
+</article>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>

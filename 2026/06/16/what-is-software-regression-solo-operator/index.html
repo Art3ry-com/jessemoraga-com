@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Is Software Regression — And Why It Hits Hardest When You Can’t Stop to Fix It | Jesse Moraga</title>
+<meta name="description" content="// TECHNICALLY SPEAKING What Is Software Regression — And Why It Hits Hardest When You Can’t Stop to Fix It $ git log –oneline –since=yesterday Updated 202">
+<link rel="canonical" href="https://jessemoraga.com/2026/06/16/what-is-software-regression-solo-operator/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/06/16/what-is-software-regression-solo-operator/">
+<meta property="og:title" content="What Is Software Regression — And Why It Hits Hardest When You Can’t Stop to Fix It">
+<meta property="og:description" content="// TECHNICALLY SPEAKING What Is Software Regression — And Why It Hits Hardest When You Can’t Stop to Fix It $ git log –oneline –since=yesterday Updated 202">
+<meta property="article:published_time" content="2026-06-16T13:02:31-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#2A2820;background:#F1EFE6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#39362B}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#2A2820}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#2A2820}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img,.post-content iframe{max-width:100%;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#6D44C2;padding:2px 7px;border-radius:6px}
+</style>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Jun 16, 2026 &middot; 10 min read</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,52px); line-height:1.08; letter-spacing:-0.03em; margin:18px 0 0;">What Is Software Regression — And Why It Hits Hardest When You Can’t Stop to Fix It</h1>
+  </div>
+  <div class="post-content">
+<p><!--META: A self-taught solo operator's field guide to software regression — what it is, why it hits hardest when you're building and operating at the same time, and how a reproduction-first debugging discipline stops you from shipping fixes that break something else.--></p>
+<div style="max-width:760px;margin:0 auto;background:#06080a;color:#c9d4e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.7;border-radius:14px;overflow:hidden;border:1px solid #1b2430">
+<p> <!-- terminal hero --></p>
+<div style="background:#0a0e13;padding:18px 22px;border-bottom:1px solid #1b2430">
+<div style="display:flex;gap:8px;margin-bottom:16px">
+ <span style="width:12px;height:12px;border-radius:50%;background:#f87171;display:inline-block"></span><br />
+ <span style="width:12px;height:12px;border-radius:50%;background:#fbbf24;display:inline-block"></span><br />
+ <span style="width:12px;height:12px;border-radius:50%;background:#34d399;display:inline-block"></span>
+ </div>
+<div style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#56b6f2;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">// TECHNICALLY SPEAKING</div>
+<h1 style="margin:0;color:#eaf1f8;font-size:30px;line-height:1.25;font-weight:800">What Is Software Regression — And Why It Hits Hardest When You Can&#8217;t Stop to Fix It</h1>
+<div style="font-family:ui-monospace,Menlo,monospace;color:#5b6b7c;font-size:13px;margin-top:14px">$ <span style="color:#34d399">git log &#8211;oneline &#8211;since=yesterday</span></div>
+<div style="font-family:ui-monospace,Menlo,monospace;color:#5b6b7c;font-size:12px;margin-top:8px">Updated 2026-06-16</div>
+</p>
+</div>
+<div style="padding:26px 24px">
+<p style="font-size:19px;color:#eaf1f8"><strong>Yesterday felt like going backwards. I fixed eight things and broke three of them again by the end of the day. The word for that in software is regression — and it&#8217;s one of the most demoralizing bugs to catch when you&#8217;re also the one answering phones and driving to serve papers.</strong></p>
+<p>I run a real California field-services company. It&#8217;s fully automated — intake, invoicing, dispatch, proof generation, client comms, all of it — on software I wrote myself. No computer science degree. I built it because I had to, and because I could see exactly what a working system needed to do. Over 1,000 cases through it now. It works.</p>
+<p>But yesterday was one of those days where the system works and you&#8217;re the problem. You fix something that&#8217;s been broken for a week, push it live, go serve someone&#8217;s legal papers, come back an hour later, and a thing that was working before your push isn&#8217;t working anymore. You opened a hole somewhere. And you don&#8217;t know where. And there&#8217;s another serve in 45 minutes.</p>
+<p>This is what software people call regression. Not because you failed. Because the thing you changed had a relationship with something else you didn&#8217;t think about. Let me explain it from first principles — what it is, why it happens, and the one discipline that actually stops it from compounding. You don&#8217;t need a degree. You need the right mental model.</p>
+<p> <!-- TOC --></p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:18px 20px;margin:24px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">$ cat contents.md</div>
+<ol style="margin:0;padding-left:20px;color:#9fb0c0">
+<li style="margin-bottom:6px"><a href="#what" style="color:#56b6f2;text-decoration:none">What regression actually is (not the vague definition)</a></li>
+<li style="margin-bottom:6px"><a href="#why" style="color:#56b6f2;text-decoration:none">Why it&#8217;s brutal when you&#8217;re building and operating at the same time</a></li>
+<li style="margin-bottom:6px"><a href="#root" style="color:#56b6f2;text-decoration:none">The root cause: hidden dependencies</a></li>
+<li style="margin-bottom:6px"><a href="#discipline" style="color:#56b6f2;text-decoration:none">The discipline that actually helps: reproduce first, lock it after</a></li>
+<li style="margin-bottom:0"><a href="#bottom" style="color:#56b6f2;text-decoration:none">The real cost — and why persistence is a technical skill</a></li>
+</ol>
+</div>
+<p> <!-- ============ SECTION 1 ============ --></p>
+<h2 id="what" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">1. What regression actually is</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>A <a href="https://en.wikipedia.org/wiki/Software_regression" style="color:#56b6f2;text-decoration:none">software regression</a> is when working behavior stops working after you change something. The thing you changed might be totally correct. The break happens somewhere else — in a piece of code that depended on the old behavior and didn&#8217;t know the behavior changed.</p>
+<p>The key word is &#8220;was working.&#8221; A regression is not a new bug. It&#8217;s an old feature, breaking. That distinction matters because it means your fix introduced the problem — and the person who introduced it is you, right now, with code you thought you understood.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY IT WORKS THIS WAY</p>
+<p>Software is not a set of independent tools. It&#8217;s a web of relationships. Every function you write has expectations about the world it lives in — what format data arrives in, what keys exist in a dict, what a status value means. When you change one thing in that web, every function that touched the thing you changed gets a new neighbor it wasn&#8217;t introduced to.</p>
+<p>Most of the time the new neighbor is compatible. Sometimes it isn&#8217;t. And the gap between &#8220;I think this is compatible&#8221; and &#8220;I know this is compatible&#8221; is exactly where regressions live.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:13px;margin-bottom:2px;margin-top:22px">// A REAL EXAMPLE</p>
+<p>Yesterday I fixed a bug where my draft detection logic was using a string comparison that was too strict. A case outcome of <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">"SERVED — left with resident"</code> wasn&#8217;t matching my classifier that looked for <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">"served"</code>. Fixed it. Made the comparison case-insensitive and prefix-aware. Pushed it. Came back from a serve two hours later to find that my dedup system — which also called the same string comparison — was now treating cases as &#8220;re-serveable&#8221; that it was supposed to leave alone. Same fix, different consumer, opposite effect. The classifier got smarter and the dedup guard got confused, because neither one was consulting a shared definition of &#8220;done.&#8221; Two independent interpretations of the same string. One fix, one regression.</p>
+<p> <!-- ============ SECTION 2 ============ --></p>
+<h2 id="why" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">2. Why it&#8217;s brutal when you&#8217;re building and operating at the same time</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>In a normal software company there&#8217;s a wall between the people who build the thing and the people who run it. QA tests the build before it ships. A staging environment absorbs the regressions before real users do. And if something breaks in production, there&#8217;s a whole on-call rotation to absorb the heat while engineering patches it.</p>
+<p>Solo operators don&#8217;t have any of that. When I push a bug at noon, I find out about it at 2 PM when a client emails asking why their update didn&#8217;t fire. I&#8217;m usually in the car. I pull over, diagnose it on my phone, write the hotfix in my head, and either wait until I&#8217;m back at the desk or do something that&#8217;s almost definitely going to introduce the next regression.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY IT COMPOUNDS</p>
+<p>The danger isn&#8217;t a single regression. It&#8217;s the emergency patch you write for the regression, under time pressure, without proper context, that introduces the next one. This is the regression cascade — and it&#8217;s a real phenomenon that veteran engineers are trained to avoid by slowing down when the urge to sprint is highest.</p>
+<p>I failed at this yesterday. Fixed a broken dedup window, which uncovered a classifier issue, which my rushed fix for the classifier broke the email batching logic downstream. By 6 PM I had solved the original problem from the morning and created two new problems that hadn&#8217;t existed at 8 AM. That&#8217;s what regression days feel like. Every step forward reveals the next hole.</p>
+<div style="background:#0a0e13;border:1px solid #2a1518;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8;margin:24px 0;color:#c9d4e0">
+<div><span style="color:#f87171"># yesterday, in roughly chronological order</span></div>
+<div>08:00 fix dedup window bug → pushed</div>
+<div>10:30 dedup fix exposes classifier mismatch</div>
+<div>11:15 fix classifier → pushed, between serves</div>
+<div>14:00 client asks why their status email didn&#8217;t fire</div>
+<div>14:12 classifier fix broke email batching</div>
+<div>14:45 fix batching → pushed from parking lot</div>
+<div>17:00 batching fix introduced timing race</div>
+<div>18:30 one more push. holding my breath.</div>
+</p>
+</div>
+<p> <!-- ============ SECTION 3 ============ --></p>
+<h2 id="root" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">3. The root cause: hidden dependencies</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>Regressions have one root cause: a piece of code depends on something you changed, and that dependency wasn&#8217;t visible when you made the change. The dependency is <em>hidden</em> — either because it&#8217;s implicit (inferred from context rather than named), because it&#8217;s not tested, or because the system grew complex enough that the full dependency graph isn&#8217;t in anyone&#8217;s head anymore.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY IT&#8217;S HIDDEN</p>
+<p>Every function you write knows about its inputs and outputs. What it doesn&#8217;t know is who&#8217;s calling it, and what they&#8217;re assuming about what it returns. The callers are the hidden dependents. When you change what a function returns — even to make it more correct — every caller absorbs that change silently, with no warning, until the program runs and something breaks.</p>
+<p>In a large team this gets handled by code review, integration tests, and keeping modules small enough that a change&#8217;s blast radius is predictable. Solo, you have to substitute rigor for headcount. You can&#8217;t have a second pair of eyes on every diff. But you can have a test that acts like one.</p>
+<div style="background:#0a0e13;border:1px solid #14323a;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8;margin:24px 0;color:#c9d4e0">
+<div><span style="color:#5b6b7c"># the hidden dependency pattern</span></div>
+<div>&nbsp;</div>
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">classify_outcome</span>(raw: str) -&gt; str:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">return</span> <span style="color:#34d399">&#8220;served&#8221;</span> <span style="color:#5b6b7c">if</span> <span style="color:#34d399">&#8220;served&#8221;</span> <span style="color:#5b6b7c">in</span> raw <span style="color:#5b6b7c">else</span> <span style="color:#34d399">&#8220;unknown&#8221;</span></div>
+<div>&nbsp;</div>
+<div><span style="color:#5b6b7c"># caller A — knows about this</span></div>
+<div><span style="color:#5b6b7c">if</span> classify_outcome(job.outcome) == <span style="color:#34d399">&#8220;served&#8221;</span>:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;send_completion_email(job)</div>
+<div>&nbsp;</div>
+<div><span style="color:#5b6b7c"># caller B — also depends on &#8220;served&#8221; meaning &#8220;definitely done&#8221;</span></div>
+<div><span style="color:#5b6b7c"># but nobody told caller B the definition could change</span></div>
+<div><span style="color:#5b6b7c">if</span> classify_outcome(job.outcome) != <span style="color:#34d399">&#8220;served&#8221;</span>:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;schedule_retry(job)&nbsp;&nbsp;<span style="color:#f87171"># 💀 fires on every &#8220;partially_served&#8221; too now</span></div>
+</p>
+</div>
+<p>The fix to Caller A was right. But Caller B existed in the same system, reading the same function, and had a completely different interpretation of what the edge cases mean. I didn&#8217;t touch Caller B. Caller B broke anyway.</p>
+<p> <!-- ============ SECTION 4 ============ --></p>
+<h2 id="discipline" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">4. The discipline that actually helps: reproduce first, lock it after</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>The single most valuable thing you can do when you find a bug — before you write a single line of fix — is write a test that reproduces it. Not to understand it better, though that happens. To <em>prove it&#8217;s actually broken</em>, so you know what broken looks like, so you can confirm the fix without guessing.</p>
+<p>Then after the fix passes, you leave the test in. That test is now your regression guard. It runs every time you push. The specific breakage you just fixed can never silently come back.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY THIS WORKS</p>
+<p>The instinct when you&#8217;re under pressure is to jump straight to the fix. You think you know what&#8217;s wrong. You&#8217;re probably right. But &#8220;probably right&#8221; is not a system — it&#8217;s a guess with good odds. The reproduction test converts the guess into a verifiable claim. You&#8217;re not fixing the thing you think is broken; you&#8217;re fixing the specific condition that the test failed on. That&#8217;s a much narrower, more precise target.</p>
+<p>And leaving the test behind is what stops the regression. You&#8217;re creating a permanent record of a failure mode. Every future change to the system runs against that record. If anything breaks that exact behavior again, you know immediately — not two hours later when a client notices. The fix cost you an hour. The test returns that hour, compounded, every time it fires. Over 1,000 cases I&#8217;ve found that the regressions that never came back are the ones that got a test. The ones that came back twice are the ones I fixed in a hurry without writing one.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:13px;margin-bottom:2px;margin-top:22px">// APPLY IT</p>
+<div style="background:#0a0e13;border:1px solid #14323a;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8;margin:0 0 16px;color:#c9d4e0">
+<div><span style="color:#5b6b7c"># 1. reproduce the bug first — a test that FAILS right now</span></div>
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">test_served_with_note_classifies_correctly</span>():</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c"># this is the exact input that was breaking yesterday</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;result = classify_outcome(<span style="color:#34d399">&#8220;SERVED — left with resident at 2:14 PM&#8221;</span>)</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">assert</span> result == <span style="color:#34d399">&#8220;served&#8221;</span>&nbsp;&nbsp;<span style="color:#f87171"># was returning &#8220;unknown&#8221; — proves the bug exists</span></div>
+<div>&nbsp;</div>
+<div><span style="color:#5b6b7c"># 2. write the fix</span></div>
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">classify_outcome</span>(raw: str) -&gt; str:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;text = (raw <span style="color:#5b6b7c">or</span> <span style="color:#34d399">&#8220;&#8221;</span>).strip().lower()</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">if</span> text.startswith(<span style="color:#34d399">&#8220;served&#8221;</span>): <span style="color:#5b6b7c">return</span> <span style="color:#34d399">&#8220;served&#8221;</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">if</span> text.startswith(<span style="color:#34d399">&#8220;attempted&#8221;</span>): <span style="color:#5b6b7c">return</span> <span style="color:#34d399">&#8220;attempted&#8221;</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">return</span> <span style="color:#34d399">&#8220;unknown&#8221;</span>&nbsp;&nbsp;<span style="color:#5b6b7c"># safe default</span></div>
+<div>&nbsp;</div>
+<div><span style="color:#5b6b7c"># 3. run the test again — it should pass now</span></div>
+<div><span style="color:#5b6b7c"># 4. leave the test in — this specific break can never silently return</span></div>
+</p>
+</div>
+<p>The test runs in under a second. It lives in my test suite. If I change <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">classify_outcome</code> again six months from now for a completely unrelated reason, the test screams if it breaks this behavior. That&#8217;s the compound return on one hour of attention.</p>
+<p>The thing I did wrong yesterday is what most solo builders do under pressure: fixed the output first, then skimmed the change, then pushed because there was somewhere to be. The fix was correct. The test wasn&#8217;t there to catch the downstream caller it broke. Now both are there.</p>
+<p> <!-- ============ SECTION 5 ============ --></p>
+<h2 id="bottom" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">5. The real cost — and why persistence is a technical skill</h2>
+<p>Yesterday was exhausting. Not because the bugs were hard — they were all findable. It was exhausting because every fix happened between serves, between phone calls, between doing the actual job the business runs on. There&#8217;s no pause button on operations. The pipeline doesn&#8217;t stop moving because the engineer is also in the field.</p>
+<p>The thing I&#8217;ve learned after running a real company on this system is that regression days are part of the job for a solo builder-operator. Not a sign the system is broken. A sign the system is alive enough to have surface area. Static software doesn&#8217;t regress. Evolving software does — and the evolution is what makes it better.</p>
+<p>The temptation when a day goes like this is to stop pushing changes. Leave it stable. Don&#8217;t touch anything that isn&#8217;t on fire. I understand why people do that. But it&#8217;s the wrong instinct. The answer isn&#8217;t to stop shipping — it&#8217;s to ship with better guards. Reproduction tests. Regression tests. A short list of behaviors that must stay true every time you change anything.</p>
+<p>You build that list one bug at a time. Yesterday I added six tests I didn&#8217;t have this morning. The day felt like regression. The code is more resilient than it was 24 hours ago.</p>
+<p>That&#8217;s the discipline. Not never breaking things. Knowing, every time you fix something, that the break can&#8217;t come back without you finding out immediately. You write that guarantee into the system one test at a time, and eventually you&#8217;ve got a machine that tells on itself before your clients do.</p>
+<p> <!-- whoami footer --></p>
+<div style="margin-top:40px;padding:20px 0 4px;border-top:1px solid #1b2430">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#5b6b7c;font-size:13px">$ <span style="color:#34d399">whoami</span></div>
+<p style="font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#9fb0c0;margin:8px 0 0">Jesse Moraga — registered California operator, who built the system that runs his company from scratch.. Over 1,000 cases handled personally. <a href="https://github.com/JesseMoraga" style="color:#56b6f2;text-decoration:none">github.com/JesseMoraga</a> &middot; <a href="https://jessemoraga.com/system" style="color:#56b6f2;text-decoration:none">jessemoraga.com/system</a></p>
+</p>
+</div>
+</div>
+</div>
+
+  </div>
+</article>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>

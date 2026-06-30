@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Silent failures: the bug that doesn’t crash, it just quietly does nothing | Jesse Moraga</title>
+<meta name="description" content="What is a silent failure in software? Jesse Moraga explains how to catch code that fails without telling you — using real commit diffs from his field-servi">
+<link rel="canonical" href="https://jessemoraga.com/2026/06/18/daily-2026-06-18/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/06/18/daily-2026-06-18/">
+<meta property="og:title" content="Silent failures: the bug that doesn’t crash, it just quietly does nothing">
+<meta property="og:description" content="What is a silent failure in software? Jesse Moraga explains how to catch code that fails without telling you — using real commit diffs from his field-servi">
+<meta property="article:published_time" content="2026-06-18T08:00:43-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#2A2820;background:#F1EFE6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#39362B}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#2A2820}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#2A2820}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img,.post-content iframe{max-width:100%;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#6D44C2;padding:2px 7px;border-radius:6px}
+</style>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Jun 18, 2026 &middot; 2 min read</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,52px); line-height:1.08; letter-spacing:-0.03em; margin:18px 0 0;">Silent failures: the bug that doesn’t crash, it just quietly does nothing</h1>
+  </div>
+  <div class="post-content">
+<div style="background:#06080a;color:#c9d3da;border-radius:18px;overflow:hidden;font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.7;border:1px solid #14323a">
+<div style="background:#0b1014;border-bottom:1px solid #14323a">
+<div style="display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid #11252b"><span style="width:11px;height:11px;border-radius:50%;background:#f87171;display:inline-block"></span><span style="width:11px;height:11px;border-radius:50%;background:#fbbf24;display:inline-block"></span><span style="width:11px;height:11px;border-radius:50%;background:#34d399;display:inline-block"></span><span style="margin-left:8px;color:#6b7785;font-family:monospace;font-size:12px">jesse@blog&#160;:&#160;~/blog&#160;&#8212;&#160;zsh</span></div>
+<div style="padding:24px 28px 26px;font-family:ui-monospace,Menlo,monospace">
+<div style="color:#6b7785;font-size:13px;margin-bottom:10px"><span style="color:#34d399">$</span> grep -r &#8220;silent&#8221; ./logs/ | wc -l</div>
+<div style="color:#34d399;font-size:12px;letter-spacing:1px;margin-bottom:8px">// TECHNICALLY SPEAKING</div>
+<h1 style="font-size:30px;line-height:1.15;margin:0 0 12px;color:#ffffff;letter-spacing:-.5px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;font-weight:800">Silent failures: the bug that doesn&#8217;t crash, it just quietly does nothing</h1>
+<p style="color:#9fb0ba;font-size:16px;max-width:640px;margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif">When your code swallows an error and returns success, you have a worse problem than a crash.<span style="color:#34d399">&#9612;</span></p>
+</div>
+</div>
+<div style="padding:14px 28px 0">
+<p style="color:#c4c9d8;margin:0 0 14px">
+<a href="https://www.ycombinator.com/companies/trellis-ai/jobs/Cg94htp-product-lead" style="color:#56b6f2;text-decoration:none">Trellis AI (YC W24) is hiring a product lead to build agents for healthcare access</a> — which means they&#8217;re about to learn the same lesson I spent most of yesterday fixing: agents that fail silently are harder to operate than agents that crash loudly.
+</p>
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## WHAT A SILENT FAILURE ACTUALLY IS</h2>
+<p style="color:#c4c9d8;margin:0 0 14px">
+A silent failure is when a function hits an error, catches it, and then returns as if everything worked. No exception bubbles up. No log line. No alert. The caller assumes success and moves on. The real-world effect — a client not getting an email, a case not getting flagged, a payment not going out — just doesn&#8217;t happen. And you find out days later, if you find out at all.
+</p>
+<p style="color:#c4c9d8;margin:0 0 14px">
+It&#8217;s the opposite of a crash. A crash is loud and fixable. A silent failure is polite and invisible. In a system where the outputs are things that matter to real people — invoices, follow-ups, status changes — invisible is the worst failure mode.
+</p>
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## WHY IT HAPPENS (THE THEORY)</h2>
+<p style="color:#c4c9d8;margin:0 0 14px">
+The root cause is almost always a bare <code style="background:#0b1014;color:#56b6f2;padding:1px 5px;border-radius:4px">except</code> block written to &#8220;be safe.&#8221; You&#8217;re handling a third-party call — an API, a local subprocess, a message send — and you don&#8217;t want one bad call to blow up the whole pipeline. So you wrap it, catch broad exceptions, and <code style="background:#0b1014;color:#56b6f2;padding:1px 5px;border-radius:4px">pass</code> or <code style="background:#0b1014;color:#56b6f2;padding:1px 5px;border-radius:4px">return None</code>. That feels defensive. It is defensive — in the worst sense. You defended the process from knowing something went wrong.
+</p>
+<p style="color:#c4c9d8;margin:0 0 14px">
+The second cause is missing success-flag checks. A function calls a sub-step, the sub-step fails, but the caller never checks whether it actually succeeded before continuing. It just moves to the next step on a foundation that isn&#8217;t there.
+</p>
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## HOW TO FIND AND FIX THEM</h2>
+<p style="color:#c4c9d8;margin:0 0 14px">
+Yesterday I ran a sweep across the system and found several of these. The pattern was the same every time. Here&#8217;s the shape of the fix:
+</p>
+<div style="background:#0b1014;border:1px solid #14323a;border-radius:10px;overflow:hidden;margin:0 0 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px">
+<div style="padding:4px 0">
+<div style="padding:3px 14px;background:rgba(248,113,113,.10);color:#f87171">&#8211; except Exception:</div>
+<div style="padding:3px 14px;background:rgba(248,113,113,.10);color:#f87171">&#8211; pass # don&#8217;t let one failure kill the run</div>
+<div style="padding:3px 14px;background:rgba(52,211,153,.10);color:#34d399">+ except Exception as e:</div>
+<div style="padding:3px 14px;background:rgba(52,211,153,.10);color:#34d399">+ log.error(&#8220;step_name failed: %s&#8221;, type(e).__name__) # type only — no PII in exc message</div>
+<div style="padding:3px 14px;background:rgba(52,211,153,.10);color:#34d399">+ return {&#8220;ok&#8221;: False, &#8220;reason&#8221;: &#8220;step_name_error&#8221;}</div>
+</div>
+</div>
+<p style="color:#c4c9d8;margin:0 0 14px">
+Two things happened in that diff. First: log the exception type, not the message. Exception messages sometimes contain PII — an address, a name, a number that came from input data. Logging <code style="background:#0b1014;color:#56b6f2;padding:1px 5px;border-radius:4px">type(e).__name__</code> tells you what kind of error happened without leaking what was in the payload. I had to fix that pattern in multiple</p>
+
+  </div>
+</article>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How I Use Two Claude Code Accounts Without Losing Any Context | Jesse Moraga</title>
+<meta name="description" content="A second $20/mo Claude Pro account replaces $50-$200 in panic credit buys — because your CLAUDE.md files are the durable state, not the session.">
+<link rel="canonical" href="https://jessemoraga.com/2026/06/16/how-i-use-two-claude-code-accounts-without-losing-any-context/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/06/16/how-i-use-two-claude-code-accounts-without-losing-any-context/">
+<meta property="og:title" content="How I Use Two Claude Code Accounts Without Losing Any Context">
+<meta property="og:description" content="A second $20/mo Claude Pro account replaces $50-$200 in panic credit buys — because your CLAUDE.md files are the durable state, not the session.">
+<meta property="article:published_time" content="2026-06-16T22:05:53-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#2A2820;background:#F1EFE6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#39362B}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#2A2820}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#2A2820}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img,.post-content iframe{max-width:100%;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#6D44C2;padding:2px 7px;border-radius:6px}
+</style>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Jun 16, 2026 &middot; 7 min read</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,52px); line-height:1.08; letter-spacing:-0.03em; margin:18px 0 0;">How I Use Two Claude Code Accounts Without Losing Any Context</h1>
+  </div>
+  <div class="post-content">
+<p><!--META: Why a second $20 Claude Pro account replaces $200 in credit top-ups — and the CS principle (stateless runtime) that makes it work without reteaching.--></p>
+<div style="max-width:760px;margin:0 auto;background:#06080a;color:#c9d4e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.7;border-radius:14px;overflow:hidden;border:1px solid #1b2430">
+<p> <!-- terminal hero --></p>
+<div style="background:#0a0e13;padding:18px 22px;border-bottom:1px solid #1b2430">
+<div style="display:flex;gap:8px;margin-bottom:16px">
+ <span style="width:12px;height:12px;border-radius:50%;background:#f87171;display:inline-block"></span><br />
+ <span style="width:12px;height:12px;border-radius:50%;background:#fbbf24;display:inline-block"></span><br />
+ <span style="width:12px;height:12px;border-radius:50%;background:#34d399;display:inline-block"></span>
+ </div>
+<div style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#56b6f2;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">// TECHNICALLY SPEAKING</div>
+<h1 style="margin:0;color:#eaf1f8;font-size:30px;line-height:1.25;font-weight:800">Before You Buy More Claude Credits, Read This — The Stateless Session Principle</h1>
+<div style="font-family:ui-monospace,Menlo,monospace;color:#5b6b7c;font-size:13px;margin-top:14px">$ <span style="color:#34d399">cat ~/.claude/CLAUDE.md | wc -l</span></div>
+<div style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:12px;margin-top:4px">847</div>
+<div style="font-family:ui-monospace,Menlo,monospace;color:#5b6b7c;font-size:12px;margin-top:8px">Posted 2026-06-16</div>
+</p>
+</div>
+<div style="padding:26px 24px">
+<p style="font-size:19px;color:#eaf1f8"><strong>For months I was spending $50 to $200 extra whenever I burned through my Claude usage limit. Then I stopped and did the math. I was never blacked out for more than three days. And the fix was $20 a month.</strong></p>
+<p>I run a real California field-services company end-to-end on software I wrote myself — intake, invoicing, dispatch, proof generation, all of it. No computer science degree. The whole system runs on a Mac, costs under $300 a month, and runs a real company end to end. I build it and operate it at the same time, mostly at night when my daughter is asleep. That means I code hard from 9 PM until anywhere from 11 to 3 or 4 in the morning depending on what&#8217;s broken.</p>
+<p>Heavy weeks, I&#8217;d hit my Claude usage ceiling by Tuesday or Wednesday. My plan resets on Fridays. Three days of gap. And every time, I&#8217;d go buy more credits. Sometimes twenty bucks. Twice, close to two hundred. I told myself this was the cost of moving fast. What I didn&#8217;t do was the math.</p>
+<p>The fix — a second Claude Pro account at $20 a month — sounds obvious in hindsight. But the <em>reason it actually works without starting over</em> is a real computer science principle worth understanding. It&#8217;s the same idea that makes every major cloud service scale.</p>
+<p> <!-- TOC --></p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:18px 20px;margin:24px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">$ cat contents.md</div>
+<ol style="margin:0;padding-left:20px;color:#9fb0c0">
+<li style="margin-bottom:6px"><a href="#why-credits" style="color:#56b6f2;text-decoration:none">Why credits felt like the only answer (and why they weren&#8217;t)</a></li>
+<li style="margin-bottom:6px"><a href="#stateless" style="color:#56b6f2;text-decoration:none">The principle: stateless runtime, durable config</a></li>
+<li style="margin-bottom:6px"><a href="#apply" style="color:#56b6f2;text-decoration:none">How to apply it — CLAUDE.md and the memory system</a></li>
+<li style="margin-bottom:6px"><a href="#setup" style="color:#56b6f2;text-decoration:none">The actual setup: two terminals, one phone</a></li>
+<li style="margin-bottom:0"><a href="#other-half" style="color:#56b6f2;text-decoration:none">The other half of the fix: running lean</a></li>
+</ol>
+</div>
+<p> <!-- ============ SECTION 1 ============ --></p>
+<h2 id="why-credits" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">1. Why credits felt like the only answer</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE SITUATION</p>
+<p>When you hit your usage limit mid-session, the immediate feeling is: I need more capacity right now. Buying credits gives you exactly that — more runway in the current account, immediately. It solves the problem you can feel (being blocked) without making you think about the problem underneath it (why you&#8217;re blocked, and for how long).</p>
+<p>I never stopped to count the days. I just bought the credits. If I had counted, the math would have ended this habit instantly:</p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:2;margin:20px 0;color:#c9d4e0">
+<div><span style="color:#56b6f2">plan_reset_day</span> = <span style="color:#34d399">Friday</span></div>
+<div><span style="color:#56b6f2">typical_burnout</span> = <span style="color:#34d399">Tuesday or Wednesday</span></div>
+<div><span style="color:#56b6f2">actual_gap</span> = <span style="color:#fbbf24">2–3 days</span></div>
+<div><span style="color:#56b6f2">credits_I_bought</span> = <span style="color:#f87171">$50–$200 per cycle</span></div>
+<div><span style="color:#56b6f2">second_account</span> = <span style="color:#34d399">$20 / month</span></div>
+</p>
+</div>
+<p>A second account at $20 a month costs less than one panicked credit purchase. And unlike a credit top-up, the second account resets on its own schedule every month. It&#8217;s not a one-time bridge. It&#8217;s a permanent second lane.</p>
+<p> <!-- ============ SECTION 2 ============ --></p>
+<h2 id="stateless" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">2. The principle: stateless runtime, durable config</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE CONCEPT</p>
+<p>The reason a second account works without reteaching is a principle that shows up everywhere in distributed systems: <strong>stateless runtime + durable configuration</strong>.</p>
+<p>In software, a <a href="https://en.wikipedia.org/wiki/Stateless_protocol" style="color:#56b6f2;text-decoration:none">stateless service</a> is one that holds no memory of past interactions. Each request arrives with all the context it needs to be processed. The service itself is just the compute — the intelligence is in the request, not in the server. That&#8217;s why you can load-balance across ten web servers and the request doesn&#8217;t care which one handles it. Every server is identical because every server reads the same config, the same rules, the same environment variables. The config is durable; the server is disposable.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY IT MATTERS HERE</p>
+<p>A Claude Code session looks stateful — it remembers what you said earlier, it has context. But that memory is ephemeral. When the session ends, it&#8217;s gone. What persists is what lives on disk: your <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">CLAUDE.md</code> files, your memory system, your project rules. Those are the durable config. The session is the runtime — stateless underneath, because it reads its intelligence from files every time it starts.</p>
+<p>Once you see this, the second account makes obvious sense. It&#8217;s not a different brain. It&#8217;s the same brain booting from the same disk. Same <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">CLAUDE.md</code>. Same memory files. Same rules. Different compute.</p>
+<p> <!-- git diff block --></p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8;margin:24px 0">
+<div style="color:#56b6f2;margin-bottom:10px">// BEFORE: session IS the state</div>
+<div style="color:#f87171">&#8211; All context lives in conversation history</div>
+<div style="color:#f87171">&#8211; New account = start from zero</div>
+<div style="color:#f87171">&#8211; Session ends, intelligence ends</div>
+<div style="color:#f87171">&#8211; Switching accounts = painful reteaching</div>
+</p>
+<div style="color:#56b6f2;margin-bottom:10px">// AFTER: files ARE the state</div>
+<div style="color:#34d399">+ Context lives in CLAUDE.md + memory files on disk</div>
+<div style="color:#34d399">+ New account reads same files = same intelligence</div>
+<div style="color:#34d399">+ Session is ephemeral, config is durable</div>
+<div style="color:#34d399">+ Switching accounts = seamless, zero reteaching</div>
+</p>
+</div>
+<p> <!-- ============ SECTION 3 ============ --></p>
+<h2 id="apply" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">3. How to apply it — CLAUDE.md and the memory system</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// HOW TO APPLY</p>
+<p>The setup that makes this possible is Claude Code&#8217;s <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">CLAUDE.md</code> file system and memory. These are plain text files on your machine. Every project can have one. There&#8217;s a global one at <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">~/.claude/CLAUDE.md</code> that loads for every session.</p>
+<p>If you&#8217;ve put your working rules into <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">CLAUDE.md</code> — your project conventions, your tone guidelines, your engineering standards, your business rules — every session starts by reading those files. The session doesn&#8217;t invent rules. It loads rules. That&#8217;s the durable config layer.</p>
+<p>The memory system extends this further. Persistent memory files store lessons learned, corrections, project context, workflow rules. They accumulate over time. A session that opens on account A reads them. A session on account B reads the exact same files. They come up identical.</p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8;margin:24px 0;color:#c9d4e0">
+<div><span style="color:#56b6f2">~/.claude/</span></div>
+<div> <span style="color:#34d399">CLAUDE.md</span> <span style="color:#5b6b7c"># global rules — loads every session</span></div>
+<div> <span style="color:#34d399">projects/</span></div>
+<div> <span style="color:#34d399">memory/</span></div>
+<div> <span style="color:#34d399">MEMORY.md</span> <span style="color:#5b6b7c"># index — loaded at startup</span></div>
+<div> <span style="color:#34d399">feedback_*.md</span> <span style="color:#5b6b7c"># lesson files — the durable state</span></div>
+<div> <span style="color:#34d399">project_*.md</span> <span style="color:#5b6b7c"># project context files</span></div>
+<div><span style="color:#5b6b7c">#</span></div>
+<div><span style="color:#5b6b7c"># account A opens → reads these files → comes up smart</span></div>
+<div><span style="color:#5b6b7c"># account B opens → reads these files → same result</span></div>
+<div><span style="color:#5b6b7c"># the files are the intelligence. the session is compute.</span></div>
+</p>
+</div>
+<p>A real mistake I made before I had this set up: I&#8217;d spend 20 minutes at the start of every session re-explaining the project — what the system does, what conventions to follow, what mistakes not to repeat. That&#8217;s time and tokens wasted on restoring state that should have been persisted to disk. Once it&#8217;s in files, you never explain it again.</p>
+<p> <!-- ============ SECTION 4 ============ --></p>
+<h2 id="setup" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">4. The actual setup: two terminals, one phone</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE MECHANICS</p>
+<p>Claude has a remote control feature in the app. If you have a Terminal session running on your Mac, it shows up in the Claude mobile app and you can control it from your phone. Open two Terminals — one logged into each account — and both appear in the app simultaneously.</p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8;margin:24px 0;color:#c9d4e0">
+<div><span style="color:#56b6f2">Claude app → Remote Sessions</span></div>
+<div> <span style="color:#34d399">✓</span> Terminal 1 — account A <span style="color:#fbbf24">[90% used — resets Friday]</span></div>
+<div> <span style="color:#34d399">✓</span> Terminal 2 — account B <span style="color:#34d399">[fresh — reserve tank]</span></div>
+<div><span style="color:#5b6b7c">#</span></div>
+<div><span style="color:#5b6b7c"># Tuesday night. Account A is done.</span></div>
+<div><span style="color:#5b6b7c"># Tap Terminal 2. Keep working.</span></div>
+<div><span style="color:#5b6b7c"># Files are on disk. State is intact. Nothing to re-explain.</span></div>
+</p>
+</div>
+<p>I code mostly from my phone when I&#8217;m in the field — remote control into Terminal means I&#8217;m not carrying a laptop to every serve. Both accounts show up side by side. When one goes dark, the other is one tap away. Both reading the same files. Both equally capable.</p>
+<p> <!-- ============ SECTION 5 ============ --></p>
+<h2 id="other-half" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">5. The other half of the fix: running lean</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE DISCIPLINE</p>
+<p>The second account is the structural fix. The other half is behavioral. I also changed what I use sessions for.</p>
+<p>For a long time I was doing exploratory work in sessions — redesigning things, refactoring, adding features that weren&#8217;t broken. That burns credits fast because it&#8217;s high-iteration: a lot of back and forth, a lot of reading large files, a lot of re-evaluating direction. I stopped doing that.</p>
+<p>Now I only open a heavy session when something is actually broken or something real needs to be built. The system runs. My job is to keep it running and add things when the business needs them. That discipline alone stretched my credits significantly. The second account is the safety net — running lean is what means I rarely need it.</p>
+<p>The two together: externalize your state into files so sessions are interchangeable, then use sessions deliberately so you don&#8217;t burn through them on work that didn&#8217;t need to happen. The stateless principle handles the structural problem. The discipline handles the behavioral one.</p>
+<p> <!-- summary block --></p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:18px 20px;margin:32px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px">$ echo &#8220;the summary&#8221;</div>
+<div style="color:#c9d4e0;line-height:1.9">
+<div><span style="color:#34d399">✓</span> Your CLAUDE.md + memory files are the durable state</div>
+<div><span style="color:#34d399">✓</span> The session is ephemeral compute — any account reads the same files</div>
+<div><span style="color:#34d399">✓</span> Second Pro account ($20/mo) = second compute node, same intelligence</div>
+<div><span style="color:#34d399">✓</span> Two terminals in Claude app remote control = visible on your phone</div>
+<div><span style="color:#34d399">✓</span> Run lean — sessions for real work only, not exploration</div>
+<div style="margin-top:10px"><span style="color:#fbbf24">$20/mo bridge vs $50–$200 panic buy. Do the math once. You only have to.</span></div>
+</p>
+</div>
+</div>
+<p> <!-- whoami footer --></p>
+<div style="border-top:1px solid #1b2430;padding-top:22px;margin-top:32px;font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#5b6b7c">
+<div style="margin-bottom:6px"><span style="color:#34d399">$</span> whoami</div>
+<div style="color:#9fb0c0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;line-height:1.7">
+ Jesse Moraga — registered California operator (), solo operator, systems builder. I run a field-services company on software I wrote from scratch. No CS degree. I build it at night and serve papers during the day.</p>
+<p> <a href="https://github.com/JesseMoraga" style="color:#56b6f2;text-decoration:none">github.com/JesseMoraga</a> &nbsp;·&nbsp;<br />
+ <a href="https://jessemoraga.com/system" style="color:#56b6f2;text-decoration:none">jessemoraga.com/system</a>
+ </div>
+</p>
+</div>
+</div>
+</div>
+
+  </div>
+</article>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>

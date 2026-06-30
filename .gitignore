@@ -1,0 +1,5 @@
+data/
+build_blog.py
+patch_home.py
+*.pyc
+__pycache__/

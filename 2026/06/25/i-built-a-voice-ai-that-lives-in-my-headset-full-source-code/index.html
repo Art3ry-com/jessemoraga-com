@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I Built a Voice AI That Lives in My Headset — Full Source Code | Jesse Moraga</title>
+<meta name="description" content="I built a voice AI with full system access that runs locally on my Mac and lives in my headset. Here’s how it works and why — open source on GitHub.">
+<link rel="canonical" href="https://jessemoraga.com/2026/06/25/i-built-a-voice-ai-that-lives-in-my-headset-full-source-code/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/06/25/i-built-a-voice-ai-that-lives-in-my-headset-full-source-code/">
+<meta property="og:title" content="I Built a Voice AI That Lives in My Headset — Full Source Code">
+<meta property="og:description" content="I built a voice AI with full system access that runs locally on my Mac and lives in my headset. Here’s how it works and why — open source on GitHub.">
+<meta property="article:published_time" content="2026-06-25T00:47:40-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#2A2820;background:#F1EFE6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#39362B}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#2A2820}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#2A2820}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img,.post-content iframe{max-width:100%;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#6D44C2;padding:2px 7px;border-radius:6px}
+</style>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Jun 25, 2026 &middot; 2 min read</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,52px); line-height:1.08; letter-spacing:-0.03em; margin:18px 0 0;">I Built a Voice AI That Lives in My Headset — Full Source Code</h1>
+  </div>
+  <div class="post-content">
+
+<p class="has-large-font-size wp-block-paragraph">I built a voice AI that lives in my headset and has full access to my computer. No subscription. No app to open. Just talk.</p>
+
+
+
+<h2 class="wp-block-heading">Why I built it</h2>
+
+
+
+<p class="wp-block-paragraph">Every AI assistant on the market requires you to stop what you&#8217;re doing, pick up your phone, open an app, and type. I work in the field. I&#8217;m moving. I needed something that worked the way I do — hands-free, always on, zero friction.</p>
+
+
+
+<p class="wp-block-paragraph">So I built one.</p>
+
+
+
+<h2 class="wp-block-heading">What it actually does</h2>
+
+
+
+<p class="wp-block-paragraph">J.A.R.V.I.S. runs locally on my Mac. It&#8217;s always listening through my JLab headset. I speak, it processes through a 70B language model via OpenRouter, and the response comes back through my earpiece in under two seconds — in a voice I chose, using Fish Audio&#8217;s TTS engine.</p>
+
+
+
+<p class="wp-block-paragraph">It has full access to my system. Not a demo. Not sandboxed. Real access:</p>
+
+
+
+<ul class="wp-block-list">
+<li>See my screen and describe what&#8217;s on it</li>
+<li>Run any shell command and speak the result back</li>
+<li>Search the web and summarize findings</li>
+<li>Read my calendar and email</li>
+<li>Open apps, browse URLs, control Spotify</li>
+<li>Spawn a full coding terminal with an uncensored model</li>
+<li>Wake on a custom phrase — no button press</li>
+</ul>
+
+
+
+<h2 class="wp-block-heading">How I built it</h2>
+
+
+
+<p class="wp-block-paragraph">The backend is FastAPI running a WebSocket server on my machine. Voice input comes through the Web Speech API in Chrome. TTS runs through Fish Audio. The LLM is served via OpenRouter. The frontend is a Three.js audio-reactive orb that pulses when she&#8217;s thinking and reacts to her voice in real time.</p>
+
+
+
+<p class="wp-block-paragraph">The whole thing is maybe 3,000 lines of Python and TypeScript. No cloud dependency. No monthly API bill beyond what I already use. It runs on my hardware and goes wherever my headset goes.</p>
+
+
+
+<figure class="wp-block-pullquote"><blockquote><p>Voice AI. Full system access. Lives in your headset.</p><cite>Jesse Moraga</cite></blockquote></figure>
+
+
+
+<h2 class="wp-block-heading">It&#8217;s open source</h2>
+
+
+
+<p class="wp-block-paragraph">The full codebase is on GitHub. Clone it, swap in your own API keys, and you&#8217;ve got a voice AI running locally in about 20 minutes.</p>
+
+
+
+<p class="wp-block-paragraph">→ <a href="https://github.com/JesseMoraga/jarvis">github.com/JesseMoraga/jarvis</a></p>
+
+
+
+<p class="wp-block-paragraph">This is the same approach I take with every tool I build — I run it on my own operation first, prove it works under real conditions, then open it up. The software isn&#8217;t theoretical. It&#8217;s what I&#8217;m actually using right now.</p>
+
+
+  </div>
+</article>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>

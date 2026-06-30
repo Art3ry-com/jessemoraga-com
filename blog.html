@@ -102,7 +102,7 @@
     </div>
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px;">
       <sc-for list="{{ mostRead }}" as="p" hint-placeholder-count="4">
-        <a href="article.html" data-card style="display:flex; flex-direction:column; gap:10px; padding:18px; border-radius:16px; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 8px 24px rgba(99,102,241,0.08); transition:transform .25s, box-shadow .25s;">
+        <a href="{{ p.href }}" data-card style="display:flex; flex-direction:column; gap:10px; padding:18px; border-radius:16px; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 8px 24px rgba(99,102,241,0.08); transition:transform .25s, box-shadow .25s;">
           <span style="align-self:flex-start; font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:4px 10px; border-radius:999px; background:{{ p.grad }};">{{ p.topic }}</span>
           <span style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:16px; line-height:1.25; letter-spacing:-0.01em;">{{ p.title }}</span>
           <span style="margin-top:auto; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#A39D8C;">{{ p.read }} · {{ p.date }}</span>
@@ -113,7 +113,7 @@
 
   <!-- ===== FEATURED ===== -->
   <section style="max-width:1100px; margin:0 auto; padding:clamp(28px,4vw,44px) 24px clamp(8px,2vw,16px);">
-    <a href="article.html" data-card style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); border-radius:24px; overflow:hidden; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 16px 44px rgba(99,102,241,0.14); transition:transform .3s, box-shadow .3s;">
+    <a href="{{ featured.href }}" data-card style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); border-radius:24px; overflow:hidden; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 16px 44px rgba(99,102,241,0.14); transition:transform .3s, box-shadow .3s;">
       <div style="position:relative; min-height:230px; background:linear-gradient(135deg,#9163EE,#4FA6D6); display:flex; align-items:flex-end; padding:22px; overflow:hidden;">
         <div aria-hidden="true" style="position:absolute; inset:0; background-image:repeating-linear-gradient(45deg, rgba(255,255,255,0.08) 0 14px, transparent 14px 28px);"></div>
         <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.12) 1px,transparent 1px); background-size:30px 30px; opacity:0.5;"></div>
@@ -121,11 +121,11 @@
       </div>
       <div style="padding:32px; display:flex; flex-direction:column;">
         <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 11px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
-          <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Featured · 9 min read · Jun 2026</span>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 11px; border-radius:999px; background:{{ featured.grad }};">{{ featured.topic }}</span>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Featured · {{ featured.read }} read · {{ featured.date }}</span>
         </div>
-        <h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,32px); line-height:1.12; letter-spacing:-0.02em; margin:16px 0 0;">How I Build Software With AI — With No CS Degree</h2>
-        <p style="margin:14px 0 0; color:#615D4F; line-height:1.6; font-size:15.5px;">The exact stack, the guardrails, and the one principle that lets a one-person shop ship like a team ten times its size.</p>
+        <h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,32px); line-height:1.12; letter-spacing:-0.02em; margin:16px 0 0;">{{ featured.title }}</h2>
+        <p style="margin:14px 0 0; color:#615D4F; line-height:1.6; font-size:15.5px;">{{ featured.excerpt }}</p>
         <span style="margin-top:auto; padding-top:22px; font-family:'Space Grotesk',sans-serif; font-weight:600; color:#7A45D8;">Read article →</span>
       </div>
     </a>
@@ -140,7 +140,7 @@
 
     <div style="columns:300px; column-gap:20px;">
       <sc-for list="{{ posts }}" as="p" hint-placeholder-count="9">
-        <a href="article.html" data-card style="display:block; break-inside:avoid; margin-bottom:20px; border-radius:18px; overflow:hidden; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 28px rgba(99,102,241,0.09); transition:transform .28s, box-shadow .28s;">
+        <a href="{{ p.href }}" data-card style="display:block; break-inside:avoid; margin-bottom:20px; border-radius:18px; overflow:hidden; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 28px rgba(99,102,241,0.09); transition:transform .28s, box-shadow .28s;">
           <div style="position:relative; height:{{ p.coverH }}; background:{{ p.grad }}; overflow:hidden;">
             <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.13) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.13) 1px,transparent 1px); background-size:26px 26px; opacity:0.55;"></div>
           </div>
@@ -196,33 +196,367 @@ class Component extends DCLogic {
     Architecture: 'linear-gradient(135deg,#7C6AE2,#4FA6D6)',
     Music: 'linear-gradient(135deg,#7A45D8,#BE4DBE)'
   };
-  ALL = [
-    { title: 'How I Build Software With AI — With No CS Degree', topic: 'Tech', read: '9 min', date: 'Jun 2026', excerpt: 'The exact stack, the guardrails, and the one principle that lets a solo shop ship like a team ten times its size.' },
-    { title: 'Why the Follow-Up Is the Sale', topic: 'Business', read: '6 min', date: 'Jun 2026', excerpt: 'Most revenue is lost in the silence after "I\'ll think about it." Here\'s the system that closes it for you.' },
-    { title: 'Designing a Site That Funnels — Not Just Sits There', topic: 'Design', read: '7 min', date: 'May 2026', excerpt: 'Every section should earn the next click. How I turn a personal site into a conversion engine.' },
-    { title: 'One Brain, One Source of Truth: How I Structure a System', topic: 'Architecture', read: '8 min', date: 'May 2026', excerpt: 'Why every business I build reads and writes from a single model — and how that keeps automation sane.' },
-    { title: 'Trivium — "Pull Harder on the Strings" | Guitar Cover', topic: 'Music', read: '4 min', date: 'May 2026', excerpt: 'California metal guitarist breaks down the rhythm tone, the tracking chain, and the parts that fight you.' },
-    { title: 'The Lead You Never Answered Is the Lead You Lost', topic: 'Business', read: '5 min', date: 'Apr 2026', excerpt: 'Speed-to-lead is not a vanity metric. The first five minutes decide who wins the job.' },
-    { title: 'Prompts Are Not a Product — Systems Are', topic: 'Tech', read: '7 min', date: 'Apr 2026', excerpt: 'Why I stopped chasing clever prompts and started building durable pipelines around them.' },
-    { title: 'Color, Contrast, Conversion: A Light-Neon System', topic: 'Design', read: '6 min', date: 'Apr 2026', excerpt: 'How a bright canvas plus restrained neon reads as premium instead of cyberpunk noise.' },
-    { title: 'The Database Is the Business', topic: 'Architecture', read: '9 min', date: 'Mar 2026', excerpt: 'If you can\'t draw your schema on a napkin, you don\'t understand your company yet.' },
-    { title: 'Ranking on Google Without Gaming It', topic: 'Business', read: '8 min', date: 'Mar 2026', excerpt: 'The unglamorous, durable SEO that actually moves local service businesses.' },
-    { title: 'I Replaced My Whole Back Office With Six Workflows', topic: 'Tech', read: '10 min', date: 'Mar 2026', excerpt: 'Invoicing, scheduling, follow-up, reviews — the automations that gave me my evenings back.' },
-    { title: 'Micro-Interactions That Earn Trust', topic: 'Design', read: '5 min', date: 'Feb 2026', excerpt: 'Hover-lift, magnetic buttons, live counters — when motion signals competence, not noise.' },
-    { title: 'From Surgical Tech to Software: Precision Transfers', topic: 'Tech', read: '6 min', date: 'Feb 2026', excerpt: 'What the operating room taught me about shipping software that can\'t afford to fail.' },
-    { title: 'Pricing a Service Like You Mean It', topic: 'Business', read: '7 min', date: 'Feb 2026', excerpt: 'Discounting is a confidence problem. Here\'s how I set numbers and hold them.' },
-    { title: 'Event-Driven, Not Cron-Driven', topic: 'Architecture', read: '8 min', date: 'Jan 2026', excerpt: 'Why I moved the business off scheduled jobs and onto events — and slept better for it.' },
-    { title: 'Lamb of God — "Laid to Rest" | Rhythm Playthrough', topic: 'Music', read: '4 min', date: 'Jan 2026', excerpt: 'Down-picking stamina, gate settings, and how I keep a wedding crowd and a metal crowd both happy.' },
-    { title: 'The One-Person Company Stack', topic: 'Tech', read: '9 min', date: 'Jan 2026', excerpt: 'Every tool I run, why it\'s in, and what I refuse to add. A living inventory.' },
-    { title: 'Write the Page for the Click, Not the Award', topic: 'Design', read: '5 min', date: 'Dec 2025', excerpt: 'Beautiful and useless is still useless. Design decisions in service of a single action.' },
-    { title: 'Idempotency Saved My Business', topic: 'Architecture', read: '7 min', date: 'Dec 2025', excerpt: 'The boring reliability pattern that stopped double-charging, double-emailing, and double-stress.' },
-    { title: 'The Math of a Reactivation Campaign', topic: 'Business', read: '6 min', date: 'Dec 2025', excerpt: 'Your warmest leads already paid you once. The spreadsheet that proves it\'s worth the message.' },
-    { title: 'Designing Loading States That Feel Fast', topic: 'Design', read: '5 min', date: 'Nov 2025', excerpt: 'Perceived performance is a design problem. Skeletons, optimism, and honest spinners.' },
-    { title: 'Raising a Daughter While Building a Company', topic: 'Business', read: '5 min', date: 'Nov 2025', excerpt: 'Stated plainly: the constraints that made me a better operator, not a worse parent.' },
-    { title: 'Webhooks, Queues, and the Art of Not Losing Data', topic: 'Architecture', read: '8 min', date: 'Nov 2025', excerpt: 'How I make sure nothing the business needs ever silently disappears.' },
-    { title: 'AI Agents Are Employees — Manage Them Like It', topic: 'Tech', read: '7 min', date: 'Oct 2025', excerpt: 'Scope, review, accountability. Treating automation like a team is the unlock.' },
-    { title: 'Building a Guitar Tone Analyzer on Weekends', topic: 'Music', read: '6 min', date: 'Oct 2025', excerpt: 'Where the music lane and the tech lane finally meet — a side project I actually use.' },
-    { title: 'The Funnel Is the Product', topic: 'Business', read: '6 min', date: 'Oct 2025', excerpt: 'Social → site → service. Designing every layer to hand the visitor to the next one.' }
+  ALL =   [
+      {
+          "title": "Fr3tLab: Find Your Scale — Tap the Notes, Get the Scale",
+          "topic": "Music",
+          "read": "3 min",
+          "date": "Jun 2026",
+          "excerpt": "The Woodshed FindYour Scale New in Fr3tLab — tap the notes, get the scale Here is the situation every guitar player knows. You are noodling around, you land on a handful ",
+          "href": "/2026/06/28/fr3tlab-find-your-scale-tap-the-notes-get-the-scale/"
+      },
+      {
+          "title": "I Built a Voice AI That Lives in My Headset — Full Source Code",
+          "topic": "Tech",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "I built a voice AI with full system access that runs locally on my Mac and lives in my headset. Here’s how it works and why — open source on GitHub.",
+          "href": "/2026/06/25/i-built-a-voice-ai-that-lives-in-my-headset-full-source-code/"
+      },
+      {
+          "title": "I Spent 20 Years Guessing. Then I Finally Built the Thing.",
+          "topic": "Music",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "For twenty years, guitar and I had a love-hate thing. It started with St. Anger — the first album I ever owned, the one record Metallica tracked in Drop C. I had the DVD,",
+          "href": "/2026/06/24/i-spent-20-years-guessing-then-i-finally-built-the-thing/"
+      },
+      {
+          "title": "How to Find Any Scale in Any Tuning — Drop C, 7-String & Beyond",
+          "topic": "Music",
+          "read": "4 min",
+          "date": "Jun 2026",
+          "excerpt": "Standard scale charts break the second you drop-tune or add strings. Here’s how to find any scale in any tuning — Drop C, 7-string, 8-string — with a free tool.",
+          "href": "/2026/06/23/how-to-find-any-scale-in-any-tuning-drop-c-7-string-beyond/"
+      },
+      {
+          "title": "Fr3tLab: I Built a Free Guitar Fretboard Visualizer for Any Tuning",
+          "topic": "Music",
+          "read": "4 min",
+          "date": "Jun 2026",
+          "excerpt": "I built Fr3tLab — a free, interactive guitar fretboard visualizer that handles any tuning, 6 to 8 strings, with scales, chords, arpeggios, and a chord identifier.",
+          "href": "/2026/06/23/fretlab-i-built-a-free-guitar-fretboard-visualizer-for-any-tuning/"
+      },
+      {
+          "title": "My Home Studio Setup — The Metal Rig I Record On",
+          "topic": "Music",
+          "read": "3 min",
+          "date": "Jun 2026",
+          "excerpt": "My home metal recording setup: Ableton Live, a Focusrite Scarlett 2i2, Neural Amp Modeler, Gamma Vocal Suite and the plugins I track guitar and screams with.",
+          "href": "/2026/06/22/my-home-studio-setup-the-metal-rig-i-record-on/"
+      },
+      {
+          "title": "Test Pollution in Production Logs (and the Real Bug It Hid)",
+          "topic": "Tech",
+          "read": "7 min",
+          "date": "Jun 2026",
+          "excerpt": "A routine health check flagged 816 errors. 680 were fake: synthetic test data leaking into a production log. The false alarms were hiding a real silent bug.",
+          "href": "/2026/06/19/test-pollution-in-production-logs-and-the-real-bug-it-hid/"
+      },
+      {
+          "title": "Silent failures: the bug that doesn’t crash, it just quietly does nothing",
+          "topic": "Tech",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "What is a silent failure in software? Jesse Moraga explains how to catch code that fails without telling you — using real commit diffs from his field-services work automa",
+          "href": "/2026/06/18/daily-2026-06-18/"
+      },
+      {
+          "title": "Fail-Silent Bugs: When Logs Say OK While the System Does Nothing",
+          "topic": "Tech",
+          "read": "7 min",
+          "date": "Jun 2026",
+          "excerpt": "How a system logs success while silently doing nothing — what fail-silent bugs are, why they’re hardest to catch, and the design rule that prevents them.",
+          "href": "/2026/06/17/fail-silent-bugs-when-logs-say-ok-while-the-system-does-nothing/"
+      },
+      {
+          "title": "Fail-Closed Design: When the Check Can’t Run, the Answer Is Always NO",
+          "topic": "Design",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "Fail-closed design explained by an operator who codes: when a safety check can’t run, the safe answer is always NO. Real diffs, real mistakes.",
+          "href": "/2026/06/17/daily-2026-06-17/"
+      },
+      {
+          "title": "What Is Software Regression — And Why It Hits Hardest When You Can’t Stop to Fix It",
+          "topic": "Tech",
+          "read": "10 min",
+          "date": "Jun 2026",
+          "excerpt": "// TECHNICALLY SPEAKING What Is Software Regression — And Why It Hits Hardest When You Can’t Stop to Fix It $ git log –oneline –since=yesterday Updated 2026-06-16 Yesterd",
+          "href": "/2026/06/16/what-is-software-regression-solo-operator/"
+      },
+      {
+          "title": "How I Use Two Claude Code Accounts Without Losing Any Context",
+          "topic": "Tech",
+          "read": "7 min",
+          "date": "Jun 2026",
+          "excerpt": "A second $20/mo Claude Pro account replaces $50-$200 in panic credit buys — because your CLAUDE.md files are the durable state, not the session.",
+          "href": "/2026/06/16/how-i-use-two-claude-code-accounts-without-losing-any-context/"
+      },
+      {
+          "title": "Single Source of Truth in Python — One Decision Function, Fail-Safe Defaults, and Why Forked Logic Drifts",
+          "topic": "Architecture",
+          "read": "14 min",
+          "date": "Jun 2026",
+          "excerpt": "Single Source of Truth in Python, by a self-taught operator: one canonical decision function, fail-safe defaults, and choosing which error is cheaper.",
+          "href": "/2026/06/15/single-source-of-truth-in-python-one-decision-function-fail-safe-defaults-and-why-forked-logic-drifts/"
+      },
+      {
+          "title": "How to Build an AI Agent That Audits Your Own Code",
+          "topic": "Tech",
+          "read": "26 min",
+          "date": "Jun 2026",
+          "excerpt": "A plain-English guide to building a self-auditing AI agent system: adversarial review, fail-closed design, idempotency, and sandboxing — from an operator who ships.",
+          "href": "/2026/06/14/how-to-build-an-ai-agent-that-audits-your-own-code/"
+      },
+      {
+          "title": "Safety-gating an overnight autonomous dispatch loop — default off, honest by design",
+          "topic": "Design",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "How I safety-gate autonomous overnight AI dispatch in a one-man field-services work business — and why the morning report has to be honest.",
+          "href": "/2026/06/14/daily-2026-06-14/"
+      },
+      {
+          "title": "Hardening a billing guard in Python automation — the e-file-without-invoicing bug",
+          "topic": "Tech",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "How an operator fixed a never-e-file-without-invoicing guard in Python automation — real commit notes from a one-man shop in.",
+          "href": "/2026/06/13/daily-2026-06-13/"
+      },
+      {
+          "title": "I Almost Gave Up on Fable 5 — Then I Told It to Build Me a Dev Team",
+          "topic": "Tech",
+          "read": "4 min",
+          "date": "Jun 2026",
+          "excerpt": "Technically Speaking I Almost Gave Up on Fable 5 — Then I Told It to Build Me a Dev Team I run a software system every day to keep my field-services work business moving.",
+          "href": "/2026/06/12/i-almost-gave-up-on-fable-5-then-i-told-it-to-build-me-a-dev-team/"
+      },
+      {
+          "title": "Killing an alert flood: from 50 iMessages an hour to signal only",
+          "topic": "Tech",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "How Jesse Moraga fixed an iMessage alert flood — 50 texts per hour down to signal-only — by deduplicating 5 repeat-loop sources in his automation system.",
+          "href": "/2026/06/12/daily-2026-06-12/"
+      },
+      {
+          "title": "Server-side confirm gate for an AI phone agent — stops a mishear before it runs",
+          "topic": "Tech",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "How a structural name-confirm gate keeps an AI skip-trace agent from running on bad input — built by a California operator with no CS degree.",
+          "href": "/2026/06/11/daily-2026-06-11/"
+      },
+      {
+          "title": "How I Use Claude Code to Run My Business — With No CS Degree",
+          "topic": "Tech",
+          "read": "5 min",
+          "date": "Jun 2026",
+          "excerpt": "What two years of pointing Claude Code at real code taught an operator with no CS degree — how I keep AI as the power tool and stay the operator.",
+          "href": "/2026/06/10/the-model-is-the-power-tool-im-still-the-operator/"
+      },
+      {
+          "title": "Songs I Can Play — Metal Guitar Covers by Band",
+          "topic": "Music",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "Every metal cover I can play, grouped by band — Slipknot, A Day to Remember, Asking Alexandria and more. A California guitarist for hire: fill-in, session, and wedding-ba",
+          "href": "/2026/06/10/songs-i-can-play-metal-guitar-covers-by-band/"
+      },
+      {
+          "title": "How I Coded an AI Assistant That Runs My Business by Voice and Text",
+          "topic": "Tech",
+          "read": "4 min",
+          "date": "Jun 2026",
+          "excerpt": "An operator with no CS degree coded an AI assistant he calls — and that calls him — to run the back office by voice and text, with a hard human gate on anything risky.",
+          "href": "/2026/06/10/how-i-coded-an-ai-assistant-that-runs-my-business-by-voice-and-text/"
+      },
+      {
+          "title": "Fixing a Python pricing bug that silently overcharged clients — a solo operator build log",
+          "topic": "Tech",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "How a small business owner fixed a pricing overcharge bug and skip-trace integration using Python and Claude — a daily build log from a solo operator in.",
+          "href": "/2026/06/10/daily-2026-06-10/"
+      },
+      {
+          "title": "Twenty Years of Playing Guitar. One Year of Actually Speaking It.",
+          "topic": "Music",
+          "read": "3 min",
+          "date": "Jun 2026",
+          "excerpt": "THE WOODSHED Twenty Years of Playing Guitar. One Year of Actually Speaking It. I’ve had a guitar in my hands for over 20 years. It wasn’t until this past year that I stop",
+          "href": "/2026/06/08/twenty-years-of-playing-guitar-one-year-of-actually-speaking-it/"
+      },
+      {
+          "title": "Slipknot — “Left Behind” | Guitar Playthrough (California Metal Guitarist)",
+          "topic": "Music",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "▶ THE WOODSHED · PLAYTHROUGH LEFT BEHIND Slipknot — performed by Jesse Moraga NU-METAL IOWA · 2001 CALIFORNIA METAL GUITARIST RHYTHM PRECISION92 GROOVE / POCKET95 RIGHT-H",
+          "href": "/2026/06/08/slipknot-left-behind-guitar-playthrough/"
+      },
+      {
+          "title": "Done Isn’t a Checkbox. It’s Proof.",
+          "topic": "Tech",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "jesse@blog : ~/blog — zsh $ git log –oneline -1 && cat post.md // TECHNICALLY SPEAKING Done Isn’t a Checkbox. It’s Proof. My system kept a list of finished jobs. Today I ",
+          "href": "/2026/06/08/done-isnt-a-checkbox-its-proof/"
+      },
+      {
+          "title": "Asking Alexandria — “Closure” on Schecter Hellraiser C-1 | Guitar Cover",
+          "topic": "Music",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "▶ THE WOODSHED · COVER CLOSURE Asking Alexandria — cover by Jesse Moraga METALCORE DEBUT · 2009 SCHECTER HELLRAISER C-1 RHYTHM90 MELODY CONTROL92 BREAKDOWN94 METALCORE96 ",
+          "href": "/2026/06/08/asking-alexandria-closure-on-the-schecter-hellraiser-c-1/"
+      },
+      {
+          "title": "A Day to Remember — “The Downfall of Us All” | Guitar Cover (California Metal Guitarist)",
+          "topic": "Music",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "▶ THE WOODSHED · COVER THE DOWNFALL OF US ALL A Day to Remember — cover by Jesse Moraga METALCORE HOMESICK · 2009 CALIFORNIA METAL GUITARIST RHYTHM88 BREAKDOWN95 DYNAMICS",
+          "href": "/2026/06/08/a-day-to-remember-the-downfall-of-us-all-guitar-cover/"
+      },
+      {
+          "title": "Your Store Is Open. Nobody Can Find It.",
+          "topic": "Business",
+          "read": "4 min",
+          "date": "Jun 2026",
+          "excerpt": "Most online stores don’t fail because the product is bad. They fail because nobody finds them. Here’s what actually decides whether a store survives.",
+          "href": "/2026/06/06/your-store-is-open-nobody-can-find-it/"
+      },
+      {
+          "title": "Your Posts Are Working Harder Than You Think — and You’re Still Getting Paid Last",
+          "topic": "Business",
+          "read": "3 min",
+          "date": "Jun 2026",
+          "excerpt": "Creators post constantly and still lose to accounts half their size. Here’s what’s actually happening — and why the system matters more than the content.",
+          "href": "/2026/06/06/your-posts-are-working-harder-than-you-think-and-youre-still-getting-paid-last/"
+      },
+      {
+          "title": "The Table That Stayed Empty Had Nothing to Do with the Food",
+          "topic": "Business",
+          "read": "4 min",
+          "date": "Jun 2026",
+          "excerpt": "Your restaurant is good. But if the right people can’t find you online in seconds, the table stays empty. Here’s what actually decides who walks in.",
+          "href": "/2026/06/06/the-table-that-stayed-empty-had-nothing-to-do-with-the-food/"
+      },
+      {
+          "title": "The Scoreboard You Never Saw (And Why You’re Already Losing On It)",
+          "topic": "Business",
+          "read": "4 min",
+          "date": "Jun 2026",
+          "excerpt": "The internet grades your business on hundreds of signals before any customer finds you. Here’s what that game looks like — and how I built a system that plays it.",
+          "href": "/2026/06/06/the-scoreboard-you-never-saw-and-why-youre-already-losing-on-it/"
+      },
+      {
+          "title": "The Internet Has Been Grading Your Business. You Just Never Saw the Report Card.",
+          "topic": "Business",
+          "read": "5 min",
+          "date": "Jun 2026",
+          "excerpt": "The internet cross-checks your name, phone, address, and bios across dozens of sources. Every mismatch costs you. Here’s what’s actually happening.",
+          "href": "/2026/06/06/the-internet-has-been-grading-your-business-you-just-never-saw-the-report-card/"
+      },
+      {
+          "title": "The Internet Already Has a Version of You. Is It the Right One?",
+          "topic": "Business",
+          "read": "4 min",
+          "date": "Jun 2026",
+          "excerpt": "Every employer searches your name before the interview. Most people have no idea what comes up — or any control over it. Here’s how to own the accurate version.",
+          "href": "/2026/06/06/the-internet-already-has-a-version-of-you-is-it-the-right-one/"
+      },
+      {
+          "title": "The Hungry Person 3 Blocks Away Can’t Find You. Here’s Why.",
+          "topic": "Business",
+          "read": "3 min",
+          "date": "Jun 2026",
+          "excerpt": "For food truck owners: the invisible online work that decides whether someone nearby finds you right now — and the system that handles all of it.",
+          "href": "/2026/06/06/the-hungry-person-3-blocks-away-cant-find-you-heres-why/"
+      },
+      {
+          "title": "The Customer You Never Knew You Lost",
+          "topic": "Business",
+          "read": "4 min",
+          "date": "Jun 2026",
+          "excerpt": "When someone needs a plumber or mobile mechanic right now, one provider gets the call. Here’s what decides who that is — and why it’s rarely the best one.",
+          "href": "/2026/06/06/the-customer-you-never-knew-you-lost/"
+      },
+      {
+          "title": "Most Businesses Have a Website. Very Few Have One the Internet Trusts.",
+          "topic": "Business",
+          "read": "5 min",
+          "date": "Jun 2026",
+          "excerpt": "There’s a difference between having a website and having one the internet trusts. Here’s what that difference costs you — and why it matters more than you think.",
+          "href": "/2026/06/06/most-businesses-have-a-website-very-few-have-one-the-internet-trusts/"
+      },
+      {
+          "title": "Built for the Person Doing It All Themselves",
+          "topic": "Business",
+          "read": "4 min",
+          "date": "Jun 2026",
+          "excerpt": "Art3ry is a done-for-you growth system for solo operators, side hustlers, and anyone building something real without a team behind them.",
+          "href": "/2026/06/06/built-for-the-person-doing-it-all-themselves/"
+      },
+      {
+          "title": "Be a Customer of Your Own Business for One Day",
+          "topic": "Business",
+          "read": "4 min",
+          "date": "Jun 2026",
+          "excerpt": "Most owners have never experienced their own business the way a stranger does. That gap is bleeding you customers — and you don’t even know where.",
+          "href": "/2026/06/06/be-a-customer-of-your-own-business-for-one-day/"
+      },
+      {
+          "title": "Six Days on GitHub, Three Badges, and What They Actually Mean",
+          "topic": "Business",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "I made a GitHub account last week. It started handing me achievement badges. Here’s how you actually earn each one — and why an operator has them.",
+          "href": "/2026/06/03/six-days-on-github-three-badges-and-what-they-actually-mean/"
+      },
+      {
+          "title": "From SaaS to GaaS: What Small Businesses Need to Know",
+          "topic": "Business",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "Software is shifting from tools you log into to systems that do the work. Here’s what “generate-as-a-service” (GaaS) means for a small business — and the proof behind it.",
+          "href": "/2026/06/02/from-saas-to-gaas-small-business/"
+      },
+      {
+          "title": "Why I Left the Operating Room",
+          "topic": "Business",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "ORIGIN STORY Why I Left the Operating Room From cardiac surgical tech to operator to systems builder — the thread that connects all three. THE CAREER I spent nearly a dec",
+          "href": "/2026/06/01/why-i-left-the-operating-room/"
+      },
+      {
+          "title": "I’m the Guy Who Asks How It Works",
+          "topic": "Business",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "OPERATOR MINDSET I’m the Guy Who Asks How It Works Every license, skill, and system I’ve built started with one question. Here’s what that question costs and what it retu",
+          "href": "/2026/06/01/im-the-guy-who-asks-how-it-works/"
+      },
+      {
+          "title": "I Didn’t Build It For My Business. I Built It For How Business Runs.",
+          "topic": "Tech",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "ARCHITECTURE I Didn’t Build It For My Business. I Built It For How Business Runs. The system behind my field-services company is 95% industry-agnostic. Here’s why that ma",
+          "href": "/2026/06/01/i-didnt-build-it-for-my-business-i-built-it-for-how-business-runs/"
+      },
+      {
+          "title": "I Couldn’t Afford an Assistant, So I Built One",
+          "topic": "Tech",
+          "read": "2 min",
+          "date": "Jun 2026",
+          "excerpt": "HOW IT STARTED I Couldn’t Afford an Assistant, So I Built One From missed calls and forgotten follow-ups to a fully automated back office — the build that runs my field-s",
+          "href": "/2026/06/01/i-couldnt-afford-an-assistant-so-i-built-one/"
+      }
   ];
 
   state = { vw: (typeof window !== 'undefined' ? window.innerWidth : 1200), menuOpen: false, topic: 'All', query: '' };
@@ -270,6 +604,7 @@ class Component extends DCLogic {
     });
 
     const mostRead = [this.ALL[0], this.ALL[1], this.ALL[10], this.ALL[3]].map(p => ({ ...p, grad: this.GRAD[p.topic] }));
+    const featured = { ...this.ALL[0], grad: this.GRAD[this.ALL[0].topic] };
 
     const label = this.state.topic === 'All' ? 'All posts' : this.state.topic;
     return {
@@ -280,7 +615,7 @@ class Component extends DCLogic {
       desktopNav: mobile ? 'none' : 'flex',
       mobileNav: mobile ? 'flex' : 'none',
       menuDisplay: (mobile && this.state.menuOpen) ? 'flex' : 'none',
-      topicBtns, posts, mostRead,
+      topicBtns, posts, mostRead, featured,
       heading: label,
       countLabel: filtered.length + (filtered.length === 1 ? ' post' : ' posts'),
       emptyDisplay: filtered.length === 0 ? 'block' : 'none'

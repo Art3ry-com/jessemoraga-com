@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hardening a billing guard in Python automation — the e-file-without-invoicing bug | Jesse Moraga</title>
+<meta name="description" content="How an operator fixed a never-e-file-without-invoicing guard in Python automation — real commit notes from a one-man shop in.">
+<link rel="canonical" href="https://jessemoraga.com/2026/06/13/daily-2026-06-13/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/06/13/daily-2026-06-13/">
+<meta property="og:title" content="Hardening a billing guard in Python automation — the e-file-without-invoicing bug">
+<meta property="og:description" content="How an operator fixed a never-e-file-without-invoicing guard in Python automation — real commit notes from a one-man shop in.">
+<meta property="article:published_time" content="2026-06-13T08:00:43-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#2A2820;background:#F1EFE6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#39362B}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#2A2820}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#2A2820}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img,.post-content iframe{max-width:100%;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#6D44C2;padding:2px 7px;border-radius:6px}
+</style>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Jun 13, 2026 &middot; 2 min read</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,52px); line-height:1.08; letter-spacing:-0.03em; margin:18px 0 0;">Hardening a billing guard in Python automation — the e-file-without-invoicing bug</h1>
+  </div>
+  <div class="post-content">
+<div style="background:#06080a;color:#c9d3da;border-radius:18px;overflow:hidden;font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.7;border:1px solid #14323a">
+<div style="background:#0b1014;border-bottom:1px solid #14323a">
+<div style="display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid #11252b"><span style="width:11px;height:11px;border-radius:50%;background:#f87171;display:inline-block"></span><span style="width:11px;height:11px;border-radius:50%;background:#fbbf24;display:inline-block"></span><span style="width:11px;height:11px;border-radius:50%;background:#34d399;display:inline-block"></span><span style="margin-left:8px;color:#6b7785;font-family:monospace;font-size:12px">jesse@blog&#160;:&#160;~/blog&#160;&#8212;&#160;zsh</span></div>
+<div style="padding:24px 28px 26px;font-family:ui-monospace,Menlo,monospace">
+<div style="color:#6b7785;font-size:13px;margin-bottom:10px"><span style="color:#34d399">$</span> git log &#8211;oneline -5 | grep efiling</div>
+<div style="color:#34d399;font-size:12px;letter-spacing:1px;margin-bottom:8px">// TECHNICALLY SPEAKING</div>
+<h1 style="font-size:30px;line-height:1.15;margin:0 0 12px;color:#ffffff;letter-spacing:-.5px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;font-weight:800">Hardening a billing guard in Python automation — the e-file-without-invoicing bug</h1>
+<p style="color:#9fb0ba;font-size:16px;max-width:640px;margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif">One guard that almost let a job go out the door without a fee attached — and how I closed the gap.<span style="color:#34d399">▌</span></p>
+</div>
+</div>
+<div style="padding:14px 28px 0">
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## THE HOOK</h2>
+<p style="color:#c4c9d8;margin:0 0 14px">The <a href="https://opensourceaimustwin.com/?share=v2" style="color:#56b6f2;text-decoration:none">Open Source AI Must Win</a> argument is mostly about who controls the model weights. I get it. But out here running a one-man field-services work operation, the fight I care about is simpler: does my code do exactly what I told it to do, every time, with no surprises? Yesterday&#8217;s session was a reminder that the answer is only ever &#8220;yes, until it isn&#8217;t.&#8221;</p>
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## WHAT BROKE</h2>
+<p style="color:#c4c9d8;margin:0 0 14px">I have a guard in the e-filing module whose whole job is simple: don&#8217;t proceed unless a $30 fee is already on the invoice. I&#8217;d written it once, tested it once, and moved on. Then a review pass surfaced a gap — there was a code path where the guard could be reached before the invoice check had actually resolved. Not &#8220;wrong answer.&#8221; Just… skipped entirely. The guard wasn&#8217;t lying. It was just getting bypassed on a timing edge.</p>
+<p style="color:#c4c9d8;margin:0 0 14px">A related issue: the confirmation email was going out on the court&#8217;s ruling event instead of on our own SUBMITTED event. So a client would hear nothing from us until the court came back. That&#8217;s a bad client experience and it&#8217;s fixable.</p>
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## THE FIX</h2>
+<div style="background:#0b1014;border:1px solid #14323a;border-radius:10px;overflow:hidden;margin:0 0 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px">
+<div style="padding:4px 0">
+<div style="padding:3px 14px;background:rgba(248,113,113,.10);color:#f87171">&#8211; proceed_if_invoiced() # called once at entry; bypassed on fast re-entry path</div>
+<div style="padding:3px 14px;background:rgba(52,211,153,.10);color:#34d399">+ auto_ensure_fee() # idempotent — runs inline, enforces before any action</div>
+</div>
+</div>
+<p style="color:#c4c9d8;margin:0 0 14px">The new function is idempotent. Call it ten times, same result. It doesn&#8217;t check whether the fee <em>was</em> attached at some earlier point — it ensures the fee <em>is</em> attached right now, inline, before anything downstream runs. That&#8217;s the pattern I keep relearning: a guard that can be bypassed isn&#8217;t a guard, it&#8217;s a suggestion.</p>
+<div style="background:#0b1014;border:1px solid #14323a;border-radius:10px;padding:14px 16px;margin:0 0 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px"><span style="color:#6b7785"># simplified shape — real version is deeper in the pipeline</span><br /><span style="color:#56b6f2">def</span> <span style="color:#e5c07b">auto_ensure_fee</span>(job):<br />&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#56b6f2">if</span> <span style="color:#e5c07b">job</span>.fee_line_exists(<span style="color:#34d399">&#8220;efile&#8221;</span>):<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#56b6f2">return</span> <span style="color:#6b7785"># already good</span><br />&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e5c07b">job</span>.add_fee(<span style="color:#34d399">&#8220;efile&#8221;</span>, amount=<span style="color:#fbbf24">30_00</span>) <span style="color:#6b7785"># cents — Square format</span><br />&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e5c07b">job</span>.flag_for_review(<span style="color:#34d399">&#8220;fee auto-added before efile&#8221;</span>)</div>
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## THE LOG AFTER</h2>
+<div style="background:#0b1014;border:1px solid #14323a;border-radius:10px;padding:12px 14px;margin:0 0 18px;font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.85">
+<div>&lt;span</p>
+
+  </div>
+</article>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>

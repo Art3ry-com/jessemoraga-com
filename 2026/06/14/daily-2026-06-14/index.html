@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Safety-gating an overnight autonomous dispatch loop — default off, honest by design | Jesse Moraga</title>
+<meta name="description" content="How I safety-gate autonomous overnight AI dispatch in a one-man field-services work business — and why the morning report has to be honest.">
+<link rel="canonical" href="https://jessemoraga.com/2026/06/14/daily-2026-06-14/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/06/14/daily-2026-06-14/">
+<meta property="og:title" content="Safety-gating an overnight autonomous dispatch loop — default off, honest by design">
+<meta property="og:description" content="How I safety-gate autonomous overnight AI dispatch in a one-man field-services work business — and why the morning report has to be honest.">
+<meta property="article:published_time" content="2026-06-14T08:00:38-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#2A2820;background:#F1EFE6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#39362B}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#2A2820}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#2A2820}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img,.post-content iframe{max-width:100%;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#6D44C2;padding:2px 7px;border-radius:6px}
+</style>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#A06AF2,#F05C98);">Design</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Jun 14, 2026 &middot; 2 min read</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,52px); line-height:1.08; letter-spacing:-0.03em; margin:18px 0 0;">Safety-gating an overnight autonomous dispatch loop — default off, honest by design</h1>
+  </div>
+  <div class="post-content">
+<div style="background:#06080a;color:#c9d3da;border-radius:18px;overflow:hidden;font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.7;border:1px solid #14323a">
+<div style="background:#0b1014;border-bottom:1px solid #14323a">
+<div style="display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid #11252b"><span style="width:11px;height:11px;border-radius:50%;background:#f87171;display:inline-block"></span><span style="width:11px;height:11px;border-radius:50%;background:#fbbf24;display:inline-block"></span><span style="width:11px;height:11px;border-radius:50%;background:#34d399;display:inline-block"></span><span style="margin-left:8px;color:#6b7785;font-family:monospace;font-size:12px">jesse@blog&#160;:&#160;~/blog&#160;&#8212;&#160;zsh</span></div>
+<div style="padding:24px 28px 26px;font-family:ui-monospace,Menlo,monospace">
+<div style="color:#6b7785;font-size:13px;margin-bottom:10px"><span style="color:#34d399">$</span> git log &#8211;oneline -5 overnight-orchestrator</div>
+<div style="color:#34d399;font-size:12px;letter-spacing:1px;margin-bottom:8px">// TECHNICALLY SPEAKING</div>
+<h1 style="font-size:30px;line-height:1.15;margin:0 0 12px;color:#ffffff;letter-spacing:-.5px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;font-weight:800">Safety-gating an overnight autonomous dispatch loop — default off, honest by design</h1>
+<p style="color:#9fb0ba;font-size:16px;max-width:640px;margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif">KPMG just pulled an AI report over hallucinations. Here&#8217;s how I built the same skepticism into my own overnight orchestrator before it ever runs unsupervised.<span style="color:#34d399">&#9612;</span></p>
+</div>
+</div>
+<div style="padding:14px 28px 0">
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## THE HOOK</h2>
+<p style="color:#c4c9d8;margin:0 0 14px"><a href="https://techcrunch.com/2026/06/13/kpmg-pulls-report-on-ai-usage-due-to-apparent-hallucinations/" style="color:#56b6f2;text-decoration:none">KPMG pulled their AI-usage report this week after apparent hallucinations made the numbers unreliable</a>. A big firm, real researchers, still got burned by output they didn&#8217;t verify. I read that and felt it. I&#8217;m arming an overnight orchestrator on my own business system right now. The difference between &#8220;this helps&#8221; and &#8220;this quietly makes things up&#8221; is entirely in how honest you force the system to be when it reports back to you.</p>
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## WHAT SHIPPED</h2>
+<p style="color:#c4c9d8;margin:0 0 14px">Yesterday I armed and installed the overnight orchestrator. It&#8217;s wired to run AUTO-OK work only — a narrowly scoped class of operations that don&#8217;t touch anything requiring my judgment. It runs on a branch, not main. Default is off. That&#8217;s not laziness; that&#8217;s the architecture. A flag you have to explicitly set to <span style="color:#34d399;font-family:monospace">True</span> is a gate you have to consciously walk through every single time.</p>
+<p style="color:#c4c9d8;margin:0 0 14px">The other half of the commit was making the morning report honest and reviewable. This matters more than the orchestrator itself. If the overnight run produces a report I can&#8217;t audit — vague summaries, no counts, no diff of what changed — then I have no idea what actually happened while I was asleep. The report has to show me exactly what ran, what it touched, and what it skipped. Anything it couldn&#8217;t handle confidently should surface as a flag, not disappear into a success message.</p>
+<div style="background:#0b1014;border:1px solid #14323a;border-radius:10px;overflow:hidden;margin:0 0 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px">
+<div style="padding:4px 0">
+<div style="padding:3px 14px;background:rgba(248,113,113,.10);color:#f87171">&#8211; overnight run: &#8220;Completed successfully.&#8221; (no detail)</div>
+<div style="padding:3px 14px;background:rgba(52,211,153,.10);color:#34d399">+ overnight run: items_processed=14, skipped=2, flags=1 → review queue</div>
+</div>
+</div>
+<p style="color:#c4c9d8;margin:0 0 14px">The skipped items and the flags are the whole point. An honest &#8220;I didn&#8217;t do this&#8221; is worth ten confident wrong answers. That&#8217;s the KPMG lesson, applied at 2 a.m. on a single-operator business.</p>
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## THE LOG</h2>
+<div style="background:#0b1014;border:1px solid #14323a;border-radius:10px;padding:12px 14px;margin:0 0 18px;font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.85">
+<div><span style="color:#6b7785">[02:00:01]</span> <span style="color:#56b6f2">INFO</span>&#160; orchestrator boot — branch-only, AUTO-OK gate active</div>
+<div><span style="color:#6b7785">[02:00:03]</span> <span style="color:#34d399">OK&#160;&#160;</span>&#160; dispatch_enabled=False — skipping autonomous run ✓</div>
+<div><span style="color:#6b7785">[02:00:04]</span> <span style="color:#34d399">OK&#160;&#160;</span>&#160; morning report generated: 0 items processed, 0 flags</div>
+<div><span style="color:#6b7785">[06:31:17]</span> <span style="color:#56b6f2">INFO</span>&#160; jesse reads report — nothing ran, nothing to review</div>
+<div><span style="color:#6b7785">[06:31:18]</span> <span style="color:#34d399">OK&#160;&#160;</span>&#160; that is the correct behavior on day one ✓</div>
+</div>
+<div style="background:#0b1014;border-left:3px solid #34d399;border-radius:8px;padding:16px 20px;margin:20px 0">
+<p style="color:#e8eaf0;font-size:17px;font-style:italic;margin:0">The most important thing an automated system can do is tell you — clearly — what it didn</p>
+
+  </div>
+</article>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>

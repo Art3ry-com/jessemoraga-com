@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fail-Silent Bugs: When Logs Say OK While the System Does Nothing | Jesse Moraga</title>
+<meta name="description" content="How a system logs success while silently doing nothing — what fail-silent bugs are, why they’re hardest to catch, and the design rule that prevents them.">
+<link rel="canonical" href="https://jessemoraga.com/2026/06/17/fail-silent-bugs-when-logs-say-ok-while-the-system-does-nothing/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/06/17/fail-silent-bugs-when-logs-say-ok-while-the-system-does-nothing/">
+<meta property="og:title" content="Fail-Silent Bugs: When Logs Say OK While the System Does Nothing">
+<meta property="og:description" content="How a system logs success while silently doing nothing — what fail-silent bugs are, why they’re hardest to catch, and the design rule that prevents them.">
+<meta property="article:published_time" content="2026-06-17T19:03:04-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#2A2820;background:#F1EFE6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#39362B}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#2A2820}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#2A2820}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img,.post-content iframe{max-width:100%;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#6D44C2;padding:2px 7px;border-radius:6px}
+</style>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Jun 17, 2026 &middot; 7 min read</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,52px); line-height:1.08; letter-spacing:-0.03em; margin:18px 0 0;">Fail-Silent Bugs: When Logs Say OK While the System Does Nothing</h1>
+  </div>
+  <div class="post-content">
+<p><!--META: How a system can log success while silently doing nothing — what fail-silent bugs are, why they're hardest to catch, and the design rule that prevents them.--></p>
+<div style="max-width:760px;margin:0 auto;background:#06080a;color:#c9d4e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.7;border-radius:14px;overflow:hidden;border:1px solid #1b2430">
+<p>  <!-- terminal hero --></p>
+<div style="background:#0a0e13;padding:18px 22px;border-bottom:1px solid #1b2430">
+<div style="display:flex;gap:8px;margin-bottom:16px">
+      <span style="width:12px;height:12px;border-radius:50%;background:#f87171;display:inline-block"></span><br />
+      <span style="width:12px;height:12px;border-radius:50%;background:#fbbf24;display:inline-block"></span><br />
+      <span style="width:12px;height:12px;border-radius:50%;background:#34d399;display:inline-block"></span>
+    </div>
+<div style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#56b6f2;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">// TECHNICALLY SPEAKING</div>
+<h1 style="margin:0;color:#eaf1f8;font-size:30px;line-height:1.25;font-weight:800">Fail-Silent Bugs: When Logs Say OK While the System Does Nothing</h1>
+<div style="font-family:ui-monospace,Menlo,monospace;color:#5b6b7c;font-size:13px;margin-top:14px">$ <span style="color:#34d399">git log &#8211;oneline &#8211;since=yesterday</span></div>
+<div style="font-family:ui-monospace,Menlo,monospace;color:#5b6b7c;font-size:12px;margin-top:8px">Updated 2026-06-17</div>
+</p>
+</div>
+<div style="padding:26px 24px">
+<p style="font-size:19px;color:#eaf1f8"><strong>Today I spent the better part of the day fixing bugs that weren&#8217;t crashing anything. The logs looked clean. No errors, no alerts, no stack traces. And a whole tier of automated steps were silently doing nothing — or worse, doing the wrong thing and logging success on the way out.</strong></p>
+<p>I run a real California field-services company. The whole operation runs on software I built from scratch — intake, dispatch, invoicing, client comms, all automated. Over 1,000 cases through it. When it works, I&#8217;m one person doing the job of four. When it breaks silently, I don&#8217;t find out until something downstream doesn&#8217;t happen and someone asks why.</p>
+<p>Today was that kind of day. No crashes. Just a system confidently marching forward on stale data, mismatched enum values, and wrong routing paths — logging &#8220;processed ok&#8221; the whole time. The technical name for this is a <a href="https://en.wikipedia.org/wiki/Fault_tolerance" style="color:#56b6f2;text-decoration:none">fail-silent failure</a>. It&#8217;s the hardest class of bug to catch, because nothing tells you it&#8217;s happening.</p>
+<p>    <!-- TOC --></p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:18px 20px;margin:24px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">$ cat contents.md</div>
+<ol style="margin:0;padding-left:20px;color:#9fb0c0">
+<li style="margin-bottom:6px"><a href="#what" style="color:#56b6f2;text-decoration:none">What a fail-silent bug actually is</a></li>
+<li style="margin-bottom:6px"><a href="#why" style="color:#56b6f2;text-decoration:none">Why they&#8217;re harder to find than crashes</a></li>
+<li style="margin-bottom:6px"><a href="#real" style="color:#56b6f2;text-decoration:none">Three real ones I hit today</a></li>
+<li style="margin-bottom:6px"><a href="#fix" style="color:#56b6f2;text-decoration:none">The fix: verify the effect, not the call</a></li>
+<li style="margin-bottom:0"><a href="#apply" style="color:#56b6f2;text-decoration:none">Three questions to ask about any automated step</a></li>
+</ol>
+</div>
+<p>    <!-- SECTION 1 --></p>
+<h2 id="what" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">1. What a fail-silent bug actually is</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>A fail-silent failure is when a system encounters a condition it can&#8217;t handle — and instead of crashing or alerting, it quietly does nothing and moves on. No error is raised. Nothing gets logged as a failure. The system just skips the work and continues. Everything looks nominal from the outside. And the work doesn&#8217;t happen.</p>
+<p>This is different from a crash (which tells you exactly where things went wrong) and different from an unhandled exception (which at least leaves a trace). A fail-silent failure is a zero — a complete non-event. The system logs &#8220;processed&#8221; and the step never ran.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY IT WORKS THIS WAY</p>
+<p>Most fail-silent bugs are accidental design. Someone wrote <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">if records: do_the_thing(records)</code> and assumed records would always exist. When the query filter breaks and records comes back empty — no exception. The condition is False, the loop runs zero times, and the log line at the end says everything processed fine.</p>
+<p>The code handles the normal case. Nobody designed behavior for when the input is wrong.</p>
+<p>    <!-- SECTION 2 --></p>
+<h2 id="why" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">2. Why they&#8217;re harder to find than crashes</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>A crash tells you where to look. An error log tells you what broke. A fail-silent bug gives you nothing except an absence. And absences are hard to notice, especially when you&#8217;re the one who built the system and you&#8217;re also the one running it.</p>
+<p>The way I find fail-silent bugs is when someone asks why something didn&#8217;t happen. Not from my own monitoring. A step that was supposed to fire didn&#8217;t. A case that should have advanced didn&#8217;t. By the time I know about it, the bug might have been silently eating work for hours — sometimes longer.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY THEY COMPOUND</p>
+<p>Fail-silent bugs also tend to travel in packs. One module emits a value another module doesn&#8217;t recognize. The mismatch propagates. Module A doesn&#8217;t produce the right output, module B doesn&#8217;t recognize it and skips, module C never gets triggered. Each one looks fine in isolation. The problem lives in the handoff.</p>
+<p>And by the time you find the surface symptom, the root is three modules back and covered by logs that all say &#8220;ok.&#8221;</p>
+<p>    <!-- SECTION 3 --></p>
+<h2 id="real" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">3. Three real ones I hit today</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// A REAL EXAMPLE</p>
+<p>I&#8217;m keeping the business logic vague — client data doesn&#8217;t go in blog posts. But the patterns are exact.</p>
+<p>    <!-- Live log block --></p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.9;margin:24px 0;color:#c9d4e0">
+<div style="color:#56b6f2;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">// LIVE LOG — TODAY&#8217;S SESSION</div>
+<div><span style="color:#fbbf24">[09:14]</span> <span style="color:#34d399">BUG 1 — stale query:</span> filter referenced a dropped property option → returned [] → 14 records silently skipped, logged &#8220;processed 0&#8221;</div>
+<div style="margin-top:8px"><span style="color:#fbbf24">[11:32]</span> <span style="color:#34d399">BUG 2 — enum desync:</span> module A emits &#8220;COURT_RUN&#8221; → module B expected &#8220;COURT RUN&#8221; → handler never fired → no action, no alert, logged &#8220;ok&#8221;</div>
+<div style="margin-top:8px"><span style="color:#fbbf24">[14:05]</span> <span style="color:#34d399">BUG 3 — routing mismatch:</span> one intake category routed to the generic handler instead of its own path → wrong draft built → logged success</div>
+<div style="margin-top:12px;color:#f87171">all three: INFO — processing complete</div>
+</p>
+</div>
+<p><strong>Bug 1</strong> is a query that trusted its filter was correct. The filter broke when a property option got renamed upstream — the query returned an empty list, the loop ran zero iterations, nothing got processed. No exception. Zero records handled, zero alerts, one &#8220;processed ok&#8221; log line.</p>
+<p><strong>Bug 2</strong> is the canonical form of this class of failure: an enum mismatch. Two modules agreed on what values exist. They were using slightly different spellings. One module&#8217;s output was never recognized by the other. The handler for that value never fired. Again, no error anywhere.</p>
+<p><strong>Bug 3</strong> is a routing path that correctly categorized the input but sent it to the wrong handler. The handler ran and succeeded — it just ran the wrong logic and produced a wrong artifact. Found out when I looked at the output, not from any alert.</p>
+<p>    <!-- SECTION 4 --></p>
+<h2 id="fix" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">4. The fix: verify the effect, not the call</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>Here&#8217;s the rule I came out of today with: don&#8217;t log that you called a function. Log that the function had an effect.</p>
+<p>The difference sounds small. It&#8217;s not. Logging a call is easy — you always called the function. Verifying an effect means checking whether the work actually happened: the record was written, the message was delivered, the count changed, the state transitioned. If you can&#8217;t verify the effect, you don&#8217;t know if the step succeeded.</p>
+<p>    <!-- Git diff block --></p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8;margin:24px 0">
+<div style="color:#56b6f2;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">$ git diff HEAD~1 HEAD &#8212; core/pipeline_worker.py</div>
+<div style="color:#f87171">&#8211; records = query_active_records(filter=action_type)</div>
+<div style="color:#f87171">&#8211; for r in records:</div>
+<div style="color:#f87171">&#8211;     process(r)</div>
+<div style="color:#f87171">&#8211; log(&#8220;processed %d records&#8221;, len(records))</div>
+<div style="color:#34d399;margin-top:6px">+ records = query_active_records(filter=action_type)</div>
+<div style="color:#34d399">+ if not records:</div>
+<div style="color:#34d399">+     log.warning(&#8220;EMPTY RESULT for %s — verify filter is still valid&#8221;, action_type)</div>
+<div style="color:#34d399">+     alert_jesse(&#8220;Zero records for %s — possible filter desync&#8221;, action_type)</div>
+<div style="color:#34d399">+     return</div>
+<div style="color:#34d399">+ processed = [r for r in records if process(r)]</div>
+<div style="color:#34d399">+ if len(processed) != len(records):</div>
+<div style="color:#34d399">+     log.error(&#8220;processed %d of %d — %d failed&#8221;, len(processed), len(records), len(records)-len(processed))</div>
+</p>
+</div>
+<p>The old version trusted that records would be there. If they weren&#8217;t, it ran zero times and logged success. The new version treats empty as suspicious — because in a live production system, a query that returns zero records when it should return active ones means the query is broken, not that there&#8217;s nothing to do. Those are different things and they need different log entries.</p>
+<p>The enum fix was the same pattern: instead of handling known values and silently ignoring unknown ones, I added an explicit <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">else: log.error("unrecognized ACTION value: %s", val)</code> branch. Unknown values are now loudly wrong instead of quietly ignored.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// THE DESIGN PRINCIPLE</p>
+<p>This is called <strong>fail-closed design</strong>. When something unexpected happens — a query returns empty, an enum value isn&#8217;t recognized, a routing condition doesn&#8217;t match — the system moves toward the safe state: alert, halt, surface the gap. It does not move toward the permissive state: assume fine, skip, continue. Fail-open looks resilient. It&#8217;s actually just silent.</p>
+<p>    <!-- SECTION 5 --></p>
+<h2 id="apply" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">5. Three questions to ask about any automated step</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// HOW TO APPLY THIS</p>
+<p>I ask these about every step in my automation pipeline now:</p>
+<p><strong>What does success actually look like?</strong> Not &#8220;did the function run&#8221; — what changed in the world? A record was created. A draft was sent. A status transitioned. If you can&#8217;t name the effect, you don&#8217;t have a success condition. You have a log line.</p>
+<p><strong>What does an empty result mean?</strong> If a query returns zero records, is that normal or suspicious? &#8220;Nothing to process right now&#8221; is fine. &#8220;Nothing that matches a filter that should always match active records&#8221; is a bug. Know the difference and log it differently.</p>
+<p><strong>What happens to a value you don&#8217;t recognize?</strong> If an enum, a status string, or a routing key appears that you didn&#8217;t write a handler for — does your code skip it silently, crash loudly, or alert and halt? Crashing loud and alerting-and-halting are both acceptable options. Skipping silently is not an option in a system where real work depends on it.</p>
+<p>The discipline is just the habit of treating silence as suspicious instead of treating it as fine. Systems that fail loudly are fixable. Systems that fail silently are time bombs — and the fuse is already lit, you just can&#8217;t see it.</p>
+<p>    <!-- $ whoami close --></p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:18px 20px;margin-top:38px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8">
+<div style="color:#56b6f2;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">$ whoami</div>
+<div style="color:#c9d4e0">Jesse Moraga — <a href="https://jessemoraga.com/about" style="color:#56b6f2;text-decoration:none">surgical tech turned self-taught systems builder</a>. I run a real California field-services company on software I built from scratch. No CS degree. A real company runs on it. <a href="https://jessemoraga.com/system" style="color:#56b6f2;text-decoration:none">The system page has what I built and what I offer.</a></div>
+<div style="margin-top:10px;color:#5b6b7c">→ <a href="https://github.com/JesseMoraga" style="color:#34d399;text-decoration:none">github.com/JesseMoraga</a></div>
+</p>
+</div>
+</div>
+</div>
+
+  </div>
+</article>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>

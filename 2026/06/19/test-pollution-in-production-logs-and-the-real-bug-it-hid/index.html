@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test Pollution in Production Logs (and the Real Bug It Hid) | Jesse Moraga</title>
+<meta name="description" content="A routine health check flagged 816 errors. 680 were fake: synthetic test data leaking into a production log. The false alarms were hiding a real silent bug">
+<link rel="canonical" href="https://jessemoraga.com/2026/06/19/test-pollution-in-production-logs-and-the-real-bug-it-hid/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/06/19/test-pollution-in-production-logs-and-the-real-bug-it-hid/">
+<meta property="og:title" content="Test Pollution in Production Logs (and the Real Bug It Hid)">
+<meta property="og:description" content="A routine health check flagged 816 errors. 680 were fake: synthetic test data leaking into a production log. The false alarms were hiding a real silent bug">
+<meta property="article:published_time" content="2026-06-19T14:37:21-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#2A2820;background:#F1EFE6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#39362B}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#2A2820}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#2A2820}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img,.post-content iframe{max-width:100%;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#6D44C2;padding:2px 7px;border-radius:6px}
+</style>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Jun 19, 2026 &middot; 7 min read</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,52px); line-height:1.08; letter-spacing:-0.03em; margin:18px 0 0;">Test Pollution in Production Logs (and the Real Bug It Hid)</h1>
+  </div>
+  <div class="post-content">
+<p><strong>Short answer:</strong> A routine health check on my one-operator automation platform flagged 816 errors and one pattern that had &ldquo;fired 624 times today.&rdquo; When I dug in, 680 of those were fake &mdash; synthetic test data my own test suite was writing into the real production error log on every run. The false alarms had quietly trained me to distrust the monitor. And under the noise sat a real bug that was silently aborting work. This is the discovery, the two fixes, and why telling signal from noise is most of the job.</p>
+<p><em>Updated 2026-06-19.</em></p>
+<h2>Table of contents</h2>
+<ul>
+<li><a href="#sweep">The sweep that wasn&rsquo;t routine</a></li>
+<li><a href="#noise">Discovery 1: my tests were poisoning production logs</a></li>
+<li><a href="#wolf">Alarm fatigue is a real outage</a></li>
+<li><a href="#realbug">Discovery 2: the bug the noise was hiding</a></li>
+<li><a href="#fixes">The two fixes</a></li>
+<li><a href="#why">Why this is the good work</a></li>
+<li><a href="#faq">FAQ</a></li>
+</ul>
+<h2 id="sweep">The sweep that wasn&rsquo;t routine</h2>
+<p>I run the back office of a small service business almost entirely on software I built myself &mdash; hundreds of jobs a month, one operator, on well under $300/month of infrastructure. On a busy day I did what every operator should do more often: I stopped shipping features and asked one question &mdash; <strong>is everything actually flowing?</strong></p>
+<p>The health dashboard came back mostly green: services up, queues draining, zero failed background jobs. But the error monitor was loud. It claimed <strong>816 errors</strong> in the logs and was paging me about a pattern that had &ldquo;fired 624 times today &mdash; INVESTIGATE.&rdquo; Two other patterns had supposedly been failing for 7 and 10 days straight.</p>
+<p>That is exactly the moment most solo builders glance at the green dashboard, decide the monitor is being dramatic, and move on. I&rsquo;ve learned the hard way not to.</p>
+<h2 id="noise">Discovery 1: my tests were poisoning production logs</h2>
+<p>I opened the noisiest log and read the actual lines instead of the count. The &ldquo;errors&rdquo; looked like this:</p>
+<pre><code>no usage found; type=dict keys=['foo', 'no_usage_here']
+no usage found; type=dict keys=['mystery', 'no_tokens']
+no usage found; type=NoneType keys=['NoneType']</code></pre>
+<p>Keys named <code>foo</code>, <code>mystery</code>, <code>no_usage_here</code>. No real API response on earth has those keys &mdash; those are <strong>test fixtures</strong>. A unit test was feeding deliberately-broken payloads into a parser to prove the parser handles junk gracefully. Good test. The problem: the parser legitimately logs every unrecognized shape to a real error-log file, and the test was running against the <em>production</em> log path. Every time my test suite ran &mdash; which on a shipping day is many times, because it runs automatically before every push &mdash; it dumped a fresh batch of fake errors into the file my monitor watches.</p>
+<p>680 of the 816 &ldquo;errors&rdquo; were my own tests talking to themselves.</p>
+<h2 id="wolf">Alarm fatigue is a real outage</h2>
+<p>Here&rsquo;s the part that matters more than the bug. A monitor that cries wolf isn&rsquo;t a cosmetic annoyance &mdash; it&rsquo;s a slow outage of your <em>attention</em>. Every false page lowers the odds you&rsquo;ll read the next one. Train yourself for a few weeks to swipe away &ldquo;816 errors,&rdquo; and the day a real number shows up, it looks identical to the noise. The alert system is only as valuable as your willingness to trust it, and trust is destroyed quietly.</p>
+<p>So the noise wasn&rsquo;t the small problem and the bug the big one. The noise <em>was</em> the big problem, because of what it was hiding.</p>
+<h2 id="realbug">Discovery 2: the bug the noise was hiding</h2>
+<p>Once I filtered the fake lines out, a genuine error was sitting underneath, attached to my document-generation step:</p>
+<pre><code>generate_document: ABORTED — ['No date — not found in the record']
+generate_document: fallback error (non-blocking): cannot import name
+    'get_thread_messages' from 'gmail'</code></pre>
+<p>The system generates a legal-grade PDF at the end of a job. If a required date isn&rsquo;t already saved in the structured record, it&rsquo;s supposed to fall back to reading the email thread and recovering the date from what was actually written there. Smart fallback. Except it imported the helper function from the wrong module, with the wrong keyword argument:</p>
+<pre><code># broken: wrong module, wrong kwarg — raises ImportError every single time
+from gmail import get_thread_messages
+msgs = get_thread_messages(thread_id, max_results=10)</code></pre>
+<p>The real function lived in a different module and took <code>max_messages</code>, not <code>max_results</code>. So the fallback threw an <code>ImportError</code> on <em>every</em> call. And because the failure was caught and logged as &ldquo;non-blocking,&rdquo; nobody noticed &mdash; the document just quietly aborted instead of recovering. Three other places in the same codebase called the same function correctly. This one line had drifted, and the noise had been burying its complaint for who knows how long.</p>
+<h2 id="fixes">The two fixes</h2>
+<p><strong>Fix 1 &mdash; stop the tests from touching production.</strong> One small automatic test fixture that redirects the log path to a throwaway folder for the duration of every test run. The parser still logs real problems in production; the tests just can&rsquo;t reach the real file anymore:</p>
+<pre><code>@pytest.fixture(autouse=True)
+def _isolate_error_log(monkeypatch, tmp_path_factory):
+    import ai_usage
+    d = tmp_path_factory.mktemp('ai_usage')
+    monkeypatch.setattr(ai_usage, '_ERROR_LOG', d / 'errors.log')</code></pre>
+<p><strong>Fix 2 &mdash; correct the import, then lock it.</strong> Point the fallback at the right module and the right keyword. Then write a regression test that fails if the wrong-module/wrong-kwarg form ever returns &mdash; because a mock would happily fake this away, so the test binds the real function signature instead:</p>
+<pre><code>from gmail_api import get_thread_messages          # right module
+msgs = get_thread_messages(thread_id, max_messages=10)  # right kwarg
+
+# regression: the drift can never come back silently
+assert 'max_messages' in inspect.signature(get_thread_messages).parameters
+assert 'from gmail import get_thread_messages' not in source</code></pre>
+<h2 id="why">Why this is the good work</h2>
+<p>None of this shows up in a feature demo. There&rsquo;s no new button. But this is the work that keeps a one-person operation alive, and it&rsquo;s built on three habits worth more than any framework:</p>
+<ol>
+<li><strong>Read the logs, not the count.</strong> &ldquo;816 errors&rdquo; is a number. The actual lines are the truth. The fix started the second I read one.</li>
+<li><strong>Treat your monitoring as a product.</strong> A noisy alert isn&rsquo;t free &mdash; it costs you the next real alert. Keeping the signal clean is not housekeeping; it&rsquo;s how you stay able to react at all. (I wrote about the cousin of this problem in <a href="http://jessemoraga.com/2026/06/17/fail-silent-bugs-when-logs-say-ok-while-the-system-does-nothing/">fail-silent bugs</a>.)</li>
+<li><strong>Fix the root cause, then make the fix permanent with a test.</strong> A patched line drifts back. A patched line plus a <a href="http://jessemoraga.com/2026/06/16/what-is-software-regression-solo-operator/">regression test</a> stays fixed. I lean on <a href="https://docs.pytest.org/en/stable/how-to/fixtures.html">pytest fixtures</a> to make &ldquo;don&rsquo;t pollute production&rdquo; an automatic guarantee instead of a thing I have to remember.</li>
+</ol>
+<p>I didn&rsquo;t go looking for a bug. I went looking for the truth about whether my system was healthy &mdash; and the discipline of not trusting a green dashboard, plus the discipline of not trusting a loud one, is what surfaced a real failure and a real fix in the same afternoon. That&rsquo;s the job. More on the auditing mindset in <a href="http://jessemoraga.com/2026/06/14/how-to-build-an-ai-agent-that-audits-your-own-code/">building an AI agent that audits your own code</a>, and the full archive lives in <a href="http://jessemoraga.com/category/technology/">technology</a>.</p>
+<h2 id="faq">FAQ</h2>
+<p><strong>What is test pollution in production logs?</strong> It&rsquo;s when running your automated tests writes data into a real production file or system &mdash; here, a test fed synthetic error payloads to a parser that logged them to the live error log, so the test suite kept manufacturing fake &ldquo;production errors.&rdquo;</p>
+<p><strong>How do you stop tests from writing to production paths?</strong> Redirect the path during tests. An automatic (autouse) pytest fixture that points the log/ledger/file path at a temporary directory for every test is the cleanest fix &mdash; production behavior is untouched, tests can&rsquo;t reach real files.</p>
+<p><strong>Why are false alarms in monitoring dangerous?</strong> Because they cause alarm fatigue. Once you learn to ignore a noisy alert, you also ignore the real one when it finally fires &mdash; the noise hides genuine failures in plain sight.</p>
+<p><strong>What&rsquo;s a silent-abort bug?</strong> Code that fails but swallows the error and stops doing its job without crashing or alerting. It looks fine from the outside while quietly producing nothing &mdash; which is why you have to read logs and verify output, not assume green means good.</p>
+
+  </div>
+</article>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>

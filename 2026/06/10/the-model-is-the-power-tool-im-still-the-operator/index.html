@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How I Use Claude Code to Run My Business — With No CS Degree | Jesse Moraga</title>
+<meta name="description" content="What two years of pointing Claude Code at real code taught an operator with no CS degree — how I keep AI as the power tool and stay the operator.">
+<link rel="canonical" href="https://jessemoraga.com/2026/06/10/the-model-is-the-power-tool-im-still-the-operator/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/06/10/the-model-is-the-power-tool-im-still-the-operator/">
+<meta property="og:title" content="How I Use Claude Code to Run My Business — With No CS Degree">
+<meta property="og:description" content="What two years of pointing Claude Code at real code taught an operator with no CS degree — how I keep AI as the power tool and stay the operator.">
+<meta property="article:published_time" content="2026-06-10T16:10:47-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#2A2820;background:#F1EFE6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#39362B}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#2A2820}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#2A2820}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img,.post-content iframe{max-width:100%;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#6D44C2;padding:2px 7px;border-radius:6px}
+</style>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Jun 10, 2026 &middot; 5 min read</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,52px); line-height:1.08; letter-spacing:-0.03em; margin:18px 0 0;">How I Use Claude Code to Run My Business — With No CS Degree</h1>
+  </div>
+  <div class="post-content">
+<div style="max-width:760px;margin:0 auto;background:#06080a;color:#cdd6e3;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;line-height:1.7;border:1px solid #16202b;border-radius:14px;overflow:hidden">
+<p> <!-- terminal hero --></p>
+<div style="background:#0a0f14;border-bottom:1px solid #16202b;padding:0">
+<div style="display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid #121a23">
+ <span style="width:12px;height:12px;border-radius:50%;background:#f87171;display:inline-block"></span><br />
+ <span style="width:12px;height:12px;border-radius:50%;background:#fbbf24;display:inline-block"></span><br />
+ <span style="width:12px;height:12px;border-radius:50%;background:#34d399;display:inline-block"></span><br />
+ <span style="margin-left:10px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;color:#5b6b7c">jesse@moraga — ~/build</span>
+ </div>
+<div style="padding:26px 22px 30px">
+<div style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#56b6f2;margin-bottom:14px">// TECHNICALLY SPEAKING</div>
+<div style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;color:#34d399;margin-bottom:10px">$ how-i-use-claude-code-to-run-my-business</div>
+<h1 style="margin:0;color:#f3f6fa;font-size:29px;line-height:1.25;letter-spacing:-0.5px">How I Use Claude Code to Run My Business — With No CS Degree</h1>
+<p style="margin:14px 0 0;color:#c6d2df;font-size:17px;font-weight:600">The model is the power tool. I&#8217;m still the operator.</p>
+<p style="margin:8px 0 0;color:#8b9aab;font-size:15px">What two years of pointing AI at real code taught an operator who never took a computer science class.</p>
+<p style="margin:14px 0 0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;color:#5b6b7c">Updated 2026-06-10 · by Jesse Moraga</p>
+</p>
+</div>
+</div>
+<div style="padding:30px 24px 8px">
+<p> <!-- TOC --></p>
+<div style="background:#0a0f14;border:1px solid #16202b;border-radius:10px;padding:14px 18px;margin:0 0 26px;font-size:14px">
+<div style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#56b6f2;margin-bottom:8px">// on this page</div>
+<p> <a href="#junior" style="color:#cdd6e3;text-decoration:none;display:block;padding:2px 0">1 &middot; Treat it like a sharp junior, not an oracle</a><br />
+ <a href="#spec" style="color:#cdd6e3;text-decoration:none;display:block;padding:2px 0">2 &middot; The spec is the job</a><br />
+ <a href="#verify" style="color:#cdd6e3;text-decoration:none;display:block;padding:2px 0">3 &middot; Verify, then verify again</a><br />
+ <a href="#human" style="color:#cdd6e3;text-decoration:none;display:block;padding:2px 0">4 &middot; Know what you keep human</a><br />
+ <a href="#faq" style="color:#cdd6e3;text-decoration:none;display:block;padding:2px 0">FAQ</a>
+ </div>
+<p>I serve legal papers for a living. I&#8217;m out in the field most days — knocking on doors in Fresno, Clovis, Madera, driving the mountain routes. I&#8217;m not a software engineer. I never took a computer science class.</p>
+<p>And over the last two years I&#8217;ve built the entire back office of <a href="https://my company site" style="color:#56b6f2;text-decoration:none">my real field-services work business</a> with AI — using <a href="https://docs.anthropic.com/en/docs/claude-code/overview" style="color:#56b6f2;text-decoration:none" rel="noopener">Claude Code</a> to write the intake, the scheduling, the invoicing, the email drafting, the reporting. Hundreds of cases run through it. People assume that means I &#8220;let the AI do it.&#8221; That&#8217;s not what working with the models actually looks like. Here&#8217;s what it really is.</p>
+<h2 id="junior" style="color:#f3f6fa;font-size:21px;margin:34px 0 6px;border-left:3px solid #ff7a3c;padding-left:12px">1. Treat it like a sharp junior, not an oracle</h2>
+<p>The model is fast, well-read, and confident — including when it&#8217;s wrong. If you treat its answer as the truth, you&#8217;ll ship its mistakes. If you treat it like a sharp junior who needs direction and review, you&#8217;ll ship good work fast.</p>
+<p>That mental shift is the whole game. I don&#8217;t ask it &#8220;what should I build?&#8221; I tell it what I&#8217;m building and why, and I make it show me the work. The judgment stays mine. The typing speed is its.</p>
+<h2 id="spec" style="color:#f3f6fa;font-size:21px;margin:34px 0 6px;border-left:3px solid #ff7a3c;padding-left:12px">2. The spec is the job</h2>
+<p>Vague in, vague out. The single biggest jump in quality I ever got wasn&#8217;t a smarter model — it was me writing better specs. Before I ask for a line of code, I write down what it has to do, what counts as done, and what must never happen. (If you want the disciplined version of this, look at <a href="https://github.com/github/spec-kit" style="color:#56b6f2;text-decoration:none" rel="noopener">spec-driven development</a> — write the spec, then let the model build to it.)</p>
+<div style="background:#0a0f14;border:1px solid #16202b;border-radius:10px;padding:16px 18px;margin:18px 0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.7">
+<div style="color:#5b6b7c">// bad prompt</div>
+<div style="color:#f87171">&gt; &#8220;write me an invoice thing&#8221;</div>
+<div style="color:#5b6b7c;margin-top:12px">// the spec I actually give</div>
+<div style="color:#34d399">&gt; build it once. retries are idempotent.</div>
+<div style="color:#34d399">&gt; price comes from ONE config file, never hardcoded.</div>
+<div style="color:#34d399">&gt; if anything is missing → stop and flag, never guess.</div>
+<div style="color:#34d399">&gt; log every decision so I can find it at 2am.</div>
+</p>
+</div>
+<p>Notice none of that is code. It&#8217;s the thinking. The model writes the code; I write the constraints. The place I keep those constraints is a file the model reads every time — my <code style="color:#fbbf24;background:#0a0f14;padding:1px 5px;border-radius:4px">CLAUDE.md</code>. It&#8217;s the real product. A slice of mine:</p>
+<div style="background:#0a0f14;border:1px solid #16202b;border-radius:10px;padding:16px 18px;margin:18px 0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.7;color:#cdd6e3">
+<div style="color:#5b6b7c"># ~/CLAUDE.md — rules the model loads every session</div>
+<div><span style="color:#56b6f2">&#8211; Read before write.</span> Read the file + its callers first.</div>
+<div><span style="color:#56b6f2">&#8211; Behavioral change</span> → a regression test in the same commit.</div>
+<div><span style="color:#56b6f2">&#8211; Idempotency by default.</span> Anything triggered twice must be safe.</div>
+<div><span style="color:#56b6f2">&#8211; No silent failures.</span> Log every branch with the case id.</div>
+<div><span style="color:#56b6f2">&#8211; Done means proven</span> — show the artifact, not a claim.</div>
+</p>
+</div>
+<h2 id="verify" style="color:#f3f6fa;font-size:21px;margin:34px 0 6px;border-left:3px solid #ff7a3c;padding-left:12px">3. Verify. Then verify again.</h2>
+<p>&#8220;It compiles&#8221; is not &#8220;it works.&#8221; &#8220;The AI said it&#8217;s done&#8221; is not &#8220;it&#8217;s done.&#8221; Every single thing I build, I run with real input and watch what actually happens. Done isn&#8217;t a checkbox — it&#8217;s proof. A log line. A rendered page. The real response coming back.</p>
+<div style="background:#0a0f14;border:1px solid #16202b;border-radius:10px;padding:16px 18px;margin:18px 0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.8">
+<div><span style="color:#56b6f2">INFO</span> ran the function with a real case file</div>
+<div><span style="color:#56b6f2">INFO</span> checked the email it drafted, line by line</div>
+<div><span style="color:#fbbf24">WARN</span> caught a wrong total — sent it back</div>
+<div><span style="color:#34d399">OK</span> fixed, re-ran, total matches the config</div>
+<div><span style="color:#34d399">DONE</span> proof shown before I called it finished</div>
+</p>
+</div>
+<p>The model will tell you it handled the edge case. Make it prove it. Half the bugs I&#8217;ve caught were things the AI was completely sure it got right. That habit — refusing to call something done until it&#8217;s proven — is exactly what <a href="https://developers.google.com/search/docs/fundamentals/creating-helpful-content" style="color:#56b6f2;text-decoration:none" rel="noopener">first-hand, experience-backed work</a> looks like, in code or anywhere else.</p>
+<h2 id="human" style="color:#f3f6fa;font-size:21px;margin:34px 0 6px;border-left:3px solid #ff7a3c;padding-left:12px">4. Know what you keep human</h2>
+<p>This is the part people skip, and it&#8217;s the most important. The AI built <a href="https://jessemoraga.com/system/" style="color:#56b6f2;text-decoration:none">the system I run my company on</a> and it drafts my routine client emails — which I review before they go out. But the legal work is mine and only mine. I&#8217;m a field-services operator. Every field job, every proof, every sworn declaration is from my own first-hand observation, written and signed by me. A machine doesn&#8217;t get to swear to what I saw at a door. It never will.</p>
+<p>That line — what the machine does versus what only a human can stand behind — isn&#8217;t a limitation I&#8217;m working around. It&#8217;s the design. Know your 20% that has to stay human, protect it, and let the model take the other 80% off your plate.</p>
+<div style="border-left:4px solid #ff7a3c;background:#0d1117;padding:16px 20px;margin:28px 0;color:#e6edf5;font-size:17px;font-style:italic">
+ You don&#8217;t need a CS degree to build real software with AI. You need to be the kind of person who reads the work, asks how it actually works, and refuses to call something done until it&#8217;s proven.
+ </div>
+<p>I&#8217;m still the operator. I still drive the routes and knock on the doors. The models just gave a one-man operation the back office of a much bigger company — because I treated them like the power tools they are, and never once handed over the steering wheel. More of this in <a href="https://jessemoraga.com/category/technology/" style="color:#56b6f2;text-decoration:none">the rest of TECHNICALLY SPEAKING</a> — and if you want the short version of <a href="https://jessemoraga.com/about/" style="color:#56b6f2;text-decoration:none">who I am</a>, that&#8217;s there too. (When I&#8217;m not shipping code, I&#8217;m <a href="https://jessemoraga.com/category/music/" style="color:#56b6f2;text-decoration:none">in the woodshed with a guitar</a>.)</p>
+<p> <!-- FAQ --></p>
+<h2 id="faq" style="color:#f3f6fa;font-size:21px;margin:34px 0 6px;border-left:3px solid #ff7a3c;padding-left:12px">FAQ</h2>
+<p style="margin:14px 0 4px;color:#f3f6fa;font-weight:700">Do I need a CS degree to build software with AI?</p>
+<p style="margin:0 0 16px">No. I don&#8217;t have one. You need to be willing to read the work, write clear specs, and verify everything before you trust it. The judgment matters more than the credential.</p>
+<p style="margin:0 0 4px;color:#f3f6fa;font-weight:700">Is it safe to let AI touch code that runs a real business?</p>
+<p style="margin:0">Only if you stay the operator. I review what it writes, run it against real input, and keep the parts that carry legal or financial weight under human control. The model drafts; I decide and verify.</p>
+<p> <!-- CTA --></p>
+<div style="text-align:center;margin:34px 0 10px">
+ <a href="https://my company site" style="display:inline-block;background:linear-gradient(90deg,#ff7a3c,#ff9a66);color:#0a0a0f;font-weight:700;text-decoration:none;padding:13px 26px;border-radius:8px;font-size:15px">Start a Case &rarr;</a>
+ </div>
+<p> <!-- whoami footer --></p>
+<div style="margin-top:30px;border-top:1px solid #16202b;padding-top:18px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;color:#8b9aab">
+<div style="color:#34d399">$ whoami</div>
+<div style="margin-top:6px">Jesse Moraga — operator who builds.</div>
+<div style="margin-top:2px">code &rarr; <a href="https://github.com/JesseMoraga" style="color:#56b6f2;text-decoration:none" rel="noopener">github.com/JesseMoraga</a></div>
+</p>
+</div>
+<div style="margin-top:22px;padding-top:16px;border-top:1px solid #121a23;color:#5b6b7c;font-size:12px;text-align:center">
+ my field-services company </div>
+</p>
+</div>
+</div>
+
+  </div>
+</article>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>

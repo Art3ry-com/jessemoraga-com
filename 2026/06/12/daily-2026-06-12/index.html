@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Killing an alert flood: from 50 iMessages an hour to signal only | Jesse Moraga</title>
+<meta name="description" content="How Jesse Moraga fixed an iMessage alert flood — 50 texts per hour down to signal-only — by deduplicating 5 repeat-loop sources in his automation system.">
+<link rel="canonical" href="https://jessemoraga.com/2026/06/12/daily-2026-06-12/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/06/12/daily-2026-06-12/">
+<meta property="og:title" content="Killing an alert flood: from 50 iMessages an hour to signal only">
+<meta property="og:description" content="How Jesse Moraga fixed an iMessage alert flood — 50 texts per hour down to signal-only — by deduplicating 5 repeat-loop sources in his automation system.">
+<meta property="article:published_time" content="2026-06-12T08:00:43-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#2A2820;background:#F1EFE6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#39362B}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#2A2820}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#2A2820}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img,.post-content iframe{max-width:100%;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#6D44C2;padding:2px 7px;border-radius:6px}
+</style>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Jun 12, 2026 &middot; 2 min read</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,52px); line-height:1.08; letter-spacing:-0.03em; margin:18px 0 0;">Killing an alert flood: from 50 iMessages an hour to signal only</h1>
+  </div>
+  <div class="post-content">
+<div style="background:#06080a;color:#c9d3da;border-radius:18px;overflow:hidden;font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.7;border:1px solid #14323a">
+<div style="background:#0b1014;border-bottom:1px solid #14323a">
+<div style="display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid #11252b"><span style="width:11px;height:11px;border-radius:50%;background:#f87171;display:inline-block"></span><span style="width:11px;height:11px;border-radius:50%;background:#fbbf24;display:inline-block"></span><span style="width:11px;height:11px;border-radius:50%;background:#34d399;display:inline-block"></span><span style="margin-left:8px;color:#6b7785;font-family:monospace;font-size:12px">jesse@blog&#160;:&#160;~/blog&#160;&#8212;&#160;zsh</span></div>
+<div style="padding:24px 28px 26px;font-family:ui-monospace,Menlo,monospace">
+<div style="color:#6b7785;font-size:13px;margin-bottom:10px"><span style="color:#34d399">$</span> grep -c &#8220;iMessage sent&#8221; alerts.log | tail -60m</div>
+<div style="color:#34d399;font-size:12px;letter-spacing:1px;margin-bottom:8px">// TECHNICALLY SPEAKING</div>
+<h1 style="font-size:30px;line-height:1.15;margin:0 0 12px;color:#ffffff;letter-spacing:-.5px;font-family:-apple-system,Segoe UI,Roboto,sans-serif;font-weight:800">Killing an alert flood: from 50 iMessages an hour to signal only</h1>
+<p style="color:#9fb0ba;font-size:16px;max-width:640px;margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif">Five repeat loops, one fix, and a lesson every ops engineer learns the hard way.<span style="color:#34d399">&#9612;</span></p>
+</div>
+</div>
+<div style="padding:14px 28px 0">
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## THE NEWS THAT HIT CLOSE TO HOME</h2>
+<p style="color:#c4c9d8;margin:0 0 14px">Yesterday I read about <a href="https://lantian.pub/en/article/fun/ai-agent-bankrupted-their-operator-scan-dn42lantian.lantian/" style="color:#56b6f2;text-decoration:none">an AI agent that burned through its operator&#8217;s budget scanning a network it wasn&#8217;t supposed to</a> — runaway loop, no circuit breaker, no dedup. I laughed for about three seconds before I remembered I had exactly that problem on my own phone. Not money, but attention. My alert system was sending 50 iMessages an hour.</p>
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## WHAT BROKE</h2>
+<p style="color:#c4c9d8;margin:0 0 14px">The automation system I run on <a href="https://art3ry.com" style="color:#56b6f2;text-decoration:none">Art3ry OS</a> watches a lot of moving parts — scheduling, follow-ups, disk health, invoice cadence, the whole back office. Each of those subsystems had its own alert path. And somewhere along the way, five of them developed repeat loops. Same event, same text, firing every few minutes. Not malicious. Just no one checking whether the message had already gone out.</p>
+<p style="color:#c4c9d8;margin:0 0 14px">At 50 texts an hour, you stop reading them. That&#8217;s the real failure mode. A noisy alert system is the same as no alert system. You start ignoring the phone and then the one real problem disappears into the feed.</p>
+<h2 style="font-size:13px;color:#34d399;margin:16px 0 8px;font-family:monospace;letter-spacing:1px">## THE FIX</h2>
+<p style="color:#c4c9d8;margin:0 0 14px">Went through each of the five sources and added deduplication at the send layer — track a fingerprint of the last message per channel, suppress repeats within a window. Also wired the new 36-hour ops-watch tick to fire only on anomalies. No anomaly, no text. That&#8217;s the rule it should have had from day one.</p>
+<div style="background:#0b1014;border:1px solid #14323a;border-radius:10px;overflow:hidden;margin:0 0 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px">
+<div style="padding:4px 0">
+<div style="padding:3px 14px;background:rgba(248,113,113,.10);color:#f87171">&#8211; send_imessage(event) # fires every tick, no check</div>
+<div style="padding:3px 14px;background:rgba(52,211,153,.10);color:#34d399">+ send_imessage(event) if not recently_sent(event.fingerprint) # anomaly-only</div>
+</div>
+</div>
+<div style="background:#0b1014;border:1px solid #14323a;border-radius:10px;padding:12px 14px;margin:0 0 18px;font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.85">
+<div><span style="color:#6b7785">[07:14:02]</span> <span style="color:#56b6f2">INFO</span>&#160; ops-watch tick — no anomaly detected</div>
+<div><span style="color:#6b7785">[07:14:02]</span> <span style="color:#34d399">OK&#160;&#160;</span>&#160; iMessage suppressed (no drift) ✓</div>
+<div><span style="color:#6b7785">[07:50:17]</span> <span style="color:#fbbf24">WARN</span>&#160; disk headroom below threshold — first occurrence</div>
+<div><span style="color:#6b7785">[07:50:17]</span> <span style="color:#34d399">OK&#160;&#160;</span>&#160; iMessage sent — anomaly flagged ✓</div>
+<div><span style="color:#6b7785">[08:26:31]</span> <span style="color:#56b6f2">INFO</span>&#160; ops-watch tick — no anomaly detected</div>
+<div><span style="color:#6b7785">[08:26:31]</span> <span style="color:#34d399">OK&#160;&#160;</span>&#160; iMessage suppressed (no drift) ✓</div>
+</div>
+<div style="background:#0b1014;border-left:3px solid #34d399;border-radius:8px;padding:16px 20px;margin:20px 0">
+<p style="color:#e8eaf0;font-size:17px;font-style:italic;margin:0">An alert that</p>
+
+  </div>
+</article>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>

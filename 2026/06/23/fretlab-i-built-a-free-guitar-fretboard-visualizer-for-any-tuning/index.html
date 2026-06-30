@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fr3tLab: I Built a Free Guitar Fretboard Visualizer for Any Tuning | Jesse Moraga</title>
+<meta name="description" content="I built Fr3tLab — a free, interactive guitar fretboard visualizer that handles any tuning, 6 to 8 strings, with scales, chords, arpeggios, and a chord iden">
+<link rel="canonical" href="https://jessemoraga.com/2026/06/23/fretlab-i-built-a-free-guitar-fretboard-visualizer-for-any-tuning/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/06/23/fretlab-i-built-a-free-guitar-fretboard-visualizer-for-any-tuning/">
+<meta property="og:title" content="Fr3tLab: I Built a Free Guitar Fretboard Visualizer for Any Tuning">
+<meta property="og:description" content="I built Fr3tLab — a free, interactive guitar fretboard visualizer that handles any tuning, 6 to 8 strings, with scales, chords, arpeggios, and a chord iden">
+<meta property="article:published_time" content="2026-06-23T14:56:34-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#2A2820;background:#F1EFE6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#39362B}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#2A2820}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#2A2820}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img,.post-content iframe{max-width:100%;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#6D44C2;padding:2px 7px;border-radius:6px}
+</style>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#7A45D8,#BE4DBE);">Music</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Jun 23, 2026 &middot; 4 min read</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,52px); line-height:1.08; letter-spacing:-0.03em; margin:18px 0 0;">Fr3tLab: I Built a Free Guitar Fretboard Visualizer for Any Tuning</h1>
+  </div>
+  <div class="post-content">
+<div style="max-width:780px;margin:0 auto;padding:0 0 48px;font-family:'Manrope',system-ui,sans-serif;color:#c8cdd6;background:#070709">
+<p>  <!-- THE WOODSHED eyebrow + hero --></p>
+<div style="padding:48px 0 0">
+<div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:0.18em;color:#ff7a3c;text-transform:uppercase;margin-bottom:18px">The Woodshed</div>
+<h1 style="font-family:'JetBrains Mono',monospace;font-size:clamp(42px,7vw,72px);font-weight:700;line-height:1.0;margin:0 0 10px;letter-spacing:-0.03em">
+      <span style="color:#ffffff;display:block">Fr3t</span><span style="color:#ff7a3c;display:block">Lab</span><br />
+    </h1>
+<p style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#5b636e;margin:0 0 36px;letter-spacing:0.04em">Interactive Guitar Fretboard Visualizer — Any Tuning</p>
+<div style="width:48px;height:2px;background:linear-gradient(90deg,#ff7a3c,#ff3b3b);margin-bottom:40px;border-radius:1px"></div>
+</p></div>
+<p>  <!-- Opening --></p>
+<p style="font-size:18px;line-height:1.75;color:#d4d8df;margin:0 0 28px">Been practicing modes on a 7-string in Drop C, and most fretboard visualizers don&#8217;t even know a 7-string exists. The ones that do look like they were built in 2009 and haven&#8217;t been touched since. Dark theme? Good luck. Extended range? Usually not. Custom tuning beyond EADGBE? Maybe, if you click through six menus and hope.</p>
+<p style="font-size:16px;line-height:1.75;color:#b0b7c0;margin:0 0 40px">So I built something. <a href="https://fr3tlab.com" style="color:#ff7a3c;text-decoration:none;border-bottom:1px solid rgba(255,122,60,0.3)">Fr3tLab</a> — a free, browser-based guitar fretboard visualizer that runs any tuning from 4-string bass to 8-string extended, covers 40+ scales, handles chords, arpeggios, progressions, and a chord identifier, all with audio. No install. No login. No ads. It&#8217;s a passion project I&#8217;m putting out for free — I just wanted everyone who plays to be able to use it. Works right now.</p>
+<p>  <!-- Why I Built It --></p>
+<h2 style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;letter-spacing:0.14em;color:#ff7a3c;text-transform:uppercase;margin:0 0 16px">Why I built it</h2>
+<div style="width:28px;height:1px;background:#ff7a3c;margin-bottom:24px;opacity:0.5"></div>
+<p style="font-size:16px;line-height:1.75;color:#b0b7c0;margin:0 0 20px">7-string Drop C is <code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#c8cdd6;background:#0d0d12;padding:2px 6px;border-radius:3px">B E A D G B E</code> — one step below standard 7-string, where the low B becomes A. Most tools either don&#8217;t have a 7-string preset at all, or they have it but won&#8217;t let you tune it differently. And almost none of them look right on a dark screen at midnight when you&#8217;re actually in the practice room.</p>
+<p style="font-size:16px;line-height:1.75;color:#b0b7c0;margin:0 0 20px">Built Fr3tLab in Claude Design as a personal tool that solved my specific problem. After I finished it, figured it was worth putting live — someone else is probably in the same spot. The <a href="/2026/05/14/twenty-years-of-playing-guitar-one-year-of-actually-speaking-it/" style="color:#ff7a3c;text-decoration:none;border-bottom:1px solid rgba(255,122,60,0.3)">twenty years of playing guitar</a> post explains more of the context — this is the part of the work where theory and practice are finally connecting for me.</p>
+<p style="font-size:16px;line-height:1.75;color:#b0b7c0;margin:0 0 40px">The tool assumes you play real guitars. Not just Stratocasters.</p>
+<p>  <!-- What It Does --></p>
+<h2 style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;letter-spacing:0.14em;color:#ff7a3c;text-transform:uppercase;margin:0 0 16px">What it does</h2>
+<div style="width:28px;height:1px;background:#ff7a3c;margin-bottom:24px;opacity:0.5"></div>
+<p style="font-size:16px;line-height:1.75;color:#b0b7c0;margin:0 0 28px">Five modes. Pick one, set your tuning, and go. Audio is WebAudio — click a fret or hit play and you hear it through your browser, no plugins needed.</p>
+<p>  <!-- Mode cards --></p>
+<div style="display:grid;gap:16px;margin:0 0 40px">
+<div style="background:#0d0d12;border:1px solid #1a1a24;border-left:3px solid #ff7a3c;border-radius:6px;padding:22px 24px">
+<div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.15em;color:#ff7a3c;text-transform:uppercase;margin-bottom:10px">Scales</div>
+<p style="font-size:15px;line-height:1.7;color:#b0b7c0;margin:0">40+ scales: Major, Minor, Dorian, Phrygian Dominant, Lydian Dominant, Bebop Dominant, Hungarian Minor, Whole Tone, Diminished — the stuff you actually need. Pick a root, pick a scale, every note lights up. Toggle Degrees mode to color-code by interval (root, 3rd, 5th, 7th, etc.) instead of just notes. Click any fret and the note sounds.</p>
+</p></div>
+<div style="background:#0d0d12;border:1px solid #1a1a24;border-left:3px solid #ff7a3c;border-radius:6px;padding:22px 24px">
+<div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.15em;color:#ff7a3c;text-transform:uppercase;margin-bottom:10px">Chords</div>
+<p style="font-size:15px;line-height:1.7;color:#b0b7c0;margin:0">36 chord qualities — major, minor, dominant 7th, maj7, min7, sus2, sus4, add9, 9, 11, 13, diminished, augmented, and more. Shows playable shapes for your current tuning and string count. Hit ▶ to hear a strum. Shapes adjust when you change tuning — no hardcoded EADGBE shapes.</p>
+</p></div>
+<div style="background:#0d0d12;border:1px solid #1a1a24;border-left:3px solid #ff7a3c;border-radius:6px;padding:22px 24px">
+<div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.15em;color:#ff7a3c;text-transform:uppercase;margin-bottom:10px">Arpeggios</div>
+<p style="font-size:15px;line-height:1.7;color:#b0b7c0;margin:0">Same chord shapes, played as sweeps — ascending, descending, or both. Each shape highlights the root note separately from the rest of the arpeggio tones so you can see where the pattern anchors. Useful for visualizing how a sweep pattern maps to an actual fretboard position.</p>
+</p></div>
+<div style="background:#0d0d12;border:1px solid #1a1a24;border-left:3px solid #ff7a3c;border-radius:6px;padding:22px 24px">
+<div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.15em;color:#ff7a3c;text-transform:uppercase;margin-bottom:10px">Progressions</div>
+<p style="font-size:15px;line-height:1.7;color:#b0b7c0;margin:0">12 progressions built in: I-V-vi-IV, 12-bar blues, Pachelbel, Andalusian cadence, jazz ii-V-I, and others. Pick a key, pick major or minor, set the BPM, enable loop, and let it play through while you follow along on your instrument. Fretboard updates in real time as each chord hits.</p>
+</p></div>
+<div style="background:#0d0d12;border:1px solid #1a1a24;border-left:3px solid #ff7a3c;border-radius:6px;padding:22px 24px">
+<div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.15em;color:#ff7a3c;text-transform:uppercase;margin-bottom:10px">Identifier</div>
+<p style="font-size:15px;line-height:1.7;color:#b0b7c0;margin:0">Tap notes anywhere on the neck and the tool names the chord those intervals form, then lists which scales contain all those notes. Works in whatever tuning you&#8217;ve set. Useful for reverse-lookup — &#8220;what chord am I accidentally playing?&#8221; and &#8220;what modes can I solo over this with?&#8221;</p>
+</p></div>
+</p></div>
+<p>  <!-- How to Use It --></p>
+<h2 style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;letter-spacing:0.14em;color:#ff7a3c;text-transform:uppercase;margin:0 0 16px">How to use it</h2>
+<div style="width:28px;height:1px;background:#ff7a3c;margin-bottom:24px;opacity:0.5"></div>
+<p style="font-size:16px;line-height:1.75;color:#b0b7c0;margin:0 0 20px">Pull up <a href="https://fr3tlab.com" style="color:#ff7a3c;text-decoration:none;border-bottom:1px solid rgba(255,122,60,0.3)">Fr3tLab at fr3tlab.com</a> in any desktop browser — works on Chrome, Firefox, Safari, Edge. Mobile works too but a real fretboard has 22 frets; it&#8217;s cramped on a phone screen. Start with the tuning selector in the top bar: pick your string count, then your tuning. If you&#8217;re on a 7-string Drop C, select &#8220;7-String&#8221; then &#8220;Drop C.&#8221; The fretboard redraws immediately. Then pick a mode, set a root note and key, and start clicking. If you&#8217;re a theory person, <a href="https://www.musictheory.net/" target="_blank" rel="noopener" style="color:#ff7a3c;text-decoration:none;border-bottom:1px solid rgba(255,122,60,0.3)">musictheory.net</a> is a solid free resource to cross-reference what you&#8217;re seeing — understanding why the notes fall where they do makes the tool click faster.</p>
+<p style="font-size:16px;line-height:1.75;color:#b0b7c0;margin:0 0 40px">Capo support is in the top bar too — set it and every mode adjusts. Lefty mode flips the neck. No account required, no ads, no paywall. Use it as much as you want.</p>
+<p>  <!-- Divider --></p>
+<div style="height:1px;background:linear-gradient(90deg,transparent,#1a1a24,transparent);margin:0 0 40px"></div>
+<p>  <!-- Booking Block --></p>
+<div style="background:#0a0a10;border:1px solid #ff7a3c;border-radius:8px;padding:28px 32px;margin:0 0 48px">
+<div style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.18em;color:#ff7a3c;text-transform:uppercase;margin-bottom:14px">Available for Hire</div>
+<p style="font-size:16px;line-height:1.6;color:#c8cdd6;margin:0 0 8px;font-weight:500">California metal guitarist — fill-in/session + wedding band</p>
+<p style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#7a828e;margin:0">
+      <a href="mailto:jesse@jessemoraga.com" style="color:#ff7a3c;text-decoration:none">jesse@jessemoraga.com</a><br />
+      <span style="color:#3a414a;margin:0 8px">·</span><br />
+      <a href="https://instagram.com/jessemusicusa" target="_blank" rel="noopener" style="color:#7a828e;text-decoration:none">@jessemusicusa</a>
+    </p>
+</p></div>
+<p>  <!-- More posts --></p>
+<p style="font-size:14px;line-height:1.7;color:#5b636e;margin:0 0 40px">
+    More on the guitar side of things in the <a href="/category/music/" style="color:#ff7a3c;text-decoration:none;border-bottom:1px solid rgba(255,122,60,0.2)">more music posts</a> section.
+  </p>
+<p>  <!-- Footer attribution --></p>
+<div style="border-top:1px solid #141418;padding-top:24px">
+<p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#3a414a;margin:0;letter-spacing:0.06em">Jesse Moraga · Guitarist · Fresno, CA · <a href="https://jessemoraga.com" style="color:#3a414a;text-decoration:none">jessemoraga.com</a></p>
+</p></div>
+</div>
+
+  </div>
+</article>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>

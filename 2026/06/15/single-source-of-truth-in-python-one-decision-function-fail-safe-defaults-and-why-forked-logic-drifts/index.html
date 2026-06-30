@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Single Source of Truth in Python — One Decision Function, Fail-Safe Defaults, and Why Forked Logic Drifts | Jesse Moraga</title>
+<meta name="description" content="Single Source of Truth in Python, by a self-taught operator: one canonical decision function, fail-safe defaults, and choosing which error is cheaper.">
+<link rel="canonical" href="https://jessemoraga.com/2026/06/15/single-source-of-truth-in-python-one-decision-function-fail-safe-defaults-and-why-forked-logic-drifts/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/06/15/single-source-of-truth-in-python-one-decision-function-fail-safe-defaults-and-why-forked-logic-drifts/">
+<meta property="og:title" content="Single Source of Truth in Python — One Decision Function, Fail-Safe Defaults, and Why Forked Logic Drifts">
+<meta property="og:description" content="Single Source of Truth in Python, by a self-taught operator: one canonical decision function, fail-safe defaults, and choosing which error is cheaper.">
+<meta property="article:published_time" content="2026-06-15T20:54:06-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#2A2820;background:#F1EFE6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#39362B}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#2A2820}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#2A2820}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img,.post-content iframe{max-width:100%;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#6D44C2;padding:2px 7px;border-radius:6px}
+</style>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#7C6AE2,#4FA6D6);">Architecture</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Jun 15, 2026 &middot; 14 min read</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,52px); line-height:1.08; letter-spacing:-0.03em; margin:18px 0 0;">Single Source of Truth in Python — One Decision Function, Fail-Safe Defaults, and Why Forked Logic Drifts</h1>
+  </div>
+  <div class="post-content">
+<p><!--META: A self-taught operator's guide to Single Source of Truth for decisions: one canonical classifier, fail-safe defaults, never synthesizing a fact, and choosing which error is cheaper — with real Python.--></p>
+<div style="max-width:760px;margin:0 auto;background:#06080a;color:#c9d4e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.7;border-radius:14px;overflow:hidden;border:1px solid #1b2430">
+<p>  <!-- terminal hero --></p>
+<div style="background:#0a0e13;padding:18px 22px;border-bottom:1px solid #1b2430">
+<div style="display:flex;gap:8px;margin-bottom:16px">
+      <span style="width:12px;height:12px;border-radius:50%;background:#f87171;display:inline-block"></span><br />
+      <span style="width:12px;height:12px;border-radius:50%;background:#fbbf24;display:inline-block"></span><br />
+      <span style="width:12px;height:12px;border-radius:50%;background:#34d399;display:inline-block"></span>
+    </div>
+<div style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#56b6f2;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">// TECHNICALLY SPEAKING</div>
+<h1 style="margin:0;color:#eaf1f8;font-size:30px;line-height:1.25;font-weight:800">Single Source of Truth in Python — One Canonical Decision Function, Fail-Safe Defaults, and Why Forked Logic Silently Drifts</h1>
+<div style="font-family:ui-monospace,Menlo,monospace;color:#5b6b7c;font-size:13px;margin-top:14px">$ <span style="color:#34d399">whoami</span> &amp;&amp; <span style="color:#34d399">decide &#8211;once &#8211;fail-safe</span></div>
+<div style="font-family:ui-monospace,Menlo,monospace;color:#5b6b7c;font-size:12px;margin-top:8px">Updated 2026-06-15</div>
+</p></div>
+<div style="padding:26px 24px">
+<p style="font-size:19px;color:#eaf1f8"><strong>The worst bug I shipped this year wasn&#8217;t wrong code. It was two pieces of code that were both right, and disagreed.</strong></p>
+<p>I&#8217;m a self-taught operator. No CS degree. I run a real California field-services business on software I wrote myself, and I spent today doing surgery on a class of bug that almost nobody warns you about. Not a crash. Not a typo. A <em>second opinion</em>. Two functions in my system that each decided the same fact — and over time, quietly, drifted apart. One said a job was finished. The other had never heard about it. Both passed their tests. The customer is the one who found out.</p>
+<p>So today was a consolidation day. I went hunting for every place my system held two opinions about one thing, and I collapsed them into one. Then I made the one place fail toward safety when it wasn&#8217;t sure. Let me show you the bug first, because you have to feel it before the fix means anything.</p>
+<p>    <!-- worked example --></p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#f87171;font-size:13px;margin-bottom:6px;margin-top:24px">// EXHIBIT A — two functions, one fact, slow divergence</p>
+<div style="background:#0a0e13;border:1px solid #2a1518;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8;margin:0 0 16px;color:#c9d4e0">
+<div><span style="color:#5b6b7c"># Path A — the worker that advances the job</span></div>
+<div><span style="color:#5b6b7c">if</span> outcome == <span style="color:#34d399">&#8220;completed&#8221;</span>:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;advance_to_next_stage(job)</div>
+<div>&nbsp;</div>
+<div><span style="color:#5b6b7c"># Path B — the worker that writes the outcome</span></div>
+<div>job.outcome = <span style="color:#34d399">&#8220;COMPLETED &mdash; left with receptionist\n2:14 PM&#8221;</span></div>
+</p></div>
+<p>Read both halves. Path B writes the real-world result into a field — a human-shaped, multi-line string with a note and a timestamp. Path A checks whether the job is done by asking <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#f87171;font-family:ui-monospace,Menlo,monospace">outcome == "completed"</code>. An exact-string match. Lowercase. No note. No newline.</p>
+<p>They never agree. Path B writes <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">"COMPLETED — left with…"</code> and Path A is looking for the literal word <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">"completed"</code>, so the equality is <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#f87171;font-family:ui-monospace,Menlo,monospace">False</code> forever. The job gets marked done in one place and sits frozen in the other. Nothing throws. The log even says &#8220;outcome recorded.&#8221; The completion email that&#8217;s supposed to fire on advance? Never sends. The client waits, then emails me asking why they heard nothing, and I&#8217;m the guy explaining that yes, it&#8217;s done, my software just forgot to tell anyone.</p>
+<p>Here&#8217;s the part that should scare you: <strong>both functions are individually correct.</strong> Path B writes a faithful record. Path A&#8217;s equality check is valid Python. Each has a green test, because each test feeds it the input <em>that same author imagined</em>. The bug only exists in the gap between them — and no unit test that mocks one side will ever see it. The rest of this is how I close that gap and keep it closed. Four ideas. Principle, the real theory under it, then working Python you can lift today. You don&#8217;t need my system. Take the concepts.</p>
+<p>    <!-- TOC --></p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:18px 20px;margin:24px 0">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">$ cat contents.md</div>
+<ol style="margin:0;padding-left:20px;color:#9fb0c0">
+<li style="margin-bottom:6px"><a href="#ssot" style="color:#56b6f2;text-decoration:none">One brain: a single source of truth for decisions</a></li>
+<li style="margin-bottom:6px"><a href="#failsafe" style="color:#56b6f2;text-decoration:none">Fail safe, not fail &#8220;done&#8221;: the default case must be the safe one</a></li>
+<li style="margin-bottom:6px"><a href="#honest" style="color:#56b6f2;text-decoration:none">A decision is only as honest as its inputs: never synthesize a fact</a></li>
+<li style="margin-bottom:6px"><a href="#asymmetry" style="color:#56b6f2;text-decoration:none">Pick which mistake is cheaper: error asymmetry in a classifier</a></li>
+<li style="margin-bottom:0"><a href="#philosophy" style="color:#56b6f2;text-decoration:none">The through-line: one brain, honest, and afraid of the right thing</a></li>
+</ol></div>
+<p>    <!-- ============ SECTION 1 ============ --></p>
+<h2 id="ssot" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">1. One brain: a single source of truth for decisions</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>Every consequential decision in your system should be computed in <strong>exactly one place</strong>. Not the data — the <em>judgment</em>. &#8220;Is this job done?&#8221; &#8220;Is this email from a real person?&#8221; &#8220;Does this case get closed?&#8221; Those questions get one function each, and everybody who needs the answer calls that function. Nobody re-derives it with their own little <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#f87171;font-family:ui-monospace,Menlo,monospace">if</code>.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY IT WORKS</p>
+<p>You already know the <a href="https://en.wikipedia.org/wiki/Single_source_of_truth" style="color:#56b6f2;text-decoration:none">Single Source of Truth</a> idea for <em>data</em> — store a fact once, reference it everywhere, so it can&#8217;t disagree with itself. The move almost nobody makes is applying the exact same logic to <em>decisions</em>. A decision is just a derived fact. And the second you compute a derived fact in two places, you&#8217;ve created two facts that are only equal by coincidence — a coincidence that has to be re-verified by hand every time either side changes.</p>
+<p>Think about what actually happened in Exhibit A. The day Path B started writing richer outcome strings — a note, a timestamp, real-world texture — was the day it silently broke Path A. Nobody touched Path A. It just rotted, because its definition of &#8220;done&#8221; was a private copy that the rest of the system grew away from. This is the deep reason <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" style="color:#56b6f2;text-decoration:none">Don&#8217;t Repeat Yourself</a> exists, and it&#8217;s almost always taught wrong. DRY isn&#8217;t about typing less. It&#8217;s about <em>knowledge</em> living in one spot, so a change to that knowledge can&#8217;t leave a stale duplicate behind to contradict it. Forked logic is duplicated knowledge with a delayed fuse.</p>
+<p>Here&#8217;s the mental test I use now. For any important judgment, ask: &#8220;if the meaning of this changes next month, how many files do I have to remember to edit?&#8221; If the answer is more than one, you don&#8217;t have a system. You have several systems that happen to agree today.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:13px;margin-bottom:2px;margin-top:22px">// APPLY IT</p>
+<p>Take the decision out of the call sites and give it a name. One canonical classifier that both paths route through.</p>
+<div style="background:#0a0e13;border:1px solid #14323a;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8;margin:0 0 16px;color:#c9d4e0">
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">classify_outcome</span>(raw: str) -&gt; str:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">&#8220;&#8221;&#8221;The ONE place that decides what an outcome means.&#8221;&#8221;&#8221;</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;text = (raw <span style="color:#5b6b7c">or</span> <span style="color:#34d399">&#8220;&#8221;</span>).strip().lower()</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">if</span> text.startswith(<span style="color:#34d399">&#8220;completed&#8221;</span>): <span style="color:#5b6b7c">return</span> <span style="color:#34d399">&#8220;completed&#8221;</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">if</span> text.startswith(<span style="color:#34d399">&#8220;attempted&#8221;</span>): <span style="color:#5b6b7c">return</span> <span style="color:#34d399">&#8220;attempted&#8221;</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">return</span> <span style="color:#34d399">&#8220;unknown&#8221;</span>&nbsp;&nbsp;<span style="color:#5b6b7c"># note this — section 2</span></div>
+<div>&nbsp;</div>
+<div><span style="color:#5b6b7c"># Path A and Path B now ask the SAME question:</span></div>
+<div><span style="color:#5b6b7c">if</span> classify_outcome(job.outcome) == <span style="color:#34d399">&#8220;completed&#8221;</span>:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;advance_to_next_stage(job)</div>
+</p></div>
+<p>That&#8217;s the whole fix and it&#8217;s almost boring. The richness of the string stops mattering, because nobody compares the raw string anymore. There&#8217;s one definition of &#8220;completed,&#8221; it lives in one function, and the day it needs to understand a new phrasing, I change it once and <em>every</em> caller gets smarter at the same instant. The test that matters here isn&#8217;t a unit test of either path — it&#8217;s a test that feeds the real, messy, multi-line strings into the classifier and pins down what they mean.</p>
+<p>    <!-- ============ SECTION 2 ============ --></p>
+<h2 id="failsafe" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">2. Fail safe, not fail &#8220;done&#8221;: the default case must be the safe one</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>Look back at that classifier. It returns <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">"unknown"</code> when it doesn&#8217;t recognize the input. That branch is not a loose end. It&#8217;s the most important line in the function. When your system meets a value it doesn&#8217;t understand, it must do the <em>safe</em> thing — stop and ask a human — never the <em>convenient</em> thing.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY IT WORKS</p>
+<p>This is <a href="https://en.wikipedia.org/wiki/Fail-safe" style="color:#56b6f2;text-decoration:none">fail-safe design</a>, and it&#8217;s borrowed straight from physical engineering, where it&#8217;s not optional. A railway signal that loses power drops to red, not green. A dead man&#8217;s switch on a train stops the train when the operator lets go. The principle: when the system is in a state it can&#8217;t reason about, it collapses toward the outcome that <em>can&#8217;t hurt anyone</em>, even at the cost of being annoying. Red-when-confused is a feature.</p>
+<p>Software defaults the other way unless you fight it. I had a place where an unrecognized status value fell through to the <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#f87171;font-family:ui-monospace,Menlo,monospace">else</code> — and the <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#f87171;font-family:ui-monospace,Menlo,monospace">else</code> branch quietly auto-closed the case. Think about that. The one situation where the code understood the <em>least</em> was the situation where it took the <em>most</em> irreversible action. A value it had never seen before would sail straight to &#8220;done, archived, customer notified.&#8221; Backwards. The unknown path is exactly where you have the least right to be confident, so it&#8217;s exactly where the action must be smallest.</p>
+<p>There&#8217;s a security cousin to this worth knowing by name: <a href="https://en.wikipedia.org/wiki/Secure_by_design" style="color:#56b6f2;text-decoration:none">secure by design</a> — when in doubt, deny. Same instinct. The default answer to a question you can&#8217;t resolve is &#8220;no,&#8221; not &#8220;sure.&#8221;</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:13px;margin-bottom:2px;margin-top:22px">// APPLY IT</p>
+<p>Make the unknown branch loud and harmless. Never let it be silent and final.</p>
+<div style="background:#0a0e13;border:1px solid #14323a;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8;margin:0 0 16px;color:#c9d4e0">
+<div>verdict = classify_outcome(job.outcome)</div>
+<div>&nbsp;</div>
+<div><span style="color:#5b6b7c">if</span> verdict == <span style="color:#34d399">&#8220;completed&#8221;</span>:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;advance_to_next_stage(job)</div>
+<div><span style="color:#5b6b7c">elif</span> verdict == <span style="color:#34d399">&#8220;attempted&#8221;</span>:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;schedule_retry(job)</div>
+<div><span style="color:#5b6b7c">else</span>:&nbsp;&nbsp;<span style="color:#5b6b7c"># the value we don&#8217;t understand</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;hold_for_review(job)&nbsp;&nbsp;<span style="color:#5b6b7c"># do nothing irreversible</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;alert_human(<span style="color:#34d399">f&#8221;unhandled outcome: {job.outcome!r}&#8221;</span>)</div>
+</p></div>
+<p>The difference between this and a silent <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#f87171;font-family:ui-monospace,Menlo,monospace">else: pass</code> is the difference between a system that tells on itself and a system that hides its own confusion until a client does the telling. I&#8217;ll take the 2 a.m. text every time. A pager that goes off is cheaper than a customer who left.</p>
+<p>    <!-- ============ SECTION 3 ============ --></p>
+<h2 id="honest" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">3. A decision is only as honest as its inputs: never synthesize a fact</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>If you don&#8217;t have a piece of data, the answer is &#8220;I don&#8217;t have it.&#8221; It is never a plausible-looking placeholder you generated to fill the hole. The most seductive version of this mistake is using the wall clock as data: reaching for <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">datetime.now()</code> to stand in for a real-world time you didn&#8217;t actually record.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY IT WORKS</p>
+<p>I had a loop that documented field events. When the real event time was missing, it filled the gap with &#8220;now.&#8221; Feels harmless — a timestamp is a timestamp, right? No. A fabricated fact is worse than a missing one, because a missing fact announces itself and a fabricated one lies with a straight face. Mine produced a record that read like a precise, observed moment — &#8220;4:02 AM&#8221; — that no human ever witnessed. And because &#8220;now&#8221; is different every time the loop runs, the record <em>changed on every pass</em>, which re-triggered downstream work that keyed off it. A closed job started re-emitting daily, each time stamped with a fresh, invented time. One dishonest input metastasized into a recurring false alarm.</p>
+<p>The clean way to think about this comes from functional programming: a <a href="https://en.wikipedia.org/wiki/Pure_function" style="color:#56b6f2;text-decoration:none">pure function</a>, same inputs in, same output out, every time. <code style="background:#0a0e13;padding:1px 6px;border-radius:4px;color:#fbbf24;font-family:ui-monospace,Menlo,monospace">datetime.now()</code> is the opposite — it&#8217;s a hidden input that&#8217;s never the same twice. When you splice a value like that into what&#8217;s supposed to be a stable record, you&#8217;ve made the record non-deterministic, and non-deterministic records can&#8217;t be trusted, deduplicated, or replayed. &#8220;Unknown&#8221; is a stable, honest value. &#8220;Now&#8221; is an unstable, dishonest one wearing a convincing costume.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:13px;margin-bottom:2px;margin-top:22px">// APPLY IT</p>
+<p>Let absence be absence. Carry the gap honestly instead of papering over it.</p>
+<div style="background:#0a0e13;border:1px solid #14323a;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8;margin:0 0 16px;color:#c9d4e0">
+<div><span style="color:#5b6b7c"># WRONG &mdash; invents an observation that never happened</span></div>
+<div>event_time = parse(raw_time) <span style="color:#5b6b7c">or</span> datetime.now()</div>
+<div>&nbsp;</div>
+<div><span style="color:#5b6b7c"># RIGHT &mdash; the gap stays a gap, and stays the same on every run</span></div>
+<div>event_time = parse(raw_time)&nbsp;&nbsp;<span style="color:#5b6b7c"># None if we never recorded it</span></div>
+<div>label = event_time.isoformat() <span style="color:#5b6b7c">if</span> event_time <span style="color:#5b6b7c">else</span> <span style="color:#34d399">&#8220;Time not recorded&#8221;</span></div>
+</p></div>
+<p>&#8220;Time not recorded&#8221; on a document looks less polished than a crisp timestamp. It&#8217;s also the truth, and the truth doesn&#8217;t change between runs, so nothing downstream gets fooled into thinking something new happened. Polish that lies is a liability. Honesty that&#8217;s a little ugly is an asset.</p>
+<p>    <!-- ============ SECTION 4 ============ --></p>
+<h2 id="asymmetry" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">4. Pick which mistake is cheaper: error asymmetry in a classifier</h2>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:2px">// THE PRINCIPLE</p>
+<p>Any classifier can be wrong two ways, and the two ways almost never cost the same. Before you tune one, decide <em>which</em> error you can afford and bias the default toward the cheaper mistake. A filter that sorts real from automated messages is the perfect example: dropping a real person&#8217;s message is a disaster; letting one piece of junk through is a shrug.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:13px;margin-bottom:2px;margin-top:22px">// WHY IT WORKS</p>
+<p>Statisticians have a clean frame for this: <a href="https://en.wikipedia.org/wiki/Type_I_and_type_II_errors" style="color:#56b6f2;text-decoration:none">Type I and Type II errors</a> — a false positive versus a false negative. The trap is treating them as symmetric, two equal columns in a confusion matrix. In the real world they&#8217;re wildly lopsided, and the whole art is knowing the exchange rate <em>before</em> you set the threshold.</p>
+<p>Mine bit me here. I had soft heuristics flagging &#8220;auto-replies&#8221; — out-of-office subjects, no-reply-shaped senders — running <em>ahead</em> of the check for &#8220;is this a known human I&#8217;m in a conversation with.&#8221; So a real client replying from an unusual address could trip a soft filter and get silently dropped. I&#8217;d optimized to keep junk out (annoying) at the cost of occasionally eating a paying customer&#8217;s message (catastrophic). Exactly backwards on the exchange rate. The fix wasn&#8217;t a smarter filter — it was reordering the logic so a trusted human bypasses the soft heuristics entirely. Let ten pieces of junk through before you drop one real reply. The errors aren&#8217;t equal, so the code shouldn&#8217;t treat them as equal.</p>
+<p style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:13px;margin-bottom:2px;margin-top:22px">// APPLY IT</p>
+<p>Name the costly error and structure the code so it&#8217;s the rare one. Check for &#8220;definitely keep&#8221; before you ever run &#8220;probably drop.&#8221;</p>
+<div style="background:#0a0e13;border:1px solid #14323a;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8;margin:0 0 16px;color:#c9d4e0">
+<div><span style="color:#5b6b7c">def</span> <span style="color:#56b6f2">should_handle</span>(msg) -&gt; bool:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c"># costly error = dropping a real person. Guard it FIRST.</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">if</span> is_known_human(msg.sender) <span style="color:#5b6b7c">or</span> in_active_thread(msg):</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">return</span> <span style="color:#fbbf24">True</span>&nbsp;&nbsp;<span style="color:#5b6b7c"># soft filters never get to drop this</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c"># only now, for strangers, may the cheap-error filters run</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">return</span> <span style="color:#5b6b7c">not</span> looks_automated(msg)</div>
+</p></div>
+<p>Same heuristics, different order, opposite risk profile. The structure of the code now <em>encodes</em> which mistake I&#8217;m willing to make. That&#8217;s the real lesson: your control flow is a statement of your priorities whether you meant it to be or not. Make it say the right thing on purpose.</p>
+<p>    <!-- ============ PHILOSOPHY ============ --></p>
+<h2 id="philosophy" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">The through-line: one brain, honest, and afraid of the right thing</h2>
+<p>Four fixes, one spine. A system should think with <strong>one brain</strong> — every important judgment computed once, in a place everyone calls, so it can&#8217;t quietly disagree with itself. That brain should be <strong>honest</strong> — it never invents an input to look more finished than it is. And it should be <strong>afraid of the right thing</strong> — when it&#8217;s confused, it stops; when it must guess, it guesses toward the error it can survive.</p>
+<p>None of this is exotic. Single Source of Truth, fail-safe defaults, pure functions, error asymmetry — these are old, well-worn ideas, and I learned every one of them by getting burned, not in a classroom. That&#8217;s kind of the point. You don&#8217;t need the pedigree to use the principles. You need a production system that&#8217;s hurt you, and the willingness to go back and ask the boring question: where does this judgment really live, and what does it do when it doesn&#8217;t know?</p>
+<p>I count instruments for a living in my other life. You don&#8217;t get to assume the tray is right. You verify it&#8217;s right, once, in one count everyone trusts, and you build the room so a missing one stops the room. Same discipline. Different tray.</p>
+<p>    <!-- FAQ --></p>
+<h2 style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:38px">FAQ</h2>
+<p style="color:#eaf1f8;margin-bottom:2px"><strong>What is a single source of truth in code?</strong></p>
+<p style="margin-top:0">It&#8217;s the rule that every fact — and every <em>decision</em> derived from facts — is defined in exactly one place, and referenced everywhere else. No second copy that can drift. Applied to decisions, it means one canonical function per important judgment, so two parts of your system can&#8217;t reach different conclusions about the same thing.</p>
+<p style="color:#eaf1f8;margin-bottom:2px"><strong>What does fail-safe mean in software?</strong></p>
+<p style="margin-top:0">When the code hits a state it can&#8217;t reason about, it takes the safe, reversible action — usually &#8220;stop and alert a human&#8221; — instead of the convenient one. The unknown branch should do the least, not the most. Like a signal that drops to red when it loses power.</p>
+<p style="color:#eaf1f8;margin-bottom:2px"><strong>Why is using datetime.now() as a fallback value a bug?</strong></p>
+<p style="margin-top:0">Because it fabricates an observation that never happened and changes on every run. That makes records non-deterministic — they can&#8217;t be trusted, deduplicated, or replayed, and they can re-trigger downstream work endlessly. Carry the gap honestly (&#8220;not recorded&#8221;) instead.</p>
+<p style="color:#eaf1f8;margin-bottom:2px"><strong>How do I decide a classifier&#8217;s default?</strong></p>
+<p style="margin-top:0">Figure out which of the two errors — false positive or false negative — costs more, then bias the default toward the cheaper mistake and guard the costly one first in your control flow. If dropping a real message is catastrophic and passing junk is trivial, check &#8220;definitely keep&#8221; before you ever run &#8220;probably drop.&#8221;</p>
+<p>    <!-- related --></p>
+<div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:18px 20px;margin:30px 0 8px">
+<div style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">$ ls related/</div>
+<p style="margin:0 0 8px"><a href="https://jessemoraga.com/2026/06/14/how-to-build-an-ai-agent-that-audits-your-own-code/" style="color:#56b6f2;text-decoration:none">How to build an AI agent that audits your own code</a> — adversarial review and fail-closed design, the machine that catches the silent bug.</p>
+<p style="margin:0 0 8px"><a href="https://jessemoraga.com/2026/06/13/daily-2026-06-13/" style="color:#56b6f2;text-decoration:none">Hardening a billing guard in Python</a> — a fail-closed fix on a money path, same instinct as section 2.</p>
+<p style="margin:0 0 8px"><a href="https://jessemoraga.com/2026/06/10/daily-2026-06-10/" style="color:#56b6f2;text-decoration:none">The Python bug that silently overcharged clients</a> — another decision that lied quietly until a human caught it.</p>
+<p style="margin:0 0 8px"><a href="https://jessemoraga.com/2026/06/12/daily-2026-06-12/" style="color:#56b6f2;text-decoration:none">Killing an alert flood: from 50 iMessages an hour to signal only</a> — the other side of section 4&#8217;s error trade-off.</p>
+<p style="margin:0"><a href="https://jessemoraga.com/category/technology/" style="color:#56b6f2;text-decoration:none">More from the systems vertical →</a></p>
+</p></div>
+<p style="font-size:13px;color:#5b6b7c;font-family:ui-monospace,Menlo,monospace;margin-top:24px">// Built and maintained by Jesse Moraga. Reach me: jesse@jessemoraga.com</p>
+</p></div>
+</div>
+
+  </div>
+</article>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>
