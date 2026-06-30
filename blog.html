@@ -10,9 +10,14 @@
 <meta property="og:url" content="https://jessemoraga.com/blog.html">
 <meta property="og:title" content="Writing — Jesse Moraga">
 <meta property="og:description" content="How I build software with AI, the systems behind it, and how small businesses use it to outrun the giants.">
+<meta property="og:image" content="https://jessemoraga.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://jessemoraga.com/og-default.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<script src="./support.js"></script>
+<script defer src="./support.js"></script>
+<noscript><style>x-dc{display:none!important}</style></noscript>
 </head>
 <body>
 <x-dc>
@@ -36,15 +41,15 @@
   <!-- ===== NAV ===== -->
   <header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);">
     <nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;">
-      <a href="index.html" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;">
+      <a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;">
         <span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>
         Jesse Moraga
       </a>
       <nav style="display:{{ desktopNav }}; align-items:center; gap:28px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859;">
-        <a href="blog.html" style="color:#7A45D8; font-weight:600;">Writing</a>
+        <a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a>
         <a href="https://art3ry.com" style-hover="color:#7A45D8;">Art3ry</a>
-        <a href="index.html#music" style-hover="color:#7A45D8;">Music</a>
-        <a href="index.html#about" style-hover="color:#7A45D8;">About</a>
+        <a href="/#music" style-hover="color:#7A45D8;">Music</a>
+        <a href="/#about" style-hover="color:#7A45D8;">About</a>
       </nav>
       <a href="https://art3ry.com" data-magnetic style="display:{{ desktopNav }}; align-items:center; gap:8px; margin-left:8px; padding:10px 18px; border-radius:999px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; color:#fff; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.45); transition:transform .25s, box-shadow .25s;" style-hover="box-shadow:0 10px 30px rgba(99,102,241,0.6);">
         Work with me <span style="font-family:'JetBrains Mono',monospace;">→ Art3ry</span>
@@ -56,10 +61,10 @@
       </button>
     </nav>
     <div style="display:{{ menuDisplay }}; flex-direction:column; gap:4px; padding:8px 20px 18px; border-top:1px solid rgba(124,92,246,0.1); background:rgba(241,239,230,0.96);">
-      <a href="blog.html" onClick="{{ closeMenu }}" style="padding:12px; border-radius:10px; font-weight:600;">Writing</a>
+      <a href="/blog.html" onClick="{{ closeMenu }}" style="padding:12px; border-radius:10px; font-weight:600;">Writing</a>
       <a href="https://art3ry.com" onClick="{{ closeMenu }}" style="padding:12px; border-radius:10px; font-weight:600;">Art3ry</a>
-      <a href="index.html#music" onClick="{{ closeMenu }}" style="padding:12px; border-radius:10px; font-weight:600;">Music</a>
-      <a href="index.html#about" onClick="{{ closeMenu }}" style="padding:12px; border-radius:10px; font-weight:600;">About</a>
+      <a href="/#music" onClick="{{ closeMenu }}" style="padding:12px; border-radius:10px; font-weight:600;">Music</a>
+      <a href="/#about" onClick="{{ closeMenu }}" style="padding:12px; border-radius:10px; font-weight:600;">About</a>
       <a href="https://art3ry.com" onClick="{{ closeMenu }}" style="margin-top:6px; padding:13px; border-radius:10px; text-align:center; color:#fff; font-weight:700; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Work with me → Art3ry</a>
     </div>
   </header>
@@ -175,11 +180,11 @@
   <footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;">
     <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(124,92,246,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,246,0.08) 1px,transparent 1px); background-size:46px 46px; opacity:0.6;"></div>
     <div style="position:relative; max-width:1100px; margin:0 auto; padding:48px 24px; display:flex; flex-wrap:wrap; gap:24px; align-items:center; justify-content:space-between;">
-      <a href="index.html" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a>
+      <a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a>
       <div style="display:flex; gap:24px; font-size:14px; flex-wrap:wrap;">
-        <a href="index.html" style-hover="color:#fff;">Home</a>
+        <a href="/" style-hover="color:#fff;">Home</a>
         <a href="https://art3ry.com" style-hover="color:#fff;">Art3ry →</a>
-        <a href="index.html#music" style-hover="color:#fff;">Music</a>
+        <a href="/#music" style-hover="color:#fff;">Music</a>
         <a href="mailto:jesse@jessemoraga.com" style-hover="color:#fff;">jesse@jessemoraga.com</a>
       </div>
     </div>
@@ -196,7 +201,7 @@ class Component extends DCLogic {
     Architecture: 'linear-gradient(135deg,#7C6AE2,#4FA6D6)',
     Music: 'linear-gradient(135deg,#7A45D8,#BE4DBE)'
   };
-  ALL =   [
+  ALL = [
       {
           "title": "Fr3tLab: Find Your Scale — Tap the Notes, Get the Scale",
           "topic": "Music",
@@ -623,5 +628,15 @@ class Component extends DCLogic {
   }
 }
 </script>
+<noscript>
+<div style="max-width:1100px;margin:0 auto;padding:48px 24px;font-family:Inter,system-ui,sans-serif;color:#2A2820;background:#F1EFE6;">
+<h1 style="font-family:'Space Grotesk',sans-serif;">Writing — Jesse Moraga</h1>
+<p>How I build software with AI, the systems behind it, and how small businesses use it to outrun the giants.</p>
+<ul style="list-style:none;padding:0;line-height:1.6;">
+<li style="margin:6px 0;"><a href="/2026/06/28/fr3tlab-find-your-scale-tap-the-notes-get-the-scale/">Fr3tLab: Find Your Scale — Tap the Notes, Get the Scale</a> <span style="color:#A39D8C;">— Music · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/25/i-built-a-voice-ai-that-lives-in-my-headset-full-source-code/">I Built a Voice AI That Lives in My Headset — Full Source Code</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/24/i-spent-20-years-guessing-then-i-finally-built-the-thing/">I Spent 20 Years Guessing. Then I Finally Built the Thing.</a> <span style="color:#A39D8C;">— Music · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/23/how-to-find-any-scale-in-any-tuning-drop-c-7-string-beyond/">How to Find Any Scale in Any Tuning — Drop C, 7-String &amp; Beyond</a> <span style="color:#A39D8C;">— Music · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/23/fretlab-i-built-a-free-guitar-fretboard-visualizer-for-any-tuning/">Fr3tLab: I Built a Free Guitar Fretboard Visualizer for Any Tuning</a> <span style="color:#A39D8C;">— Music · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/22/my-home-studio-setup-the-metal-rig-i-record-on/">My Home Studio Setup — The Metal Rig I Record On</a> <span style="color:#A39D8C;">— Music · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/19/test-pollution-in-production-logs-and-the-real-bug-it-hid/">Test Pollution in Production Logs (and the Real Bug It Hid)</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/18/daily-2026-06-18/">Silent failures: the bug that doesn’t crash, it just quietly does nothing</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/17/fail-silent-bugs-when-logs-say-ok-while-the-system-does-nothing/">Fail-Silent Bugs: When Logs Say OK While the System Does Nothing</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/17/daily-2026-06-17/">Fail-Closed Design: When the Check Can’t Run, the Answer Is Always NO</a> <span style="color:#A39D8C;">— Design · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/16/what-is-software-regression-solo-operator/">What Is Software Regression — And Why It Hits Hardest When You Can’t Stop to Fix It</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/16/how-i-use-two-claude-code-accounts-without-losing-any-context/">How I Use Two Claude Code Accounts Without Losing Any Context</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/15/single-source-of-truth-in-python-one-decision-function-fail-safe-defaults-and-why-forked-logic-drifts/">Single Source of Truth in Python — One Decision Function, Fail-Safe Defaults, and Why Forked Logic Drifts</a> <span style="color:#A39D8C;">— Architecture · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/14/how-to-build-an-ai-agent-that-audits-your-own-code/">How to Build an AI Agent That Audits Your Own Code</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/14/daily-2026-06-14/">Safety-gating an overnight autonomous dispatch loop — default off, honest by design</a> <span style="color:#A39D8C;">— Design · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/13/daily-2026-06-13/">Hardening a billing guard in Python automation — the e-file-without-invoicing bug</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/12/i-almost-gave-up-on-fable-5-then-i-told-it-to-build-me-a-dev-team/">I Almost Gave Up on Fable 5 — Then I Told It to Build Me a Dev Team</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/12/daily-2026-06-12/">Killing an alert flood: from 50 iMessages an hour to signal only</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/11/daily-2026-06-11/">Server-side confirm gate for an AI phone agent — stops a mishear before it runs</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/10/the-model-is-the-power-tool-im-still-the-operator/">How I Use Claude Code to Run My Business — With No CS Degree</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/10/songs-i-can-play-metal-guitar-covers-by-band/">Songs I Can Play — Metal Guitar Covers by Band</a> <span style="color:#A39D8C;">— Music · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/10/how-i-coded-an-ai-assistant-that-runs-my-business-by-voice-and-text/">How I Coded an AI Assistant That Runs My Business by Voice and Text</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/10/daily-2026-06-10/">Fixing a Python pricing bug that silently overcharged clients — a solo operator build log</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/08/twenty-years-of-playing-guitar-one-year-of-actually-speaking-it/">Twenty Years of Playing Guitar. One Year of Actually Speaking It.</a> <span style="color:#A39D8C;">— Music · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/08/slipknot-left-behind-guitar-playthrough/">Slipknot — “Left Behind” | Guitar Playthrough (California Metal Guitarist)</a> <span style="color:#A39D8C;">— Music · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/08/done-isnt-a-checkbox-its-proof/">Done Isn’t a Checkbox. It’s Proof.</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/08/asking-alexandria-closure-on-the-schecter-hellraiser-c-1/">Asking Alexandria — “Closure” on Schecter Hellraiser C-1 | Guitar Cover</a> <span style="color:#A39D8C;">— Music · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/08/a-day-to-remember-the-downfall-of-us-all-guitar-cover/">A Day to Remember — “The Downfall of Us All” | Guitar Cover (California Metal Guitarist)</a> <span style="color:#A39D8C;">— Music · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/06/your-store-is-open-nobody-can-find-it/">Your Store Is Open. Nobody Can Find It.</a> <span style="color:#A39D8C;">— Business · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/06/your-posts-are-working-harder-than-you-think-and-youre-still-getting-paid-last/">Your Posts Are Working Harder Than You Think — and You’re Still Getting Paid Last</a> <span style="color:#A39D8C;">— Business · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/06/the-table-that-stayed-empty-had-nothing-to-do-with-the-food/">The Table That Stayed Empty Had Nothing to Do with the Food</a> <span style="color:#A39D8C;">— Business · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/06/the-scoreboard-you-never-saw-and-why-youre-already-losing-on-it/">The Scoreboard You Never Saw (And Why You’re Already Losing On It)</a> <span style="color:#A39D8C;">— Business · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/06/the-internet-has-been-grading-your-business-you-just-never-saw-the-report-card/">The Internet Has Been Grading Your Business. You Just Never Saw the Report Card.</a> <span style="color:#A39D8C;">— Business · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/06/the-internet-already-has-a-version-of-you-is-it-the-right-one/">The Internet Already Has a Version of You. Is It the Right One?</a> <span style="color:#A39D8C;">— Business · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/06/the-hungry-person-3-blocks-away-cant-find-you-heres-why/">The Hungry Person 3 Blocks Away Can’t Find You. Here’s Why.</a> <span style="color:#A39D8C;">— Business · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/06/the-customer-you-never-knew-you-lost/">The Customer You Never Knew You Lost</a> <span style="color:#A39D8C;">— Business · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/06/most-businesses-have-a-website-very-few-have-one-the-internet-trusts/">Most Businesses Have a Website. Very Few Have One the Internet Trusts.</a> <span style="color:#A39D8C;">— Business · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/06/built-for-the-person-doing-it-all-themselves/">Built for the Person Doing It All Themselves</a> <span style="color:#A39D8C;">— Business · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/06/be-a-customer-of-your-own-business-for-one-day/">Be a Customer of Your Own Business for One Day</a> <span style="color:#A39D8C;">— Business · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/03/six-days-on-github-three-badges-and-what-they-actually-mean/">Six Days on GitHub, Three Badges, and What They Actually Mean</a> <span style="color:#A39D8C;">— Business · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/02/from-saas-to-gaas-small-business/">From SaaS to GaaS: What Small Businesses Need to Know</a> <span style="color:#A39D8C;">— Business · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/01/why-i-left-the-operating-room/">Why I Left the Operating Room</a> <span style="color:#A39D8C;">— Business · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/01/im-the-guy-who-asks-how-it-works/">I’m the Guy Who Asks How It Works</a> <span style="color:#A39D8C;">— Business · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/01/i-didnt-build-it-for-my-business-i-built-it-for-how-business-runs/">I Didn’t Build It For My Business. I Built It For How Business Runs.</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li><li style="margin:6px 0;"><a href="/2026/06/01/i-couldnt-afford-an-assistant-so-i-built-one/">I Couldn’t Afford an Assistant, So I Built One</a> <span style="color:#A39D8C;">— Tech · Jun 2026</span></li>
+</ul>
+<p><a href="/">Home</a> &middot; <a href="https://art3ry.com">Work with me at Art3ry</a></p>
+</div>
+</noscript>
 </body>
 </html>
