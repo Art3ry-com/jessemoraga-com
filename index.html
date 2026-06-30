@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jesse Moraga — I build with AI so small businesses can take on the giants</title>
+<meta name="description" content="I'm a developer who uses AI to ship real software fast and affordable — enterprise-grade tools in small-business hands, so you can compete with the corporations instead of getting buried by them.">
+<link rel="canonical" href="https://jessemoraga.com/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jessemoraga.com/">
+<meta property="og:title" content="Jesse Moraga — I build with AI so small businesses can take on the giants">
+<meta property="og:description" content="A developer who uses AI to ship real software fast and affordable, so small businesses can compete with the corporations instead of getting buried by them.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Jesse Moraga — I build with AI so small businesses can take on the giants">
+<meta name="twitter:description" content="A developer who uses AI to ship real software fast and affordable, so small businesses can compete with the corporations.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: 'Inter', system-ui, sans-serif; color: #2A2820; background: #F1EFE6; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: #C9B8FF; color: #1a1030; }
+  @keyframes meshA { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(6%,4%) scale(1.15)} 100%{transform:translate(0,0) scale(1)} }
+  @keyframes meshB { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(-5%,6%) scale(1.1)} 100%{transform:translate(0,0) scale(1)} }
+  @keyframes meshC { 0%{transform:translate(0,0) scale(1.05)} 50%{transform:translate(4%,-5%) scale(1.2)} 100%{transform:translate(0,0) scale(1.05)} }
+  @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.7)} }
+  @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  @keyframes shimmer { 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
+</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative; width:100%; overflow-x:hidden; background:#F1EFE6;">
+
+  <!-- ===== NAV ===== -->
+  <header data-screen-label="Nav" style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);">
+    <nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;">
+      <a href="index.html" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;">
+        <span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>
+        Jesse Moraga
+      </a>
+      <nav style="display:{{ desktopNav }}; align-items:center; gap:28px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859;">
+        <a href="blog.html" style="transition:color .2s;" style-hover="color:#7A45D8;">Writing</a>
+        <a href="https://art3ry.com" style="transition:color .2s;" style-hover="color:#7A45D8;">Art3ry</a>
+        <a href="#music" style="transition:color .2s;" style-hover="color:#7A45D8;">Music</a>
+        <a href="#about" style="transition:color .2s;" style-hover="color:#7A45D8;">About</a>
+      </nav>
+      <a href="https://art3ry.com" data-magnetic style="display:{{ desktopNav }}; align-items:center; gap:8px; margin-left:8px; padding:10px 18px; border-radius:999px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; color:#fff; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.45); transition:transform .25s, box-shadow .25s;" style-hover="box-shadow:0 10px 30px rgba(99,102,241,0.6);">
+        Work with me <span style="font-family:'JetBrains Mono',monospace;">→ Art3ry</span>
+      </a>
+      <button onClick="{{ toggleMenu }}" aria-label="Menu" style="display:{{ mobileNav }}; margin-left:auto; width:42px; height:42px; border-radius:12px; border:1px solid rgba(124,92,246,0.2); background:rgba(255,255,255,0.7); cursor:pointer; flex-direction:column; gap:4px; align-items:center; justify-content:center;">
+        <span style="width:18px; height:2px; background:#2A2820; border-radius:2px;"></span>
+        <span style="width:18px; height:2px; background:#2A2820; border-radius:2px;"></span>
+        <span style="width:18px; height:2px; background:#2A2820; border-radius:2px;"></span>
+      </button>
+    </nav>
+    <div style="display:{{ menuDisplay }}; flex-direction:column; gap:4px; padding:8px 20px 18px; border-top:1px solid rgba(124,92,246,0.1); background:rgba(241,239,230,0.96);">
+      <a href="blog.html" onClick="{{ closeMenu }}" style="padding:12px; border-radius:10px; font-weight:600;">Writing</a>
+      <a href="https://art3ry.com" onClick="{{ closeMenu }}" style="padding:12px; border-radius:10px; font-weight:600;">Art3ry</a>
+      <a href="#music" onClick="{{ closeMenu }}" style="padding:12px; border-radius:10px; font-weight:600;">Music</a>
+      <a href="#about" onClick="{{ closeMenu }}" style="padding:12px; border-radius:10px; font-weight:600;">About</a>
+      <a href="https://art3ry.com" onClick="{{ closeMenu }}" style="margin-top:6px; padding:13px; border-radius:10px; text-align:center; color:#fff; font-weight:700; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Work with me → Art3ry</a>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section data-screen-label="Hero" style="position:relative; overflow:hidden; padding:clamp(64px,9vw,120px) 24px clamp(56px,7vw,96px);">
+    <!-- gradient mesh -->
+    <div aria-hidden="true" style="position:absolute; inset:-20% -10%; z-index:0; filter:blur(60px); opacity:0.9; pointer-events:none;">
+      <div style="position:absolute; top:2%; left:8%; width:42%; height:62%; border-radius:50%; background:radial-gradient(circle at 50% 50%, rgba(139,92,246,0.55), transparent 70%); animation:meshA 18s ease-in-out infinite;"></div>
+      <div style="position:absolute; top:0%; right:4%; width:46%; height:64%; border-radius:50%; background:radial-gradient(circle at 50% 50%, rgba(59,130,246,0.5), transparent 70%); animation:meshB 22s ease-in-out infinite;"></div>
+      <div style="position:absolute; bottom:-6%; left:32%; width:40%; height:58%; border-radius:50%; background:radial-gradient(circle at 50% 50%, rgba(34,211,238,0.42), transparent 70%); animation:meshC 26s ease-in-out infinite;"></div>
+    </div>
+    <!-- grid texture -->
+    <div aria-hidden="true" style="position:absolute; inset:0; z-index:0; background-image:linear-gradient(rgba(99,102,241,0.07) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.07) 1px,transparent 1px); background-size:44px 44px; mask-image:radial-gradient(ellipse 90% 80% at 50% 30%, #000 40%, transparent 100%); -webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 30%, #000 40%, transparent 100%);"></div>
+
+    <div style="position:relative; z-index:2; max-width:980px; margin:0 auto; text-align:center;">
+      <div data-reveal style="display:inline-flex; align-items:center; gap:9px; padding:7px 15px; border-radius:999px; background:rgba(255,255,255,0.7); border:1px solid rgba(124,92,246,0.22); box-shadow:0 4px 18px rgba(99,102,241,0.12); font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:500; color:#5B3Fb0; backdrop-filter:blur(8px);">
+        <span style="width:8px; height:8px; border-radius:50%; background:#9BC53D; box-shadow:0 0 0 3px rgba(34,197,94,0.18); animation:pulseDot 2s infinite;"></span>
+        developer using AI to level the playing field
+      </div>
+      <h1 data-reveal style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(40px,7vw,82px); line-height:1.02; letter-spacing:-0.035em; margin:24px auto 0; max-width:15ch;">
+        I build with AI.
+        <span style="display:block; background:linear-gradient(110deg,#9163EE,#7C6AE2 45%,#4FA6D6 80%,#66D9EF); -webkit-background-clip:text; background-clip:text; color:transparent;">So small businesses can take on the giants.</span>
+      </h1>
+      <p data-reveal style="margin:24px auto 0; max-width:64ch; font-size:clamp(16px,2.2vw,20px); line-height:1.6; color:#615D4F;">
+        Ex-surgical tech turned builder. I use AI to ship real software fast — the kind that used to cost a corporation a fortune and a year — and I put that firepower in small-business hands, so you can compete with the big guys instead of getting buried by them. This is where I write it all down.
+      </p>
+      <div data-reveal style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:34px;">
+        <a href="https://art3ry.com" data-magnetic style="display:inline-flex; align-items:center; gap:9px; padding:15px 26px; border-radius:14px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:16px; color:#fff; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 10px 30px rgba(99,102,241,0.45); transition:transform .25s, box-shadow .25s;" style-hover="box-shadow:0 16px 44px rgba(99,102,241,0.6);">
+          Work with me <span style="font-family:'JetBrains Mono',monospace;">→ Art3ry</span>
+        </a>
+        <a href="blog.html" style="display:inline-flex; align-items:center; gap:9px; padding:15px 26px; border-radius:14px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:16px; color:#36322A; background:rgba(255,255,255,0.8); border:1px solid rgba(124,92,246,0.25); box-shadow:0 6px 18px rgba(99,102,241,0.1); transition:transform .2s, border-color .2s; backdrop-filter:blur(8px);" style-hover="border-color:rgba(124,92,246,0.55);">
+          Read the blog
+        </a>
+      </div>
+
+      <!-- live credibility strip -->
+      <div data-reveal style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; max-width:760px; margin:54px auto 0;">
+        <div style="padding:20px 16px; border-radius:16px; background:rgba(255,255,255,0.66); border:1px solid rgba(124,92,246,0.16); box-shadow:0 8px 26px rgba(99,102,241,0.1); backdrop-filter:blur(10px);">
+          <div data-count="48" style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:38px; line-height:1; background:linear-gradient(120deg,#9163EE,#4FA6D6); -webkit-background-clip:text; background-clip:text; color:transparent;">0</div>
+          <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.04em; color:#8C8676; text-transform:uppercase;">posts published</div>
+        </div>
+        <div style="padding:20px 16px; border-radius:16px; background:rgba(255,255,255,0.66); border:1px solid rgba(124,92,246,0.16); box-shadow:0 8px 26px rgba(99,102,241,0.1); backdrop-filter:blur(10px);">
+          <div data-count="214" style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:38px; line-height:1; background:linear-gradient(120deg,#7C6AE2,#66D9EF); -webkit-background-clip:text; background-clip:text; color:transparent;">0</div>
+          <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.04em; color:#8C8676; text-transform:uppercase;">builds shipped</div>
+        </div>
+        <div style="padding:20px 16px; border-radius:16px; background:rgba(255,255,255,0.66); border:1px solid rgba(124,92,246,0.16); box-shadow:0 8px 26px rgba(99,102,241,0.1); backdrop-filter:blur(10px);">
+          <div data-count="1" data-suffix="" style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:38px; line-height:1; background:linear-gradient(120deg,#A06AF2,#4FA6D6); -webkit-background-clip:text; background-clip:text; color:transparent;">0</div>
+          <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.04em; color:#8C8676; text-transform:uppercase;">services company, run solo</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ART3RY BAND ===== -->
+  <section data-screen-label="Art3ry band" style="padding:24px;">
+    <div data-reveal style="position:relative; overflow:hidden; max-width:1200px; margin:0 auto; border-radius:30px; padding:clamp(40px,6vw,80px) clamp(28px,5vw,72px); background:linear-gradient(125deg,#2A2920 0%,#6D44C2 32%,#3A6A88 64%,#2C8A9A 100%); box-shadow:0 30px 80px rgba(74,46,180,0.5);">
+      <div aria-hidden="true" style="position:absolute; inset:0; background-image:radial-gradient(circle at 80% 20%, rgba(34,211,238,0.45), transparent 45%),radial-gradient(circle at 12% 90%, rgba(236,72,153,0.35), transparent 45%); pointer-events:none;"></div>
+      <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.06) 1px,transparent 1px); background-size:40px 40px; opacity:0.5; pointer-events:none;"></div>
+      <div style="position:relative; z-index:2; max-width:760px;">
+        <div style="display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#D9D5C5;">
+          <span style="width:7px;height:7px;border-radius:50%;background:#66D9EF;box-shadow:0 0 12px #66D9EF;animation:pulseDot 1.8s infinite;"></span>growth-as-a-service
+        </div>
+        <h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,4.6vw,54px); line-height:1.05; letter-spacing:-0.03em; color:#fff; margin:18px 0 0;">
+          I don't just talk about it.<br>I build it for you.
+        </h2>
+        <p style="margin:20px 0 0; font-size:clamp(16px,2vw,20px); line-height:1.6; color:#E5E1D2; max-width:60ch;">
+          Art3ry is where I build and run it for you — AI-speed, small-business priced. Rank on Google, follow up with every lead automatically, kill the busywork, and stop losing to companies ten times your size. Software that runs the work instead of making you run it.
+        </p>
+        <div style="display:flex; flex-wrap:wrap; gap:14px; margin-top:32px;">
+          <a href="https://art3ry.com" data-magnetic style="display:inline-flex; align-items:center; gap:10px; padding:16px 30px; border-radius:14px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:17px; color:#2E2540; background:linear-gradient(135deg,#ffffff,#F0EDE1); box-shadow:0 14px 40px rgba(0,0,0,0.28); transition:transform .25s, box-shadow .25s;" style-hover="box-shadow:0 20px 56px rgba(34,211,238,0.45);">
+            Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">→ art3ry.com</span>
+          </a>
+          <span style="display:inline-flex; align-items:center; padding:0 6px; font-family:'JetBrains Mono',monospace; font-size:13.5px; color:#BAB5A1;">"Most software makes you run the work. Art3ry runs it for you."</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURED + LATEST WRITING ===== -->
+  <section data-screen-label="Writing" style="max-width:1200px; margin:0 auto; padding:clamp(50px,7vw,90px) 24px;">
+    <div data-reveal style="display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; margin-bottom:34px;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#7A45D8;">// the writing</div>
+        <h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(28px,4vw,44px); letter-spacing:-0.03em; margin:10px 0 0;">Featured &amp; latest</h2>
+      </div>
+      <a href="blog.html" style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15px; color:#7A45D8; padding-bottom:2px; border-bottom:2px solid rgba(124,92,246,0.3);" style-hover="border-color:#7A45D8;">Browse all →</a>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:22px;">
+      <!-- featured -->
+      <a href="article.html" data-reveal data-card style="grid-column:1 / -1; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0; border-radius:24px; overflow:hidden; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 14px 40px rgba(99,102,241,0.12); transition:transform .3s, box-shadow .3s;">
+        <div style="position:relative; min-height:240px; background:linear-gradient(135deg,#9163EE,#4FA6D6); display:flex; align-items:flex-end; padding:22px; overflow:hidden;">
+          <div aria-hidden="true" style="position:absolute; inset:0; background-image:repeating-linear-gradient(45deg, rgba(255,255,255,0.08) 0 14px, transparent 14px 28px);"></div>
+          <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.12) 1px,transparent 1px); background-size:30px 30px; opacity:0.5;"></div>
+          <span style="position:relative; font-family:'JetBrains Mono',monospace; font-size:12px; color:rgba(255,255,255,0.85);">[ featured cover — drop image ]</span>
+        </div>
+        <div style="padding:30px 30px 32px; display:flex; flex-direction:column;">
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 11px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Featured · 9 min read · Jun 2026</span>
+          </div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,32px); line-height:1.12; letter-spacing:-0.02em; margin:16px 0 0;">How I Build Software With AI — With No CS Degree</h3>
+          <p style="margin:14px 0 0; color:#615D4F; line-height:1.6; font-size:15.5px;">The exact stack, the guardrails, and the one principle that lets a one-person shop ship like a team ten times its size.</p>
+          <span style="margin-top:auto; padding-top:22px; font-family:'Space Grotesk',sans-serif; font-weight:600; color:#7A45D8;">Read article →</span>
+        </div>
+      </a>
+
+      <!-- grid posts -->
+      <a href="article.html" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; overflow:hidden; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
+        <div style="position:relative; height:150px; background:linear-gradient(135deg,#4FA6D6,#66D9EF); overflow:hidden;">
+          <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.13) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.13) 1px,transparent 1px); background-size:26px 26px; opacity:0.6;"></div>
+        </div>
+        <div style="padding:20px 22px 24px; display:flex; flex-direction:column; flex:1;">
+          <div style="display:flex; align-items:center; gap:9px;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:4px 10px; border-radius:999px; background:linear-gradient(135deg,#4FA6D6,#66D9EF);">Business</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#A39D8C;">6 min · Jun 2026</span>
+          </div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:20px; line-height:1.18; letter-spacing:-0.01em; margin:13px 0 0;">Why the Follow-Up Is the Sale</h3>
+          <p style="margin:10px 0 0; color:#6E6A5B; font-size:14px; line-height:1.55;">Most revenue is lost in the silence after "I'll think about it." Here's the system that closes it for you.</p>
+        </div>
+      </a>
+
+      <a href="article.html" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; overflow:hidden; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
+        <div style="position:relative; height:150px; background:linear-gradient(135deg,#A06AF2,#F05C98); overflow:hidden;">
+          <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.13) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.13) 1px,transparent 1px); background-size:26px 26px; opacity:0.6;"></div>
+        </div>
+        <div style="padding:20px 22px 24px; display:flex; flex-direction:column; flex:1;">
+          <div style="display:flex; align-items:center; gap:9px;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:4px 10px; border-radius:999px; background:linear-gradient(135deg,#A06AF2,#F05C98);">Design</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#A39D8C;">7 min · May 2026</span>
+          </div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:20px; line-height:1.18; letter-spacing:-0.01em; margin:13px 0 0;">Designing a Site That Funnels — Not Just Sits There</h3>
+          <p style="margin:10px 0 0; color:#6E6A5B; font-size:14px; line-height:1.55;">Every section should earn the next click. How I turn a personal site into a conversion engine.</p>
+        </div>
+      </a>
+
+      <a href="article.html" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; overflow:hidden; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
+        <div style="position:relative; height:150px; background:linear-gradient(135deg,#7C6AE2,#4FA6D6); overflow:hidden;">
+          <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.13) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.13) 1px,transparent 1px); background-size:26px 26px; opacity:0.6;"></div>
+        </div>
+        <div style="padding:20px 22px 24px; display:flex; flex-direction:column; flex:1;">
+          <div style="display:flex; align-items:center; gap:9px;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:4px 10px; border-radius:999px; background:linear-gradient(135deg,#7C6AE2,#4FA6D6);">Architecture</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#A39D8C;">8 min · May 2026</span>
+          </div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:20px; line-height:1.18; letter-spacing:-0.01em; margin:13px 0 0;">One Brain, One Source of Truth: How I Structure a System</h3>
+          <p style="margin:10px 0 0; color:#6E6A5B; font-size:14px; line-height:1.55;">Why every business I build reads and writes from a single model — and how that keeps automation sane.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== WHAT I WRITE ABOUT ===== -->
+  <section data-screen-label="Topics rail" style="max-width:1200px; margin:0 auto; padding:0 24px clamp(40px,6vw,70px);">
+    <div data-reveal style="margin-bottom:28px;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#7A45D8;">// my range</div>
+      <h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(26px,3.6vw,40px); letter-spacing:-0.03em; margin:10px 0 0;">What I write about</h2>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px;">
+      <a href="blog.html" data-reveal data-tile style="position:relative; overflow:hidden; border-radius:20px; padding:26px 22px 24px; min-height:170px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(150deg,#9163EE,#4FA6D6); color:#fff; box-shadow:0 12px 32px rgba(99,102,241,0.32); transition:transform .3s, box-shadow .3s;">
+        <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.1) 1px,transparent 1px); background-size:28px 28px; opacity:0.4;"></div>
+        <div style="position:relative; width:44px; height:44px; border-radius:13px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.3); display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-weight:700;">&lt;/&gt;</div>
+        <div style="position:relative;">
+          <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:22px;">Tech</div>
+          <div style="font-size:13px; color:rgba(255,255,255,0.82); margin-top:3px;">Building with AI, end to end.</div>
+        </div>
+      </a>
+      <a href="blog.html" data-reveal data-tile style="position:relative; overflow:hidden; border-radius:20px; padding:26px 22px 24px; min-height:170px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(150deg,#4FA6D6,#66D9EF); color:#fff; box-shadow:0 12px 32px rgba(59,130,246,0.32); transition:transform .3s, box-shadow .3s;">
+        <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.1) 1px,transparent 1px); background-size:28px 28px; opacity:0.4;"></div>
+        <div style="position:relative; width:44px; height:44px; border-radius:13px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.3); display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-weight:700;">$</div>
+        <div style="position:relative;">
+          <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:22px;">Business</div>
+          <div style="font-size:13px; color:rgba(255,255,255,0.82); margin-top:3px;">Leads, follow-up, and the math of growth.</div>
+        </div>
+      </a>
+      <a href="blog.html" data-reveal data-tile style="position:relative; overflow:hidden; border-radius:20px; padding:26px 22px 24px; min-height:170px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(150deg,#A06AF2,#F05C98); color:#fff; box-shadow:0 12px 32px rgba(168,85,247,0.32); transition:transform .3s, box-shadow .3s;">
+        <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.1) 1px,transparent 1px); background-size:28px 28px; opacity:0.4;"></div>
+        <div style="position:relative; width:44px; height:44px; border-radius:13px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.3); display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-weight:700;">✦</div>
+        <div style="position:relative;">
+          <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:22px;">Design</div>
+          <div style="font-size:13px; color:rgba(255,255,255,0.82); margin-top:3px;">Interfaces that convert, not just decorate.</div>
+        </div>
+      </a>
+      <a href="blog.html" data-reveal data-tile style="position:relative; overflow:hidden; border-radius:20px; padding:26px 22px 24px; min-height:170px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(150deg,#7C6AE2,#4FA6D6); color:#fff; box-shadow:0 12px 32px rgba(99,102,241,0.32); transition:transform .3s, box-shadow .3s;">
+        <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.1) 1px,transparent 1px); background-size:28px 28px; opacity:0.4;"></div>
+        <div style="position:relative; width:44px; height:44px; border-radius:13px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.3); display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-weight:700;">◆</div>
+        <div style="position:relative;">
+          <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:22px;">Architecture</div>
+          <div style="font-size:13px; color:rgba(255,255,255,0.82); margin-top:3px;">One source of truth. Systems that hold.</div>
+        </div>
+      </a>
+      <a href="#music" data-reveal data-tile style="position:relative; overflow:hidden; border-radius:20px; padding:22px; min-height:170px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(150deg,#1C1411,#E0483A 150%); color:#fff; border:1px solid rgba(240,86,63,0.4); box-shadow:0 12px 32px rgba(224,72,58,0.32); transition:transform .3s, box-shadow .3s;">
+        <div aria-hidden="true" style="position:absolute; inset:0; background-image:radial-gradient(circle at 70% 30%, rgba(240,86,63,0.4), transparent 60%);"></div>
+        <div style="position:relative; width:40px; height:40px; border-radius:12px; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center; font-size:18px;">♪</div>
+        <div style="position:relative;">
+          <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px;">Music</div>
+          <div style="font-size:12.5px; color:rgba(255,255,255,0.8); margin-top:3px;">A flavor — I build tech for music too.</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== BUILD IN PUBLIC DATA BAND ===== -->
+  <section data-screen-label="Build in public" style="max-width:1200px; margin:0 auto; padding:clamp(20px,4vw,40px) 24px clamp(50px,7vw,90px);">
+    <div data-reveal style="position:relative; overflow:hidden; border-radius:28px; padding:clamp(26px,4vw,44px); background:linear-gradient(180deg,#272620,#34332A); box-shadow:0 26px 70px rgba(14,18,48,0.35);">
+      <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(124,92,246,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,246,0.1) 1px,transparent 1px); background-size:40px 40px; opacity:0.5; pointer-events:none;"></div>
+      <div style="position:relative; display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#66D9EF;box-shadow:0 0 12px #66D9EF;animation:pulseDot 1.6s infinite;"></span>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#8FCBD2;">build in public</span>
+      </div>
+      <h2 style="position:relative; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(24px,3.4vw,38px); letter-spacing:-0.02em; color:#fff; margin:0 0 6px;">This guy actually ships.</h2>
+      <p style="position:relative; color:#B2AD99; font-size:15px; margin:0 0 28px; max-width:60ch;">A live read on the output — posts written, builds shipped, and what's on the bench right now. Illustrative, and always moving.</p>
+
+      <div style="position:relative; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; align-items:stretch;">
+        <div style="grid-column:span 2; min-width:260px; border-radius:18px; padding:22px; background:rgba(255,255,255,0.04); border:1px solid rgba(124,92,246,0.22);">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#8FCBD2; text-transform:uppercase; letter-spacing:0.06em;">posts &amp; builds / 12mo</span>
+            <span style="font-family:'Space Grotesk',sans-serif; font-weight:700; color:#fff; font-size:15px;">trending up</span>
+          </div>
+          <div ref="{{ chartRef }}" style="width:100%; height:170px;"></div>
+        </div>
+        <div style="border-radius:18px; padding:22px; background:rgba(255,255,255,0.04); border:1px solid rgba(124,92,246,0.22); display:flex; flex-direction:column;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#8FCBD2; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:14px;">topic mix</span>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div ref="{{ donutRef }}" style="width:120px; height:120px; flex-shrink:0;"></div>
+            <div style="display:flex; flex-direction:column; gap:8px; font-size:12.5px; color:#D8D4C4;">
+              <span style="display:flex; align-items:center; gap:7px;"><span style="width:10px;height:10px;border-radius:3px;background:#9163EE;"></span>Tech</span>
+              <span style="display:flex; align-items:center; gap:7px;"><span style="width:10px;height:10px;border-radius:3px;background:#4FA6D6;"></span>Business</span>
+              <span style="display:flex; align-items:center; gap:7px;"><span style="width:10px;height:10px;border-radius:3px;background:#F05C98;"></span>Design</span>
+              <span style="display:flex; align-items:center; gap:7px;"><span style="width:10px;height:10px;border-radius:3px;background:#66D9EF;"></span>Arch</span>
+              <span style="display:flex; align-items:center; gap:7px;"><span style="width:10px;height:10px;border-radius:3px;background:#E0483A;"></span>Music</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="position:relative; margin-top:18px; border-radius:14px; overflow:hidden; background:rgba(255,255,255,0.04); border:1px solid rgba(124,92,246,0.22); padding:12px 0;">
+        <div style="display:flex; align-items:center; gap:10px; padding:0 18px 8px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#66D9EF; text-transform:uppercase; letter-spacing:0.08em;">▸ currently building</span>
+        </div>
+        <div style="display:flex; width:max-content; animation:marquee 28s linear infinite; gap:0; will-change:transform; font-family:'JetBrains Mono',monospace; font-size:13px; color:#D8D4C4;">
+          <span style="display:flex; gap:34px; padding:0 17px;">
+            <span>• lead-capture autoresponder v3</span><span>• Google rank tracker dashboard</span><span>• one-brain CRM sync</span><span>• blog → newsletter pipeline</span><span>• guitar tone analyzer (nights)</span>
+          </span>
+          <span aria-hidden="true" style="display:flex; gap:34px; padding:0 17px;">
+            <span>• lead-capture autoresponder v3</span><span>• Google rank tracker dashboard</span><span>• one-brain CRM sync</span><span>• blog → newsletter pipeline</span><span>• guitar tone analyzer (nights)</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MUSIC ===== -->
+  <section id="music" data-screen-label="Music" style="position:relative; padding:clamp(50px,7vw,90px) 24px;">
+    <div data-reveal style="position:relative; overflow:hidden; max-width:1200px; margin:0 auto; border-radius:28px; padding:clamp(30px,4vw,56px); background:linear-gradient(135deg,#2A1714 0%,#3A1A18 50%,#4A1F1C 100%); box-shadow:0 24px 64px rgba(42,21,82,0.4);">
+      <div aria-hidden="true" style="position:absolute; inset:0; background-image:radial-gradient(circle at 85% 15%, rgba(240,86,63,0.4), transparent 50%); pointer-events:none;"></div>
+      <div style="position:relative; display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:34px; align-items:center;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#FF9A8A;">// the other lane</div>
+          <h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(28px,3.8vw,44px); letter-spacing:-0.03em; color:#fff; margin:14px 0 0;">I also build tech for music.</h2>
+          <p style="margin:16px 0 0; color:#E8C9C2; line-height:1.6; font-size:16px; max-width:50ch;">California metal guitarist — session &amp; fill-in work, plus a wedding band. When I'm not shipping software, I'm tracking guitar and building tools for the people who make sound.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:24px;">
+            <a href="mailto:jesse@jessemoraga.com" style="display:inline-flex; align-items:center; gap:8px; padding:13px 22px; border-radius:12px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15px; color:#fff; background:linear-gradient(135deg,#F0563F,#C2362A); box-shadow:0 10px 28px rgba(224,72,58,0.45);">Book me → jesse@jessemoraga.com</a>
+            <a href="blog.html" style="display:inline-flex; align-items:center; gap:8px; padding:13px 22px; border-radius:12px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15px; color:#fff; border:1px solid rgba(255,255,255,0.3); background:rgba(255,255,255,0.06);">Read the music posts →</a>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div style="position:relative; border-radius:18px; overflow:hidden; aspect-ratio:16/9; background:#161510; border:1px solid rgba(240,86,63,0.35); display:flex; align-items:center; justify-content:center;">
+            <div aria-hidden="true" style="position:absolute; inset:0; background-image:repeating-linear-gradient(45deg, rgba(240,86,63,0.12) 0 12px, transparent 12px 24px);"></div>
+            <div style="position:relative; display:flex; flex-direction:column; align-items:center; gap:10px;">
+              <div style="width:54px; height:54px; border-radius:50%; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.3); display:flex; align-items:center; justify-content:center; font-size:20px; color:#fff;">▶</div>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#D8BCB5;">[ embed guitar playthrough video ]</span>
+            </div>
+          </div>
+          <div style="display:flex; gap:12px;">
+            <div style="flex:1; border-radius:14px; padding:14px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12);">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#FF9A8A;">guitar cover</div>
+              <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; color:#fff; font-size:14.5px; margin-top:4px;">[Band] — "[Song]"</div>
+            </div>
+            <div style="flex:1; border-radius:14px; padding:14px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12);">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#FF9A8A;">live</div>
+              <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; color:#fff; font-size:14.5px; margin-top:4px;">Wedding band set</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about" data-screen-label="About" style="max-width:1200px; margin:0 auto; padding:clamp(20px,4vw,40px) 24px clamp(50px,7vw,90px);">
+    <div data-reveal style="margin-bottom:30px;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#7A45D8;">// the operator</div>
+      <h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(26px,3.6vw,42px); letter-spacing:-0.03em; margin:10px 0 0; max-width:20ch;">Precision background. A real leap. Builds in public.</h2>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:22px; align-items:start;">
+      <!-- LEFT: photo + facts -->
+      <div data-reveal style="display:flex; flex-direction:column; gap:18px;">
+        <div style="position:relative; border-radius:22px; overflow:hidden; aspect-ratio:4/5; background:linear-gradient(135deg,#ECE9DF,#DCD8C8); border:1px solid rgba(124,92,246,0.2); display:flex; align-items:center; justify-content:center;">
+          <div aria-hidden="true" style="position:absolute; inset:0; background-image:repeating-linear-gradient(45deg, rgba(124,92,246,0.07) 0 16px, transparent 16px 32px);"></div>
+          <div aria-hidden="true" style="position:absolute; top:12px; left:12px; width:18px; height:18px; border-top:2px solid #9163EE; border-left:2px solid #9163EE;"></div>
+          <div aria-hidden="true" style="position:absolute; bottom:12px; right:12px; width:18px; height:18px; border-bottom:2px solid #4FA6D6; border-right:2px solid #4FA6D6;"></div>
+          <span style="position:relative; font-family:'JetBrains Mono',monospace; font-size:12px; color:#7A45D8;">[ drop headshot — Jesse ]</span>
+          <span style="position:absolute; bottom:14px; left:14px; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#8C8676;">jesse.jpg · 4:5</span>
+        </div>
+        <!-- fact grid -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div style="padding:16px; border-radius:14px; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 6px 18px rgba(99,102,241,0.07);">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#9163EE; text-transform:uppercase; letter-spacing:0.05em;">background</div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15px; margin-top:5px;">Ex-surgical tech</div>
+          </div>
+          <div style="padding:16px; border-radius:14px; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 6px 18px rgba(99,102,241,0.07);">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#4FA6D6; text-transform:uppercase; letter-spacing:0.05em;">builds with</div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15px; margin-top:5px;">AI, end to end</div>
+          </div>
+          <div style="padding:16px; border-radius:14px; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 6px 18px rgba(99,102,241,0.07);">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#9BC53D; text-transform:uppercase; letter-spacing:0.05em;">method</div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15px; margin-top:5px;">Builds in public</div>
+          </div>
+          <div style="padding:16px; border-radius:14px; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 6px 18px rgba(99,102,241,0.07);">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#E0483A; text-transform:uppercase; letter-spacing:0.05em;">also</div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15px; margin-top:5px;">Girl dad</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: terminal bio + socials -->
+      <div data-reveal style="display:flex; flex-direction:column; gap:18px;">
+        <!-- terminal -->
+        <div style="border-radius:18px; overflow:hidden; background:#1E1F1A; border:1px solid rgba(124,92,246,0.25); box-shadow:0 18px 48px rgba(20,18,14,0.35);">
+          <div style="display:flex; align-items:center; gap:7px; padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.08);">
+            <span style="width:11px;height:11px;border-radius:50%;background:#FF5F57;"></span>
+            <span style="width:11px;height:11px;border-radius:50%;background:#FEBC2E;"></span>
+            <span style="width:11px;height:11px;border-radius:50%;background:#28C840;"></span>
+            <span style="margin-left:8px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#8C8676;">~/about — jesse.md</span>
+          </div>
+          <div style="padding:20px 22px; font-family:'JetBrains Mono',monospace; font-size:13.5px; line-height:1.9; color:#E8E5D8;">
+            <div><span style="color:#9BC53D;">jesse@hub</span><span style="color:#75715E;">:~$</span> whoami</div>
+            <div style="color:#C9C5B6;"><span style="color:#66D9EF;">→</span> a developer who builds with AI — fast, and for the small guys.</div>
+            <div style="margin-top:10px;"><span style="color:#9BC53D;">jesse@hub</span><span style="color:#75715E;">:~$</span> cat the-leap.txt</div>
+            <div style="color:#C9C5B6;"><span style="color:#66D9EF;">→</span> Left a stable career. Learned to build with AI.</div>
+            <div style="color:#C9C5B6;">&nbsp;&nbsp;Now I ship software that used to need <span style="color:#9163EE;">a whole team</span>.</div>
+            <div style="margin-top:10px;"><span style="color:#9BC53D;">jesse@hub</span><span style="color:#75715E;">:~$</span> cat life.txt</div>
+            <div style="color:#C9C5B6;"><span style="color:#66D9EF;">→</span> Solo operator, raising my daughter, building in public.</div>
+            <div style="margin-top:10px;"><span style="color:#9BC53D;">jesse@hub</span><span style="color:#75715E;">:~$</span> ./pitch --short</div>
+            <div style="color:#E6DB74;"><span style="color:#66D9EF;">→</span> "I build with AI so small businesses can take on the giants."</div>
+            <div style="margin-top:8px;"><span style="color:#9BC53D;">jesse@hub</span><span style="color:#75715E;">:~$</span> <span style="display:inline-block; width:9px; height:16px; background:#9163EE; vertical-align:-3px; animation:pulseDot 1.1s steps(1) infinite;"></span></div>
+          </div>
+        </div>
+
+        <!-- socials -->
+        <div style="border-radius:18px; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 28px rgba(99,102,241,0.08); overflow:hidden;">
+          <div style="padding:14px 18px; border-bottom:1px solid rgba(124,92,246,0.1); font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:#8C8676;">// find me — social feeds this site</div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+            <a href="#" style="display:flex; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid rgba(124,92,246,0.08); transition:background .2s;" style-hover="background:rgba(145,99,238,0.06);">
+              <span style="width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:14px; color:#fff; background:#2A2820;">X</span>
+              <span style="display:flex; flex-direction:column;"><span style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px;">Twitter / X</span><span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#9163EE;">@jessemoraga</span></span>
+            </a>
+            <a href="#" style="display:flex; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid rgba(124,92,246,0.08); transition:background .2s;" style-hover="background:rgba(145,99,238,0.06);">
+              <span style="width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:15px; color:#fff; background:#E0483A;">▶</span>
+              <span style="display:flex; flex-direction:column;"><span style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px;">YouTube</span><span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#9163EE;">Jesse Moraga</span></span>
+            </a>
+            <a href="#" style="display:flex; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid rgba(124,92,246,0.08); transition:background .2s;" style-hover="background:rgba(145,99,238,0.06);">
+              <span style="width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:13px; color:#fff; background:#4FA6D6;">in</span>
+              <span style="display:flex; flex-direction:column;"><span style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px;">LinkedIn</span><span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#9163EE;">/in/jessemoraga</span></span>
+            </a>
+            <a href="#" style="display:flex; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid rgba(124,92,246,0.08); transition:background .2s;" style-hover="background:rgba(145,99,238,0.06);">
+              <span style="width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:15px; color:#fff; background:linear-gradient(135deg,#9163EE,#E0483A);">◎</span>
+              <span style="display:flex; flex-direction:column;"><span style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px;">Instagram</span><span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#9163EE;">@jessemoraga</span></span>
+            </a>
+            <a href="#" style="display:flex; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid rgba(124,92,246,0.08); transition:background .2s;" style-hover="background:rgba(145,99,238,0.06);">
+              <span style="width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:12px; color:#fff; background:#9163EE;">GH</span>
+              <span style="display:flex; flex-direction:column;"><span style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px;">GitHub</span><span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#9163EE;">@jessemoraga</span></span>
+            </a>
+            <a href="mailto:jesse@jessemoraga.com" style="display:flex; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid rgba(124,92,246,0.08); transition:background .2s;" style-hover="background:rgba(145,99,238,0.06);">
+              <span style="width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:15px; color:#fff; background:#9BC53D;">✉</span>
+              <span style="display:flex; flex-direction:column;"><span style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px;">Email</span><span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#9163EE;">jesse@jessemoraga.com</span></span>
+            </a>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+          <a href="https://art3ry.com" data-magnetic style="display:inline-flex; align-items:center; gap:9px; padding:14px 24px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; color:#fff; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 10px 28px rgba(99,102,241,0.4); transition:transform .25s, box-shadow .25s;" style-hover="box-shadow:0 16px 40px rgba(99,102,241,0.55);">Work with me <span style="font-family:'JetBrains Mono',monospace;">→ Art3ry</span></a>
+          <a href="#about" style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15px; color:#7A45D8; border-bottom:2px solid rgba(124,92,246,0.3); padding-bottom:2px;">Full story →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FUNNEL FOOTER ===== -->
+  <footer data-screen-label="Footer" style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;">
+    <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(124,92,246,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,246,0.08) 1px,transparent 1px); background-size:46px 46px; opacity:0.6;"></div>
+    <!-- big CTA -->
+    <div data-reveal style="position:relative; max-width:1100px; margin:0 auto; padding:clamp(50px,7vw,84px) 24px clamp(30px,4vw,40px); text-align:center;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#8FCBD2;">the ecosystem — one destination</div>
+      <h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,58px); letter-spacing:-0.03em; color:#fff; margin:16px auto 0; max-width:18ch; line-height:1.05;">Social sends them here. Here sends them to <span style="background:linear-gradient(110deg,#A78BFA,#60A5FA,#66D9EF); -webkit-background-clip:text; background-clip:text; color:transparent;">Art3ry.</span></h2>
+      <a href="https://art3ry.com" data-magnetic style="display:inline-flex; align-items:center; gap:10px; margin-top:30px; padding:17px 34px; border-radius:14px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:17px; color:#fff; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 14px 44px rgba(99,102,241,0.55); transition:transform .25s, box-shadow .25s;" style-hover="box-shadow:0 20px 60px rgba(99,102,241,0.75);">
+        Work with me <span style="font-family:'JetBrains Mono',monospace;">→ Art3ry</span>
+      </a>
+    </div>
+
+    <!-- subscribe -->
+    <div data-reveal style="position:relative; max-width:680px; margin:0 auto; padding:0 24px;">
+      <form action="#" method="post" data-newsletter style="display:flex; flex-direction:column; gap:10px; padding:24px; border-radius:20px; background:rgba(255,255,255,0.04); border:1px solid rgba(124,92,246,0.25);">
+        <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; color:#fff; font-size:18px;">Get the writing in your inbox</div>
+        <div style="font-size:13.5px; color:#ABA690;">Tech, business, design, architecture — and the occasional riff. No spam.</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;">
+          <input type="email" required placeholder="you@email.com" style="flex:1; min-width:200px; padding:13px 16px; border-radius:11px; border:1px solid rgba(124,92,246,0.3); background:rgba(255,255,255,0.06); color:#fff; font-family:'Inter',sans-serif; font-size:15px; outline:none;">
+          <button type="submit" style="padding:13px 24px; border-radius:11px; border:none; cursor:pointer; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; color:#fff; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 8px 24px rgba(99,102,241,0.45);">Subscribe</button>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#75715E; margin-top:2px;">// wire form action to your provider (e.g. ConvertKit / Buttondown POST endpoint)</div>
+      </form>
+    </div>
+
+    <!-- sitemap -->
+    <div style="position:relative; max-width:1100px; margin:0 auto; padding:clamp(40px,5vw,60px) 24px 30px; display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:28px;">
+      <div style="grid-column:span 2; min-width:200px;">
+        <div style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;">
+          <span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga
+        </div>
+        <p style="margin:14px 0 0; font-size:13.5px; color:#ABA690; max-width:34ch; line-height:1.6;">I build with AI so small businesses can take on the giants.</p>
+        <div style="display:flex; gap:10px; margin-top:18px;">
+          <a href="#" aria-label="X" style="width:38px;height:38px;border-radius:10px;border:1px solid rgba(124,92,246,0.3);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:13px;color:#D8D4C4;" style-hover="border-color:#9163EE;">X</a>
+          <a href="#" aria-label="YouTube" style="width:38px;height:38px;border-radius:10px;border:1px solid rgba(124,92,246,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;color:#D8D4C4;" style-hover="border-color:#9163EE;">▶</a>
+          <a href="#" aria-label="LinkedIn" style="width:38px;height:38px;border-radius:10px;border:1px solid rgba(124,92,246,0.3);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:13px;color:#D8D4C4;" style-hover="border-color:#9163EE;">in</a>
+          <a href="#" aria-label="Instagram" style="width:38px;height:38px;border-radius:10px;border:1px solid rgba(124,92,246,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;color:#D8D4C4;" style-hover="border-color:#9163EE;">◎</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:#8C8676; margin-bottom:14px;">Writing</div>
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:14px;">
+          <a href="blog.html" style-hover="color:#fff;">All posts</a>
+          <a href="blog.html" style-hover="color:#fff;">Tech</a>
+          <a href="blog.html" style-hover="color:#fff;">Business</a>
+          <a href="blog.html" style-hover="color:#fff;">Design</a>
+          <a href="blog.html" style-hover="color:#fff;">Architecture</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:#8C8676; margin-bottom:14px;">More</div>
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:14px;">
+          <a href="https://art3ry.com" style-hover="color:#fff;">Art3ry →</a>
+          <a href="#music" style-hover="color:#fff;">Music</a>
+          <a href="#about" style-hover="color:#fff;">About</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:#8C8676; margin-bottom:14px;">Contact</div>
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:13.5px;">
+          <a href="mailto:jesse@art3ry.com" style-hover="color:#fff;">Business<br><span style="font-family:'JetBrains Mono',monospace; color:#8FCBD2; font-size:12.5px;">jesse@art3ry.com</span></a>
+          <a href="mailto:jesse@jessemoraga.com" style-hover="color:#fff;">Personal<br><span style="font-family:'JetBrains Mono',monospace; color:#8FCBD2; font-size:12.5px;">jesse@jessemoraga.com</span></a>
+        </div>
+      </div>
+    </div>
+    <div style="position:relative; border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">
+      © 2026 Jesse Moraga · built &amp; operated solo
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:1400}}">
+class Component extends DCLogic {
+  state = { vw: (typeof window !== 'undefined' ? window.innerWidth : 1200), menuOpen: false };
+
+  componentDidMount() {
+    this._onResize = () => {
+      const vw = window.innerWidth;
+      if (Math.abs(vw - this.state.vw) > 0) this.setState({ vw });
+    };
+    window.addEventListener('resize', this._onResize);
+    // delay so streamed DOM + fonts settle
+    requestAnimationFrame(() => {
+      this.setupReveals();
+      this.setupMagnetic();
+      this.drawChart();
+      this.drawDonut();
+    });
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._onResize);
+    if (this._io) this._io.disconnect();
+  }
+
+  setupReveals() {
+    if (!this.root) return;
+    const els = this.root.querySelectorAll('[data-reveal]');
+    els.forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(26px)';
+      el.style.transition = 'opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1)';
+      el.style.transitionDelay = (i % 4) * 60 + 'ms';
+    });
+    this._io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'none';
+          this._io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    els.forEach(el => this._io.observe(el));
+
+    // counters
+    const counters = this.root.querySelectorAll('[data-count]');
+    const cio = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { this.animateCount(e.target); cio.unobserve(e.target); }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(el => cio.observe(el));
+  }
+
+  animateCount(el) {
+    const target = parseFloat(el.getAttribute('data-count')) || 0;
+    const dur = 1500, start = performance.now();
+    const step = (now) => {
+      const t = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(target * eased).toLocaleString();
+      if (t < 1) requestAnimationFrame(step);
+      else el.textContent = target.toLocaleString();
+    };
+    requestAnimationFrame(step);
+  }
+
+  setupMagnetic() {
+    if (!this.root || window.matchMedia('(hover: none)').matches) return;
+    this.root.querySelectorAll('[data-magnetic]').forEach(el => {
+      el.addEventListener('mousemove', (ev) => {
+        const r = el.getBoundingClientRect();
+        const dx = (ev.clientX - (r.left + r.width / 2)) * 0.25;
+        const dy = (ev.clientY - (r.top + r.height / 2)) * 0.3;
+        el.style.transform = `translate(${dx}px, ${dy}px)`;
+      });
+      el.addEventListener('mouseleave', () => { el.style.transform = 'translate(0,0)'; });
+    });
+  }
+
+  drawChart() {
+    const host = this._chart;
+    if (!host) return;
+    const w = host.clientWidth || 520, h = 170;
+    const posts = [2,3,3,4,5,4,6,5,7,6,8,9];
+    const builds = [6,9,11,10,14,13,17,16,20,19,24,28];
+    const max = Math.max(...builds) * 1.12;
+    const pad = { l: 6, r: 6, t: 12, b: 18 };
+    const iw = w - pad.l - pad.r, ih = h - pad.t - pad.b;
+    const X = i => pad.l + (i / (builds.length - 1)) * iw;
+    const Y = v => pad.t + ih - (v / max) * ih;
+    const line = (arr) => arr.map((v,i)=>`${i?'L':'M'}${X(i).toFixed(1)} ${Y(v).toFixed(1)}`).join(' ');
+    const area = (arr) => `${line(arr)} L${X(arr.length-1).toFixed(1)} ${(pad.t+ih).toFixed(1)} L${X(0).toFixed(1)} ${(pad.t+ih).toFixed(1)} Z`;
+    const svg = `
+    <svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" style="display:block">
+      <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#4FA6D6" stop-opacity="0.45"/>
+          <stop offset="1" stop-color="#4FA6D6" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="lg" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#9163EE"/><stop offset="1" stop-color="#66D9EF"/>
+        </linearGradient>
+      </defs>
+      ${[0.25,0.5,0.75].map(g=>`<line x1="${pad.l}" x2="${w-pad.r}" y1="${pad.t+ih*g}" y2="${pad.t+ih*g}" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>`).join('')}
+      <path d="${area(builds)}" fill="url(#bg)"/>
+      <path class="p-builds" d="${line(builds)}" fill="none" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="p-posts" d="${line(posts)}" fill="none" stroke="#A78BFA" stroke-width="2" stroke-dasharray="4 5" stroke-linecap="round"/>
+      ${builds.map((v,i)=>`<circle cx="${X(i).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="2.6" fill="#66D9EF"/>`).join('')}
+    </svg>`;
+    host.innerHTML = svg;
+    host.querySelectorAll('path.p-builds, path.p-posts').forEach(p => {
+      const len = p.getTotalLength();
+      p.style.transition = 'none';
+      const dash = p.getAttribute('stroke-dasharray');
+      p.style.strokeDasharray = len;
+      p.style.strokeDashoffset = len;
+      requestAnimationFrame(() => {
+        p.style.transition = 'stroke-dashoffset 1.8s ease';
+        p.style.strokeDashoffset = '0';
+        if (dash) setTimeout(() => { p.style.strokeDasharray = dash; }, 1850);
+      });
+    });
+  }
+
+  drawDonut() {
+    const host = this._donut;
+    if (!host) return;
+    const data = [
+      { v: 34, c: '#9163EE' }, { v: 24, c: '#4FA6D6' },
+      { v: 18, c: '#F05C98' }, { v: 16, c: '#66D9EF' }, { v: 8, c: '#E0483A' }
+    ];
+    const total = data.reduce((s,d)=>s+d.v,0);
+    const R = 52, C = 60, sw = 14, circ = 2 * Math.PI * R;
+    let offset = 0;
+    const segs = data.map(d => {
+      const frac = d.v / total, len = frac * circ;
+      const seg = `<circle cx="${C}" cy="${C}" r="${R}" fill="none" stroke="${d.c}" stroke-width="${sw}" stroke-linecap="round"
+        stroke-dasharray="0 ${circ}" data-len="${len.toFixed(2)}" data-off="${(-offset).toFixed(2)}"
+        transform="rotate(-90 ${C} ${C})" style="transition:stroke-dasharray .9s ease"/>`;
+      offset += len;
+      return seg;
+    }).join('');
+    host.innerHTML = `<svg width="120" height="120" viewBox="0 0 120 120">
+      <circle cx="${C}" cy="${C}" r="${R}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="${sw}"/>
+      ${segs}
+      <text x="${C}" y="${C-2}" text-anchor="middle" fill="#fff" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="20">48</text>
+      <text x="${C}" y="${C+15}" text-anchor="middle" fill="#8FCBD2" font-family="JetBrains Mono, monospace" font-size="9">posts</text>
+    </svg>`;
+    requestAnimationFrame(() => {
+      host.querySelectorAll('circle[data-len]').forEach(c => {
+        c.style.strokeDashoffset = c.getAttribute('data-off');
+        c.setAttribute('stroke-dasharray', `${c.getAttribute('data-len')} ${(2*Math.PI*R).toFixed(2)}`);
+      });
+    });
+  }
+
+  renderVals() {
+    const mobile = this.state.vw < 860;
+    return {
+      rootRef: (el) => { this.root = el; },
+      chartRef: (el) => { this._chart = el; },
+      donutRef: (el) => { this._donut = el; },
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      desktopNav: mobile ? 'none' : 'flex',
+      mobileNav: mobile ? 'flex' : 'none',
+      menuDisplay: (mobile && this.state.menuOpen) ? 'flex' : 'none',
+    };
+  }
+}
+</script>
+</body>
+</html>
