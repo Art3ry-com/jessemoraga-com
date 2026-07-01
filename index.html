@@ -554,7 +554,7 @@
           <input type="email" name="fields[email]" required placeholder="you@email.com" style="flex:1; min-width:200px; padding:13px 16px; border-radius:11px; border:1px solid rgba(124,92,246,0.3); background:rgba(255,255,255,0.06); color:#fff; font-family:'Inter',sans-serif; font-size:15px; outline:none;">
           <input type="hidden" name="ml-submit" value="1">
           <input type="hidden" name="anticsrf" value="true">
-          <input type="text" name="hp_url" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; left:-9999px; top:auto; width:1px; height:1px; opacity:0; pointer-events:none;">
+          <input type="hidden" name="hp_url" value="" aria-hidden="true">
           <button type="submit" style="padding:13px 24px; border-radius:11px; border:none; cursor:pointer; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; color:#fff; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 8px 24px rgba(99,102,241,0.45);">Subscribe</button>
         </div>
         <div style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#75715E; margin-top:2px;">One confirmation email to opt in. Unsubscribe anytime.</div>
@@ -858,9 +858,9 @@ class Component extends DCLogic {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: params.toString()
     }).then(function (r) {
-      return r.json().then(function (j) { return r.ok && j && j.success ? done() : fail(); },
+      return r.json().then(function (j) { return r.ok && j && j.success ? done() : fail(j && j.message); },
                            function () { return fail(); });
-    }).catch(function (err) { console.error('newsletter subscribe: network error', err && err.message); fail(); });
+    }).catch(function () { console.error('newsletter subscribe: network error'); fail(); });
   }, true);
 })();
 </script>
