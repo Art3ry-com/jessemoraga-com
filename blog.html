@@ -100,7 +100,7 @@
   </section>
 
   <!-- ===== START HERE RAIL ===== -->
-  <section style="max-width:1100px; margin:0 auto; padding:clamp(20px,3vw,30px) 24px 0;">
+  <section style="display:{{ discoveryDisplay }}; max-width:1100px; margin:0 auto; padding:clamp(20px,3vw,30px) 24px 0;">
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
       <span style="width:7px;height:7px;border-radius:50%;background:#66D9EF;box-shadow:0 0 10px #66D9EF;animation:pulseDot 1.8s infinite;"></span>
       <span style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#6D44C2;">start here · most read</span>
@@ -117,7 +117,7 @@
   </section>
 
   <!-- ===== FEATURED ===== -->
-  <section style="max-width:1100px; margin:0 auto; padding:clamp(28px,4vw,44px) 24px clamp(8px,2vw,16px);">
+  <section style="display:{{ discoveryDisplay }}; max-width:1100px; margin:0 auto; padding:clamp(28px,4vw,44px) 24px clamp(8px,2vw,16px);">
     <a href="{{ featured.href }}" data-card style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); border-radius:24px; overflow:hidden; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 16px 44px rgba(99,102,241,0.14); transition:transform .3s, box-shadow .3s;">
       <div style="position:relative; min-height:230px; background:linear-gradient(135deg,#9163EE,#4FA6D6); display:flex; align-items:flex-end; padding:22px; overflow:hidden;">
         <div aria-hidden="true" style="position:absolute; inset:0; background-image:repeating-linear-gradient(45deg, rgba(255,255,255,0.08) 0 14px, transparent 14px 28px);"></div>
@@ -635,6 +635,13 @@ class Component extends DCLogic {
     const mostRead = [this.ALL[0], this.ALL[1], this.ALL[10], this.ALL[3]].map(p => ({ ...p, grad: this.GRAD[p.topic] }));
     const featured = { ...this.ALL[0], grad: this.GRAD[this.ALL[0].topic] };
 
+    // "Most read" and "Featured" are a fixed editorial pick (always ALL[0]/[1]/[10]/[3]),
+    // not filtered results — shown only in the default "All / no search" browse view so a
+    // tag click or a search doesn't look like it did nothing while the real results (the
+    // GRID below) render out of sight further down the page.
+    const isFiltering = this.state.topic !== 'All' || q !== '';
+    const discoveryDisplay = isFiltering ? 'none' : 'block';
+
     const label = this.state.topic === 'All' ? 'All posts' : this.state.topic;
     return {
       rootRef: (el) => { this.root = el; },
@@ -644,7 +651,7 @@ class Component extends DCLogic {
       desktopNav: mobile ? 'none' : 'flex',
       mobileNav: mobile ? 'flex' : 'none',
       menuDisplay: (mobile && this.state.menuOpen) ? 'flex' : 'none',
-      topicBtns, posts, mostRead, featured,
+      topicBtns, posts, mostRead, featured, discoveryDisplay,
       heading: label,
       countLabel: filtered.length + (filtered.length === 1 ? ' post' : ' posts'),
       emptyDisplay: filtered.length === 0 ? 'block' : 'none'
