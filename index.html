@@ -31,7 +31,7 @@
 <style>
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body { margin: 0; font-family: 'Inter', system-ui, sans-serif; color: #2A2820; background: #F1EFE6; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body { margin: 0; font-family: 'Inter', system-ui, sans-serif; color: #FFFFFF; background: #000000; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
   a { color: inherit; text-decoration: none; }
   ::selection { background: #C9B8FF; color: #1a1030; }
   @keyframes meshA { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(6%,4%) scale(1.15)} 100%{transform:translate(0,0) scale(1)} }
@@ -44,16 +44,16 @@
   @keyframes shimmer { 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
 </style>
 </helmet>
-<div ref="{{ rootRef }}" style="position:relative; width:100%; overflow-x:hidden; background:#F1EFE6;">
+<div ref="{{ rootRef }}" style="position:relative; width:100%; overflow-x:hidden; background:#000000;">
 
   <!-- ===== NAV ===== -->
-  <header data-screen-label="Nav" style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(241,239,230,0.74); border-bottom:1px solid rgba(124,92,246,0.12);">
+  <header data-screen-label="Nav" style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(0,0,0,0.74); border-bottom:1px solid rgba(124,92,246,0.12);">
     <nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;">
       <a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;">
         <span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>
         Jesse Moraga
       </a>
-      <nav style="display:{{ desktopNav }}; align-items:center; gap:28px; margin-left:auto; font-size:14.5px; font-weight:500; color:#6C6859;">
+      <nav style="display:{{ desktopNav }}; align-items:center; gap:28px; margin-left:auto; font-size:14.5px; font-weight:500; color:#B2AD99;">
         <a href="/blog.html" style="transition:color .2s;" style-hover="color:#7A45D8;">Writing</a>
         <a href="#work" style="transition:color .2s;" style-hover="color:#7A45D8;">Work</a>
         <a href="https://art3ry.com" style="transition:color .2s;" style-hover="color:#7A45D8;">Art3ry</a>
@@ -63,13 +63,13 @@
       <a href="https://art3ry.com" data-magnetic style="display:{{ desktopNav }}; align-items:center; gap:8px; margin-left:8px; padding:10px 18px; border-radius:999px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; color:#fff; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.45); transition:transform .25s, box-shadow .25s;" style-hover="box-shadow:0 10px 30px rgba(99,102,241,0.6);">
         Work with me <span style="font-family:'JetBrains Mono',monospace;">→ Art3ry</span>
       </a>
-      <button onClick="{{ toggleMenu }}" aria-label="Menu" style="display:{{ mobileNav }}; margin-left:auto; width:42px; height:42px; border-radius:12px; border:1px solid rgba(124,92,246,0.2); background:rgba(255,255,255,0.7); cursor:pointer; flex-direction:column; gap:4px; align-items:center; justify-content:center;">
-        <span style="width:18px; height:2px; background:#2A2820; border-radius:2px;"></span>
-        <span style="width:18px; height:2px; background:#2A2820; border-radius:2px;"></span>
-        <span style="width:18px; height:2px; background:#2A2820; border-radius:2px;"></span>
+      <button onClick="{{ toggleMenu }}" aria-label="Menu" style="display:{{ mobileNav }}; margin-left:auto; width:42px; height:42px; border-radius:12px; border:1px solid rgba(124,92,246,0.2); background:rgba(255,255,255,0.06); cursor:pointer; flex-direction:column; gap:4px; align-items:center; justify-content:center;">
+        <span style="width:18px; height:2px; background:#FFFFFF; border-radius:2px;"></span>
+        <span style="width:18px; height:2px; background:#FFFFFF; border-radius:2px;"></span>
+        <span style="width:18px; height:2px; background:#FFFFFF; border-radius:2px;"></span>
       </button>
     </nav>
-    <div style="display:{{ menuDisplay }}; flex-direction:column; gap:4px; padding:8px 20px 18px; border-top:1px solid rgba(124,92,246,0.1); background:rgba(241,239,230,0.96);">
+    <div style="display:{{ menuDisplay }}; flex-direction:column; gap:4px; padding:8px 20px 18px; border-top:1px solid rgba(124,92,246,0.1); background:rgba(0,0,0,0.96);">
       <a href="/blog.html" onClick="{{ closeMenu }}" style="padding:12px; border-radius:10px; font-weight:600;">Writing</a>
       <a href="#work" onClick="{{ closeMenu }}" style="padding:12px; border-radius:10px; font-weight:600;">Work</a>
       <a href="https://art3ry.com" onClick="{{ closeMenu }}" style="padding:12px; border-radius:10px; font-weight:600;">Art3ry</a>
@@ -91,7 +91,7 @@
     <div aria-hidden="true" style="position:absolute; inset:0; z-index:0; background-image:linear-gradient(rgba(99,102,241,0.07) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.07) 1px,transparent 1px); background-size:44px 44px; mask-image:radial-gradient(ellipse 90% 80% at 50% 30%, #000 40%, transparent 100%); -webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 30%, #000 40%, transparent 100%);"></div>
 
     <div style="position:relative; z-index:2; max-width:980px; margin:0 auto; text-align:center;">
-      <div data-reveal style="display:inline-flex; align-items:center; gap:9px; padding:7px 15px; border-radius:999px; background:rgba(255,255,255,0.7); border:1px solid rgba(124,92,246,0.22); box-shadow:0 4px 18px rgba(99,102,241,0.12); font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:500; color:#5B3Fb0; backdrop-filter:blur(8px);">
+      <div data-reveal style="display:inline-flex; align-items:center; gap:9px; padding:7px 15px; border-radius:999px; background:rgba(255,255,255,0.06); border:1px solid rgba(124,92,246,0.22); box-shadow:0 4px 18px rgba(99,102,241,0.12); font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:500; color:#C9BEF5; backdrop-filter:blur(8px);">
         <span style="width:8px; height:8px; border-radius:50%; background:#9BC53D; box-shadow:0 0 0 3px rgba(34,197,94,0.18); animation:pulseDot 2s infinite;"></span>
         developer using AI to level the playing field
       </div>
@@ -99,14 +99,14 @@
         I build with AI.
         <span style="display:block; background:linear-gradient(110deg,#9163EE,#7C6AE2 45%,#4FA6D6 80%,#66D9EF); -webkit-background-clip:text; background-clip:text; color:transparent;">So small businesses can take on the giants.</span>
       </h1>
-      <p data-reveal style="margin:24px auto 0; max-width:64ch; font-size:clamp(16px,2.2vw,20px); line-height:1.6; color:#615D4F;">
+      <p data-reveal style="margin:24px auto 0; max-width:64ch; font-size:clamp(16px,2.2vw,20px); line-height:1.6; color:#C9C5B6;">
         Ex-surgical tech turned builder. I use AI to ship real software fast — the kind that used to cost a corporation a fortune and a year — and I put that firepower in small-business hands, so you can compete with the big guys instead of getting buried by them. This is where I write it all down.
       </p>
       <div data-reveal style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:34px;">
         <a href="https://art3ry.com" data-magnetic style="display:inline-flex; align-items:center; gap:9px; padding:15px 26px; border-radius:14px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:16px; color:#fff; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 10px 30px rgba(99,102,241,0.45); transition:transform .25s, box-shadow .25s;" style-hover="box-shadow:0 16px 44px rgba(99,102,241,0.6);">
           Work with me <span style="font-family:'JetBrains Mono',monospace;">→ Art3ry</span>
         </a>
-        <a href="/blog.html" style="display:inline-flex; align-items:center; gap:9px; padding:15px 26px; border-radius:14px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:16px; color:#36322A; background:rgba(255,255,255,0.8); border:1px solid rgba(124,92,246,0.25); box-shadow:0 6px 18px rgba(99,102,241,0.1); transition:transform .2s, border-color .2s; backdrop-filter:blur(8px);" style-hover="border-color:rgba(124,92,246,0.55);">
+        <a href="/blog.html" style="display:inline-flex; align-items:center; gap:9px; padding:15px 26px; border-radius:14px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:16px; color:#FFFFFF; background:rgba(255,255,255,0.06); border:1px solid rgba(124,92,246,0.25); box-shadow:0 6px 18px rgba(99,102,241,0.1); transition:transform .2s, border-color .2s; backdrop-filter:blur(8px);" style-hover="border-color:rgba(124,92,246,0.55);">
           Read the blog
         </a>
       </div>
@@ -166,7 +166,7 @@
 
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:22px;">
       <!-- featured -->
-      <a href="/2026/06/25/i-built-a-voice-ai-that-lives-in-my-headset-full-source-code/" data-reveal data-card style="grid-column:1 / -1; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0; border-radius:24px; overflow:hidden; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 14px 40px rgba(99,102,241,0.12); transition:transform .3s, box-shadow .3s;">
+      <a href="/2026/06/25/i-built-a-voice-ai-that-lives-in-my-headset-full-source-code/" data-reveal data-card style="grid-column:1 / -1; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0; border-radius:24px; overflow:hidden; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 14px 40px rgba(99,102,241,0.12); transition:transform .3s, box-shadow .3s;">
         <div style="position:relative; min-height:240px; background:linear-gradient(135deg,#9163EE,#4FA6D6); display:flex; align-items:flex-end; padding:22px; overflow:hidden;">
           <div aria-hidden="true" style="position:absolute; inset:0; background-image:repeating-linear-gradient(45deg, rgba(255,255,255,0.08) 0 14px, transparent 14px 28px);"></div>
           <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.12) 1px,transparent 1px); background-size:30px 30px; opacity:0.5;"></div>
@@ -178,13 +178,13 @@
             <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Featured · Tech · Jun 2026</span>
           </div>
           <h3 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,32px); line-height:1.12; letter-spacing:-0.02em; margin:16px 0 0;">I Built a Voice AI That Lives in My Headset — Full Source Code</h3>
-          <p style="margin:14px 0 0; color:#615D4F; line-height:1.6; font-size:15.5px;">A hands-free AI assistant I actually run in the field — how it works, plus the full source code.</p>
+          <p style="margin:14px 0 0; color:#C9C5B6; line-height:1.6; font-size:15.5px;">A hands-free AI assistant I actually run in the field — how it works, plus the full source code.</p>
           <span style="margin-top:auto; padding-top:22px; font-family:'Space Grotesk',sans-serif; font-weight:600; color:#7A45D8;">Read article →</span>
         </div>
       </a>
 
       <!-- grid posts -->
-      <a href="/2026/06/10/how-i-coded-an-ai-assistant-that-runs-my-business-by-voice-and-text/" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; overflow:hidden; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
+      <a href="/2026/06/10/how-i-coded-an-ai-assistant-that-runs-my-business-by-voice-and-text/" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; overflow:hidden; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
         <div style="position:relative; height:150px; background:linear-gradient(135deg,#4FA6D6,#66D9EF); overflow:hidden;">
           <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.13) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.13) 1px,transparent 1px); background-size:26px 26px; opacity:0.6;"></div>
         </div>
@@ -194,11 +194,11 @@
             <span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#A39D8C;">Tech · Jun 2026</span>
           </div>
           <h3 style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:20px; line-height:1.18; letter-spacing:-0.01em; margin:13px 0 0;">How I Coded an AI Assistant That Runs My Business by Voice and Text</h3>
-          <p style="margin:10px 0 0; color:#6E6A5B; font-size:14px; line-height:1.55;">The assistant that quotes, books, and follows up for me — built with AI, run by one person.</p>
+          <p style="margin:10px 0 0; color:#C9C5B6; font-size:14px; line-height:1.55;">The assistant that quotes, books, and follows up for me — built with AI, run by one person.</p>
         </div>
       </a>
 
-      <a href="/2026/06/02/from-saas-to-gaas-small-business/" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; overflow:hidden; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
+      <a href="/2026/06/02/from-saas-to-gaas-small-business/" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; overflow:hidden; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
         <div style="position:relative; height:150px; background:linear-gradient(135deg,#A06AF2,#F05C98); overflow:hidden;">
           <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.13) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.13) 1px,transparent 1px); background-size:26px 26px; opacity:0.6;"></div>
         </div>
@@ -208,11 +208,11 @@
             <span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#A39D8C;">Business · Jun 2026</span>
           </div>
           <h3 style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:20px; line-height:1.18; letter-spacing:-0.01em; margin:13px 0 0;">From SaaS to GaaS: What Small Businesses Need to Know</h3>
-          <p style="margin:10px 0 0; color:#6E6A5B; font-size:14px; line-height:1.55;">Why "growth-as-a-service" beats another software subscription for a small shop.</p>
+          <p style="margin:10px 0 0; color:#C9C5B6; font-size:14px; line-height:1.55;">Why "growth-as-a-service" beats another software subscription for a small shop.</p>
         </div>
       </a>
 
-      <a href="/2026/06/03/six-days-on-github-three-badges-and-what-they-actually-mean/" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; overflow:hidden; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
+      <a href="/2026/06/03/six-days-on-github-three-badges-and-what-they-actually-mean/" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; overflow:hidden; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
         <div style="position:relative; height:150px; background:linear-gradient(135deg,#7C6AE2,#4FA6D6); overflow:hidden;">
           <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.13) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.13) 1px,transparent 1px); background-size:26px 26px; opacity:0.6;"></div>
         </div>
@@ -222,7 +222,7 @@
             <span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#A39D8C;">Tech · Jun 2026</span>
           </div>
           <h3 style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:20px; line-height:1.18; letter-spacing:-0.01em; margin:13px 0 0;">Six Days on GitHub, Three Badges, and What They Actually Mean</h3>
-          <p style="margin:10px 0 0; color:#6E6A5B; font-size:14px; line-height:1.55;">What I shipped in my first week building in public — and what the badges actually prove.</p>
+          <p style="margin:10px 0 0; color:#C9C5B6; font-size:14px; line-height:1.55;">What I shipped in my first week building in public — and what the badges actually prove.</p>
         </div>
       </a>
     </div>
@@ -272,7 +272,7 @@
         <div style="position:relative; width:40px; height:40px; border-radius:12px; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center; font-size:18px;">♪</div>
         <div style="position:relative;">
           <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px;">Music</div>
-          <div style="font-size:12.5px; color:rgba(255,255,255,0.8); margin-top:3px;">A flavor — I build tech for music too.</div>
+          <div style="font-size:12.5px; color:rgba(255,255,255,0.06); margin-top:3px;">A flavor — I build tech for music too.</div>
         </div>
       </a>
     </div>
@@ -333,7 +333,7 @@
     <div data-reveal style="margin-bottom:28px;">
       <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#7A45D8;">// the work</div>
       <h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(26px,3.6vw,42px); letter-spacing:-0.03em; margin:10px 0 0;">Selected builds</h2>
-      <p style="margin:12px 0 0; color:#615D4F; font-size:15.5px; line-height:1.6; max-width:60ch;">Real things I've shipped with AI — software, tools, and a company that runs on what I built.</p>
+      <p style="margin:12px 0 0; color:#C9C5B6; font-size:15.5px; line-height:1.6; max-width:60ch;">Real things I've shipped with AI — software, tools, and a company that runs on what I built.</p>
     </div>
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px;">
       <!-- Art3ry -->
@@ -347,33 +347,33 @@
         <span style="margin-top:auto; padding-top:16px; font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#C9BEF5;">art3ry.com →</span>
       </a>
       <!-- Jarvis -->
-      <a href="/2026/06/25/i-built-a-voice-ai-that-lives-in-my-headset-full-source-code/" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; padding:24px; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
+      <a href="/2026/06/25/i-built-a-voice-ai-that-lives-in-my-headset-full-source-code/" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; padding:24px; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
         <div style="display:flex; align-items:center; justify-content:space-between;">
           <span style="width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,#9163EE,#4FA6D6); color:#fff; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-weight:700;">&lt;/&gt;</span>
           <span style="font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:#9BC53D;">voice AI</span>
         </div>
         <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:21px; margin:16px 0 0;">Jarvis — voice AI</div>
-        <p style="margin:8px 0 0; font-size:14px; line-height:1.55; color:#615D4F;">A hands-free AI assistant that lives in my headset and runs on my computer. Full write-up and source.</p>
+        <p style="margin:8px 0 0; font-size:14px; line-height:1.55; color:#C9C5B6;">A hands-free AI assistant that lives in my headset and runs on my computer. Full write-up and source.</p>
         <span style="margin-top:auto; padding-top:16px; font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">Read the build →</span>
       </a>
       <!-- Fr3tLab -->
-      <a href="https://fr3tlab.com" target="_blank" rel="noopener" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; padding:24px; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
+      <a href="https://fr3tlab.com" target="_blank" rel="noopener" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; padding:24px; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
         <div style="display:flex; align-items:center; justify-content:space-between;">
           <span style="width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,#1C1411,#E0483A 150%); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px;">♪</span>
           <span style="font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:#A39D8C;">free tool</span>
         </div>
         <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:21px; margin:16px 0 0;">Fr3tLab</div>
-        <p style="margin:8px 0 0; font-size:14px; line-height:1.55; color:#615D4F;">A free guitar fretboard visualizer — find any scale in any tuning, Drop C to 7-string.</p>
+        <p style="margin:8px 0 0; font-size:14px; line-height:1.55; color:#C9C5B6;">A free guitar fretboard visualizer — find any scale in any tuning, Drop C to 7-string.</p>
         <span style="margin-top:auto; padding-top:16px; font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">fr3tlab.com →</span>
       </a>
       <!-- Guitar lessons -->
-      <a href="https://jessemoragaguitar.com" target="_blank" rel="noopener" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; padding:24px; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
+      <a href="https://jessemoragaguitar.com" target="_blank" rel="noopener" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; padding:24px; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
         <div style="display:flex; align-items:center; justify-content:space-between;">
           <span style="width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,#4FA6D6,#66D9EF); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px;">🎸</span>
           <span style="font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:#A39D8C;">lessons</span>
         </div>
         <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:21px; margin:16px 0 0;">Guitar Lessons</div>
-        <p style="margin:8px 0 0; font-size:14px; line-height:1.55; color:#615D4F;">1-on-1 online lessons — metal, rock, and the theory that actually unlocks the fretboard.</p>
+        <p style="margin:8px 0 0; font-size:14px; line-height:1.55; color:#C9C5B6;">1-on-1 online lessons — metal, rock, and the theory that actually unlocks the fretboard.</p>
         <span style="margin-top:auto; padding-top:16px; font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">jessemoragaguitar.com →</span>
       </a>
       <!-- Services company (neutral, no link — OPSEC) -->
@@ -431,7 +431,7 @@
     <div data-reveal style="margin-bottom:30px;">
       <div style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#7A45D8;">// the operator</div>
       <h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(26px,3.6vw,42px); letter-spacing:-0.03em; margin:10px 0 0; max-width:20ch;">Precision background. A real leap. Builds in public.</h2>
-      <div style="margin-top:20px; max-width:68ch; display:flex; flex-direction:column; gap:14px; color:#4F4B3F; font-size:16px; line-height:1.7;">
+      <div style="margin-top:20px; max-width:68ch; display:flex; flex-direction:column; gap:14px; color:#C9C5B6; font-size:16px; line-height:1.7;">
         <p style="margin:0;">I spent nearly a decade in surgery — cardiac cases, where the margin between outcome and incident is measured in seconds and in counts. You're several steps ahead of the surgeon, you don't improvise, and every count at close matches every count at open. That's where I first loved the place where work meets the machine.</p>
         <p style="margin:0;">Then my daughter was on the way, and I had to decide: write the rest of it out the safe way, or show her — by actually doing it — that if you want something in this world you go build it. I left, started a company of my own, and supported her on the thing I was building, as a single father.</p>
         <p style="margin:0;">Then I did the part most people never do: with no software background, I taught myself to build the system that runs it — intake, billing, coordination, document generation, client communication, and an AI assistant on the phone around the clock. It runs the business while I'm in the field, for less than a part-time hire would cost.</p>
@@ -449,19 +449,19 @@
         </div>
         <!-- fact grid -->
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-          <div style="padding:16px; border-radius:14px; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 6px 18px rgba(99,102,241,0.07);">
+          <div style="padding:16px; border-radius:14px; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 6px 18px rgba(99,102,241,0.07);">
             <div style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#9163EE; text-transform:uppercase; letter-spacing:0.05em;">background</div>
             <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15px; margin-top:5px;">Ex-surgical tech</div>
           </div>
-          <div style="padding:16px; border-radius:14px; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 6px 18px rgba(99,102,241,0.07);">
+          <div style="padding:16px; border-radius:14px; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 6px 18px rgba(99,102,241,0.07);">
             <div style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#4FA6D6; text-transform:uppercase; letter-spacing:0.05em;">builds with</div>
             <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15px; margin-top:5px;">AI, end to end</div>
           </div>
-          <div style="padding:16px; border-radius:14px; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 6px 18px rgba(99,102,241,0.07);">
+          <div style="padding:16px; border-radius:14px; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 6px 18px rgba(99,102,241,0.07);">
             <div style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#9BC53D; text-transform:uppercase; letter-spacing:0.05em;">method</div>
             <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15px; margin-top:5px;">Builds in public</div>
           </div>
-          <div style="padding:16px; border-radius:14px; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 6px 18px rgba(99,102,241,0.07);">
+          <div style="padding:16px; border-radius:14px; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 6px 18px rgba(99,102,241,0.07);">
             <div style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#E0483A; text-transform:uppercase; letter-spacing:0.05em;">also</div>
             <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15px; margin-top:5px;">Girl dad</div>
           </div>
@@ -493,11 +493,11 @@
         </div>
 
         <!-- socials -->
-        <div style="border-radius:18px; background:#fff; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 28px rgba(99,102,241,0.08); overflow:hidden;">
+        <div style="border-radius:18px; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 28px rgba(99,102,241,0.08); overflow:hidden;">
           <div style="padding:14px 18px; border-bottom:1px solid rgba(124,92,246,0.1); font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:#8C8676;">// find me — social feeds this site</div>
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
             <a href="https://x.com/JesseMoraga_" target="_blank" rel="noopener" style="display:flex; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid rgba(124,92,246,0.08); transition:background .2s;" style-hover="background:rgba(145,99,238,0.06);">
-              <span style="width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:14px; color:#fff; background:#2A2820;">X</span>
+              <span style="width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:14px; color:#fff; background:#3A3A3A;">X</span>
               <span style="display:flex; flex-direction:column;"><span style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px;">Twitter / X</span><span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#9163EE;">@JesseMoraga_</span></span>
             </a>
             <a href="https://www.youtube.com/@jessemusicusa" target="_blank" rel="noopener" style="display:flex; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid rgba(124,92,246,0.08); transition:background .2s;" style-hover="background:rgba(145,99,238,0.06);">
@@ -607,7 +607,7 @@
 </div>
 </x-dc>
 <noscript>
-<div style="max-width:900px;margin:0 auto;padding:48px 24px;font-family:Inter,system-ui,sans-serif;color:#2A2820;background:#F1EFE6;">
+<div style="max-width:900px;margin:0 auto;padding:48px 24px;font-family:Inter,system-ui,sans-serif;color:#FFFFFF;background:#000000;">
   <h1 style="font-family:'Space Grotesk',sans-serif;">I build with AI. So small businesses can take on the giants.</h1>
   <p>I'm a developer who uses AI to ship real software fast and affordable — so small businesses can compete with the corporations instead of getting buried by them.</p>
   <p><a href="/blog.html">Read the blog</a> &middot; <a href="https://art3ry.com">Work with me at Art3ry</a></p>
