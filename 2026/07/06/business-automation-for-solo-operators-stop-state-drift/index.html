@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Business Automation for Solo Operators: Stop State Drift | Jesse Moraga</title>
+<meta name="description" content="53 commits. 86 scenarios. How I built a reconciler that catches the state drift your automation creates — and what it found on the first live run.">
+<meta name="author" content="Jesse Moraga">
+<link rel="canonical" href="https://jessemoraga.com/2026/07/06/business-automation-for-solo-operators-stop-state-drift/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/07/06/business-automation-for-solo-operators-stop-state-drift/">
+<meta property="og:title" content="Business Automation for Solo Operators: Stop State Drift">
+<meta property="og:description" content="53 commits. 86 scenarios. How I built a reconciler that catches the state drift your automation creates — and what it found on the first live run.">
+<meta property="og:image" content="https://jessemoraga.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-07-06T08:20:27-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Business Automation for Solo Operators: Stop State Drift">
+<meta name="twitter:description" content="53 commits. 86 scenarios. How I built a reconciler that catches the state drift your automation creates — and what it found on the first live run.">
+<meta name="twitter:image" content="https://jessemoraga.com/og-default.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#FFFFFF;background:#000000;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#C9C5B6}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#FFFFFF}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#FFFFFF}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img{max-width:100%;height:auto;border-radius:14px;display:block;margin:24px auto}
+  .post-content iframe{max-width:100%;width:100%;aspect-ratio:16/9;border:0;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#C9BEF5;padding:2px 7px;border-radius:6px}
+  .related a:hover{transform:translateY(-3px)}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Business Automation for Solo Operators: Stop State Drift", "description": "53 commits. 86 scenarios. How I built a reconciler that catches the state drift your automation creates — and what it found on the first live run.", "datePublished": "2026-07-06T08:20:27-07:00", "dateModified": "2026-07-06T08:20:27-07:00", "articleSection": "Tech", "inLanguage": "en", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://jessemoraga.com/2026/07/06/business-automation-for-solo-operators-stop-state-drift/"}, "url": "https://jessemoraga.com/2026/07/06/business-automation-for-solo-operators-stop-state-drift/", "image": "https://jessemoraga.com/og-default.png", "author": {"@type": "Person", "name": "Jesse Moraga", "url": "https://jessemoraga.com", "@id": "https://jessemoraga.com/#jesse"}, "publisher": {"@type": "Person", "name": "Jesse Moraga", "@id": "https://jessemoraga.com/#jesse"}}</script>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(0,0,0,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#B2AD99; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">By Jesse Moraga &middot; Jul 6, 2026 &middot; 8 min read</span>
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,52px); line-height:1.08; letter-spacing:-0.03em; margin:18px 0 0;">Business Automation for Solo Operators: Stop State Drift</h1>
+  </div>
+  <div style="max-width:820px; margin:0 auto; padding:8px 24px 40px;">
+<!-- TERMINAL HERO -->
+<div style="background:#06080a;color:#e2e8f0;font-family:'Courier New',Courier,monospace;padding:1.75rem 1.5rem 1.5rem;border-radius:8px;margin-bottom:2rem;border:1px solid #1e2937;">
+  <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:1.25rem;">
+    <span style="width:12px;height:12px;background:#f87171;border-radius:50%;display:inline-block;"></span>
+    <span style="width:12px;height:12px;background:#fbbf24;border-radius:50%;display:inline-block;"></span>
+    <span style="width:12px;height:12px;background:#34d399;border-radius:50%;display:inline-block;"></span>
+    <span style="color:#475569;font-size:.75rem;margin-left:.5rem;">jessemoraga.com — tech</span>
+  </div>
+  <span style="display:block;color:#56b6f2;font-size:.8rem;letter-spacing:.12em;margin:0 0 .75rem;text-transform:uppercase;">// Technically Speaking</span>
+  <span style="display:block;color:#94a3b8;font-size:.85rem;margin:0 0 .25rem;">$ git log --oneline --since='30 days ago' | wc -l</span>
+  <span style="display:block;color:#34d399;font-size:.85rem;margin:0;">53</span>
+</div>
+
+<!-- INTRO -->
+<p>I've been running a real California field-services company end-to-end on software I built myself. In the last 30 days, 53 commits shipped to that system. One matters more than all the others combined — not a new feature, not a bug fix. A <strong>reconciler</strong>. If you are doing serious business automation for solo operators, this is the design pattern you're most likely missing.</p>
+
+<!-- TOC -->
+<div style="background:#0d1117;border:1px solid #1e2937;border-radius:6px;padding:1rem 1.5rem;margin:1.5rem 0;font-family:'Courier New',Courier,monospace;">
+  <p style="color:#56b6f2;font-size:.8rem;letter-spacing:.08em;margin:0 0 .6rem;text-transform:uppercase;">// Contents</p>
+  <ol style="margin:0;padding-left:1.25rem;color:#94a3b8;font-size:.9rem;line-height:2.1;">
+    <li><a href="#what-is-state-drift" style="color:#56b6f2;text-decoration:none;">What state drift is — and why it's guaranteed</a></li>
+    <li><a href="#the-reconciler-pattern" style="color:#56b6f2;text-decoration:none;">The reconciler pattern</a></li>
+    <li><a href="#how-i-built-mine" style="color:#56b6f2;text-decoration:none;">How I built mine — 53 commits, 86 test scenarios</a></li>
+    <li><a href="#what-it-found" style="color:#56b6f2;text-decoration:none;">What the first live run found</a></li>
+    <li><a href="#how-to-apply" style="color:#56b6f2;text-decoration:none;">How to apply this</a></li>
+    <li><a href="#faq" style="color:#56b6f2;text-decoration:none;">FAQ</a></li>
+  </ol>
+</div>
+
+<!-- SECTION 1 -->
+<h2 id="what-is-state-drift" style="color:#34d399;">What State Drift Is — and Why It's Guaranteed</h2>
+
+<p>State drift is the gap between what your system <em>thinks</em> happened and what <em>actually</em> happened.</p>
+
+<p>A payment comes in. Your code marks the invoice paid and fires a confirmation email. The email call times out. Your database says "invoice paid, email sent." Reality says the client never got a confirmation and is still waiting. Your automation just lied to itself — not because the code is broken, but because distributed operations fail. Network calls fail. APIs return 500. Queues back up and messages drop.</p>
+
+<p>This is not a bug you can fix. It is a property of any system that touches more than one data store, or runs async operations, or talks to an external API. The academic name for it is <a href="https://en.wikipedia.org/wiki/Eventual_consistency" style="color:#56b6f2;">eventual consistency</a> — the formal acknowledgment that in a distributed system, truth takes time to converge across nodes. Werner Vogels, Amazon's CTO, described the pattern and its implications in a 2008 ACM Queue paper. Every distributed database paper since has built on it. It applies to a solo-operator automation system in Fresno, California just as much as it applies to Amazon's order pipeline.</p>
+
+<p>The key principle: <strong style="color:#fbbf24;">you cannot prevent state drift. You can only detect it and repair it.</strong> The write path — the code that runs when something happens — cannot do this. It doesn't know what it got wrong. You need a separate layer whose only job is to look.</p>
+
+<!-- SECTION 2 -->
+<h2 id="the-reconciler-pattern" style="color:#34d399;">The Reconciler Pattern for Business Automation for Solo Operators</h2>
+
+<p>A reconciler is a background job that runs on a schedule, reads ground truth from your primary data store, derives what state each record <em>should</em> be in, compares that to the reported state, and repairs or alerts on the delta.</p>
+
+<p>It does not sit on the write path. It does not intercept operations as they happen. It is a watcher. An auditor. It runs every 30 minutes (or whatever interval fits your tolerance) and asks one question: "Is the world in the state the database says it's in?"</p>
+
+<p>The shape is always the same:</p>
+
+<div style="background:#0d1117;border:1px solid #1e2937;border-radius:6px;padding:1.25rem 1.5rem;margin:1.5rem 0;overflow-x:auto;font-family:'Courier New',Courier,monospace;">
+  <p style="color:#56b6f2;font-size:.8rem;margin:0 0 .75rem;letter-spacing:.08em;text-transform:uppercase;">// The reconciler shape</p>
+  <pre style="margin:0;font-size:.85rem;line-height:1.8;color:#e2e8f0;white-space:pre;"><span style="color:#fbbf24;">def</span> <span style="color:#34d399;">reconcile</span>():
+    records = <span style="color:#56b6f2;">read_ground_truth</span>()        <span style="color:#475569;"># the database — what IS</span>
+    <span style="color:#fbbf24;">for</span> record <span style="color:#fbbf24;">in</span> records:
+        expected = <span style="color:#56b6f2;">derive_expected_state</span>(record)
+        actual   = <span style="color:#56b6f2;">read_actual_state</span>(record)
+        <span style="color:#fbbf24;">if</span> expected != actual:
+            <span style="color:#56b6f2;">alert</span>(record, expected, actual)  <span style="color:#475569;"># start here, not repair</span></pre>
+</div>
+
+<p>The critical detail: <code style="background:#0d1117;color:#34d399;padding:.2em .4em;border-radius:3px;font-family:'Courier New',Courier,monospace;">read_ground_truth()</code> goes to the primary source of record — not a cache, not a flag in memory. The raw data. And <code style="background:#0d1117;color:#34d399;padding:.2em .4em;border-radius:3px;font-family:'Courier New',Courier,monospace;">derive_expected_state()</code> is pure logic derived from that ground truth. "If a job is marked 'complete' but no delivery email exists in the thread, something is wrong." The reconciler doesn't care <em>why</em> the drift happened. It only cares about the delta.</p>
+
+<!-- SECTION 3 -->
+<h2 id="how-i-built-mine" style="color:#34d399;">How I Built Mine — 53 Commits, 86 Test Scenarios</h2>
+
+<p>The trigger was a pattern I kept seeing in my own system: jobs that were "complete" in the pipeline but silently stuck — the system believed it was waiting for something that had already happened, or had already sent something that never went out. Every time I found one it was via a manual audit. That's a terrible detection mechanism.</p>
+
+<p>I defined the drift classes first — walked every stage transition and wrote down: "if this step fails, what state am I in?" Eight classes surfaced:</p>
+
+<div style="background:#0d1117;border:1px solid #1e2937;border-radius:6px;padding:1.25rem 1.5rem;margin:1.5rem 0;overflow-x:auto;font-family:'Courier New',Courier,monospace;">
+  <p style="color:#56b6f2;font-size:.8rem;margin:0 0 .75rem;letter-spacing:.08em;text-transform:uppercase;">// Drift class inventory</p>
+  <pre style="margin:0;font-size:.85rem;line-height:1.9;color:#e2e8f0;white-space:pre;"><span style="color:#fbbf24;">SERVED_PARKED</span>           <span style="color:#475569;"># served, proof workflow never triggered</span>
+<span style="color:#fbbf24;">ATTEMPT_LOGGED_NO_EMAIL</span> <span style="color:#475569;"># attempt recorded, client not notified</span>
+<span style="color:#fbbf24;">PROOF_ON_FILE_PARKED</span>    <span style="color:#475569;"># proof exists, pre-verify email never sent</span>
+<span style="color:#fbbf24;">PAID_NO_THANKYOU</span>        <span style="color:#475569;"># payment recorded, confirmation not delivered</span>
+<span style="color:#fbbf24;">MAILOUT_PARKED</span>          <span style="color:#475569;"># documents mailed, close-out never triggered</span>
+<span style="color:#fbbf24;">TERMINAL_LEFT_ACTIVE</span>    <span style="color:#475569;"># terminal marker present, status still "active"</span>
+<span style="color:#fbbf24;">STAGE_FUNNEL_MISMATCH</span>   <span style="color:#475569;"># stage says X, other fields say it's past X</span>
+<span style="color:#fbbf24;">SERVED_NO_SIGNED_PROOF</span>  <span style="color:#475569;"># served + advanced to mail-out, no signed POS on record</span></pre>
+</div>
+
+<p>Once I had the drift classes, I built a simulator — 86 test scenarios covering every class at every severity level. The simulator generates synthetic records in each drift state so I can develop and tune the reconciler without waiting for production to produce examples. This is the step most builders skip. Do not skip it. A reconciler you cannot test against known inputs is just more code you can't trust.</p>
+
+<p>The same period also shipped an 86-scenario inbound funnel simulator — state machines for how the system should respond to every type of incoming message. It caught 9 email-protocol misfires: cases where the pipeline was producing the wrong response to a specific inbound pattern. These are the same root issue: the write path is wrong and the system doesn't know it. The funnel sim is the reconciler applied to event handling.</p>
+
+<!-- BEFORE/AFTER FLOW -->
+<div style="background:#0d1117;border:1px solid #1e2937;border-radius:6px;padding:1.25rem 1.5rem;margin:1.5rem 0;font-family:'Courier New',Courier,monospace;">
+  <p style="color:#56b6f2;font-size:.8rem;margin:0 0 .75rem;letter-spacing:.08em;text-transform:uppercase;">// Before → After</p>
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+    <div style="flex:1;min-width:200px;">
+      <p style="color:#f87171;font-size:.8rem;margin:0 0 .5rem;">BEFORE</p>
+      <p style="color:#94a3b8;font-size:.85rem;margin:0;line-height:1.7;">Manual audit finds drift<br>Production data = test harness<br>Silent stuck jobs accumulate<br>No guarantee of detection</p>
+    </div>
+    <div style="flex:1;min-width:200px;">
+      <p style="color:#34d399;font-size:.8rem;margin:0 0 .5rem;">AFTER</p>
+      <p style="color:#94a3b8;font-size:.85rem;margin:0;line-height:1.7;">Reconciler runs every 30 min<br>86 synthetic test scenarios<br>8 drift classes always checked<br>Alert fires, nothing slips</p>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4 -->
+<h2 id="what-it-found" style="color:#34d399;">What the First Live Run Found</h2>
+
+<p>The first live run fired 23 TERMINAL_LEFT_ACTIVE alerts in one sweep. Every one of them was a false positive — legacy records with old status labels that predated the current schema. The reconciler didn't know about those legacy labels, so it flagged them as active jobs that should be closed.</p>
+
+<p>One commit to add the legacy filter. After that: zero false positives.</p>
+
+<div style="background:#0d1117;border:1px solid #1e2937;border-radius:6px;padding:1.25rem 1.5rem;margin:1.5rem 0;font-family:'Courier New',Courier,monospace;">
+  <p style="color:#56b6f2;font-size:.8rem;margin:0 0 .75rem;letter-spacing:.08em;text-transform:uppercase;">// Live run output (after false-positive fix)</p>
+  <div style="font-size:.85rem;line-height:2;color:#e2e8f0;">
+    <p style="margin:0;"><span style="color:#56b6f2;">[INFO]</span>&nbsp; <span style="color:#94a3b8;">scanning work board — active records loaded</span></p>
+    <p style="margin:0;"><span style="color:#fbbf24;">[WARN]</span>&nbsp; <span style="color:#94a3b8;">SERVED_PARKED — 2 cases found</span></p>
+    <p style="margin:0;"><span style="color:#fbbf24;">[WARN]</span>&nbsp; <span style="color:#94a3b8;">ATTEMPT_LOGGED_NO_EMAIL — 1 case found</span></p>
+    <p style="margin:0;"><span style="color:#34d399;">[OK]</span>&nbsp;&nbsp; <span style="color:#94a3b8;">TERMINAL_LEFT_ACTIVE — 0 (legacy filter applied)</span></p>
+    <p style="margin:0;"><span style="color:#34d399;">[DONE]</span> <span style="color:#94a3b8;">3 real findings, 0 false alarms</span></p>
+  </div>
+</div>
+
+<p>The harder lesson: the TERMINAL_LEFT_ACTIVE class problem wasn't a reconciler bug. It was a schema gap — the reconciler revealed that the system had been using two incompatible status label schemes across its lifetime, and no single piece of code had ever needed to look at both at once. The reconciler was the first reader that cared. That's the thing about a reconciler: it does not just find operational drift. It finds the design assumptions your write path was silently carrying.</p>
+
+<p>The real mistake I made: I built the system for a year and a half before I built the reconciler. The stuck jobs that accumulated in that time were real operational cost — time I spent on manual audits instead of the system catching itself. Build the reconciler early. Month one, not month eighteen.</p>
+
+<!-- SECTION 5 -->
+<h2 id="how-to-apply" style="color:#34d399;">How to Apply This to Your Automation</h2>
+
+<p><strong style="color:#fbbf24;">Step 1 — Name your drift classes before writing code.</strong> Walk every stage transition. For each one: "if this step fails, what state am I in?" Write the list. Four to ten classes is normal for a real system. These are your targets.</p>
+
+<p><strong style="color:#fbbf24;">Step 2 — Build the simulator before the scanner.</strong> Generate synthetic records in every drift state. Write the tests first. The simulator is the test harness for your reconciler. Without it you're developing in production.</p>
+
+<p><strong style="color:#fbbf24;">Step 3 — Start with alert, not repair.</strong> The first version of my reconciler only sent me a message — it never touched the data. I watched it for two weeks. Only then did I add tiered auto-repair. A reconciler that repairs without review is just a second write path that also drifts. Earn the right to act.</p>
+
+<p><strong style="color:#fbbf24;">Step 4 — Every repair must be idempotent.</strong> Run the repair twice, same result. Use a claim key keyed on (record ID + drift class + date) so a re-run doesn't double-apply the same fix. This is non-negotiable.</p>
+
+<p>For more on the design patterns that led here, the full stack is at <a href="/blog.html" style="color:#56b6f2;">jessemoraga.com/blog.html</a>. Two related posts: <a href="https://jessemoraga.com/2026/06/17/fail-silent-bugs-when-logs-say-ok-while-the-system-does-nothing/" style="color:#56b6f2;">Fail-Silent Bugs: When Logs Say OK While the System Does Nothing</a> shows the failure mode the reconciler is designed to catch. <a href="https://jessemoraga.com/2026/06/15/single-source-of-truth-in-python-one-decision-function-fail-safe-defaults-and-why-forked-logic-drifts/" style="color:#56b6f2;">Single Source of Truth in Python</a> covers what the write path looks like when it's working correctly — and how forked logic creates the drift in the first place.</p>
+
+<!-- FAQ -->
+<h2 id="faq" style="color:#34d399;">FAQ</h2>
+
+<p><strong style="color:#fbbf24;">Do I need a database to use the reconciler pattern?</strong><br>
+No — any system with two sources of state can drift. A spreadsheet + an email inbox is two sources. A webhook receiver + a log file is two sources. The pattern scales down to anything where state is recorded in more than one place.</p>
+
+<p><strong style="color:#fbbf24;">How often should the reconciler run?</strong><br>
+Start at 30 minutes. If the alert volume is high, your write path has a systematic problem the reconciler is masking — fix the root cause first. If it's quiet 95% of the time, that's correct. Drift is infrequent, not constant.</p>
+
+<p><strong style="color:#fbbf24;">What if my reconciler can't determine expected state?</strong><br>
+Don't guess — alert. Ambiguous state is itself a finding. Log it as a separate drift class (AMBIGUOUS_STATE) and let a human resolve it. A reconciler that makes assumptions about ambiguous records is worse than none.</p>
+
+<p><strong style="color:#fbbf24;">Is the reconciler the same as a health check?</strong><br>
+No. A health check tells you if the system is running. The reconciler tells you if the system is correct. Both are necessary. Neither replaces the other.</p>
+
+<!-- CTA -->
+<div style="background:#0d1117;border:1px solid #34d399;border-radius:6px;padding:1.25rem 1.5rem;margin:2rem 0;text-align:center;">
+  <p style="margin:0 0 .4rem;font-size:.9rem;color:#94a3b8;font-family:'Courier New',Courier,monospace;">// See the full systems stack</p>
+  <a href="/blog.html" style="color:#34d399;font-weight:700;font-size:1rem;text-decoration:none;font-family:'Courier New',Courier,monospace;">jessemoraga.com/blog.html →</a>
+</div>
+
+<!-- $ whoami -->
+<div style="background:#06080a;border-top:1px solid #1e2937;padding:1.5rem 0 .5rem;margin-top:2rem;font-family:'Courier New',Courier,monospace;">
+  <p style="color:#94a3b8;font-size:.85rem;margin:0 0 .25rem;">$ whoami</p>
+  <p style="color:#34d399;font-size:.85rem;margin:0 0 .25rem;">Jesse Moraga</p>
+  <p style="color:#94a3b8;font-size:.85rem;margin:0;">Software developer. I build and operate production systems for real companies — a real California field-services business runs end-to-end on software I wrote and maintain solo. Growth-as-a-Service: <a href="https://art3ry.com" style="color:#56b6f2;text-decoration:none;">art3ry.com</a><br>
+  <a href="https://github.com/JesseMoraga" style="color:#56b6f2;text-decoration:none;">github.com/JesseMoraga</a></p>
+</div>
+  </div>
+</article>
+<section class="related" style="max-width:760px;margin:0 auto;padding:8px 24px 8px;"><h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(20px,2.6vw,26px);letter-spacing:-0.02em;margin:0 0 18px;">Keep reading</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;"><a href="/2026/06/17/fail-silent-bugs-when-logs-say-ok-while-the-system-does-nothing/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">Fail-Silent Bugs: When Logs Say OK While the System Does Nothing</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Jun 2026</span></a><a href="/2026/07/01/silent-bug-ai-playbook-any-business/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">The Silent Bug That Ghosted My Customers — And the AI Playbook Any Business Can Steal</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Jul 2026</span></a><a href="/2026/06/19/test-pollution-in-production-logs-and-the-real-bug-it-hid/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">Test Pollution in Production Logs (and the Real Bug It Hid)</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Jun 2026</span></a></div></section>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>
