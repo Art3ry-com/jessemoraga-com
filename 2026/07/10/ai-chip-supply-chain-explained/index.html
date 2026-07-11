@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The AI Chip Supply Chain: How It’s Made and Who Controls It | Jesse Moraga</title>
+<meta name="description" content="How AI chips actually get made, where, and who controls the supply chain in 2026 — TSMC, Nvidia, ASML, the 2nm/CoWoS/HBM squeeze — plus the code that decides whether you waste the silicon.">
+<meta name="author" content="Jesse Moraga">
+<link rel="canonical" href="https://jessemoraga.com/2026/07/10/ai-chip-supply-chain-explained/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/07/10/ai-chip-supply-chain-explained/">
+<meta property="og:title" content="The AI Chip Supply Chain: How It’s Made and Who Controls It">
+<meta property="og:description" content="How AI chips actually get made, where, and who controls the supply chain in 2026 — TSMC, Nvidia, ASML, the 2nm/CoWoS/HBM squeeze — plus the code that decides whether you waste the silicon.">
+<meta property="og:image" content="https://jessemoraga.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-07-10T16:00:00-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The AI Chip Supply Chain: How It’s Made and Who Controls It">
+<meta name="twitter:description" content="How AI chips actually get made, where, and who controls the supply chain in 2026 — TSMC, Nvidia, ASML, the 2nm/CoWoS/HBM squeeze — plus the code that decides whether you waste the silicon.">
+<meta name="twitter:image" content="https://jessemoraga.com/og-default.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#FFFFFF;background:#000000;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#C9C5B6}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#FFFFFF}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#FFFFFF}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img{max-width:100%;height:auto;border-radius:14px;display:block;margin:24px auto}
+  .post-content iframe{max-width:100%;width:100%;aspect-ratio:16/9;border:0;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#C9BEF5;padding:2px 7px;border-radius:6px}
+  .related a:hover{transform:translateY(-3px)}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "The AI Chip Supply Chain: How It’s Made and Who Controls It", "description": "How AI chips actually get made, where, and who controls the supply chain in 2026 — TSMC, Nvidia, ASML, the 2nm/CoWoS/HBM squeeze — plus the code that decides whether you waste the silicon.", "datePublished": "2026-07-10T16:00:00-07:00", "dateModified": "2026-07-10T16:00:00-07:00", "articleSection": "Tech", "inLanguage": "en", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://jessemoraga.com/2026/07/10/ai-chip-supply-chain-explained/"}, "url": "https://jessemoraga.com/2026/07/10/ai-chip-supply-chain-explained/", "image": "https://jessemoraga.com/og-default.png", "author": {"@type": "Person", "name": "Jesse Moraga", "url": "https://jessemoraga.com", "@id": "https://jessemoraga.com/#jesse"}, "publisher": {"@type": "Person", "name": "Jesse Moraga", "@id": "https://jessemoraga.com/#jesse"}}</script>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(0,0,0,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#B2AD99; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">By Jesse Moraga &middot; Jul 10, 2026 &middot; 9 min read</span>
+    </div>
+  </div>
+  <div style="max-width:820px; margin:0 auto; padding:8px 24px 40px;">
+<div style="max-width:760px;margin:0 auto;background:#06080a;color:#c9d4e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.7;border-radius:14px;overflow:hidden;border:1px solid #1b2430">
+
+  <!-- terminal hero -->
+  <div style="background:#0a0e13;padding:18px 22px;border-bottom:1px solid #1b2430">
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <span style="width:12px;height:12px;border-radius:50%;background:#f87171;display:inline-block"></span>
+      <span style="width:12px;height:12px;border-radius:50%;background:#fbbf24;display:inline-block"></span>
+      <span style="width:12px;height:12px;border-radius:50%;background:#34d399;display:inline-block"></span>
+    </div>
+    <div style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#56b6f2;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">// TECHNICALLY SPEAKING</div>
+    <h1 style="margin:0;color:#eaf1f8;font-size:30px;line-height:1.25;font-weight:800">The AI Chip Supply Chain: How It&#8217;s Made and Who Controls It</h1>
+    <div style="font-family:ui-monospace,Menlo,monospace;color:#5b6b7c;font-size:13px;margin-top:14px">$ <span style="color:#34d399">whoami</span> &amp;&amp; <span style="color:#34d399">trace --what-every-model-runs-on</span></div>
+    <div style="font-family:ui-monospace,Menlo,monospace;color:#5b6b7c;font-size:12px;margin-top:8px">Updated 2026-07-10</div>
+  </div>
+
+  <div style="padding:26px 24px">
+
+    <p style="font-size:19px;color:#eaf1f8"><strong>Almost every AI thing you touched today traces back to a few buildings on one island, and one machine that only a single company on earth knows how to build.</strong></p>
+
+    <p>I&#8217;m a self-taught operator. I run a small California service business on software I wrote myself, and I spend a lot of my day thinking about what my code costs to run. That cost bottoms out in physics — a chip somebody etched, in a fab somebody spent tens of billions to build, using light so precise it barely exists in nature. I went down the rabbit hole on how that whole chain actually works, and it&#8217;s wilder and more fragile than the headlines make it sound.</p>
+
+    <p>So here&#8217;s the map. Who designs the chips, who actually makes them, where, and why the entire AI boom is currently rate-limited by a handful of choke points. And then the part I care about most as a builder: the one place in this chain where <em>you</em> have any control at all.</p>
+
+    <!-- table of contents -->
+    <div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:18px 20px;margin:24px 0">
+      <div style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">$ cat contents.md</div>
+      <ol style="margin:0;padding-left:20px;color:#9fb0c0">
+        <li style="margin-bottom:6px"><a href="#stack" style="color:#56b6f2;text-decoration:none">The stack: who actually does what</a></li>
+        <li style="margin-bottom:6px"><a href="#howmade" style="color:#56b6f2;text-decoration:none">How a chip actually gets made</a></li>
+        <li style="margin-bottom:6px"><a href="#squeeze" style="color:#56b6f2;text-decoration:none">The triple squeeze: why chips are sold out</a></li>
+        <li style="margin-bottom:6px"><a href="#whocontrols" style="color:#56b6f2;text-decoration:none">Who controls it, and where it&#8217;s moving</a></li>
+        <li style="margin-bottom:6px"><a href="#code" style="color:#56b6f2;text-decoration:none">The one part you control: your code</a></li>
+        <li style="margin-bottom:0"><a href="#faq" style="color:#56b6f2;text-decoration:none">FAQ</a></li>
+      </ol>
+    </div>
+
+    <!-- ============ SECTION 1 ============ -->
+    <h2 id="stack" style="color:#56b6f2;font-size:23px;border-left:3px solid #56b6f2;padding-left:12px;margin-top:38px">The stack: who actually does what</h2>
+
+    <p>First thing that surprised me: the company whose name is on the chip usually didn&#8217;t make it. The industry is split into layers, and almost nobody does more than one of them well.</p>
+
+    <p>The <strong>designers</strong> are &#8220;fabless&#8221; — they draw the chip and own zero factories. Nvidia, AMD, Apple, and now the big cloud players designing their own silicon. Nvidia sits on top of the AI pile hard: it holds somewhere around <strong>80% of the AI accelerator market</strong>, on the order of $190 billion in data-center revenue in its 2026 fiscal year. They design the thing. They don&#8217;t pour it.</p>
+
+    <p>The <strong>fab</strong> — the factory that turns a design into actual silicon — is where the map collapses onto one company. <a href="https://en.wikipedia.org/wiki/TSMC" style="color:#56b6f2;text-decoration:none">TSMC</a> in Taiwan runs roughly <strong>70% of the world&#8217;s contract chip manufacturing</strong> and makes something like <strong>90% of the most advanced chips</strong> — the 3-nanometer-and-below stuff that every flagship AI part is built on. Not most of it. Almost all of it.</p>
+
+    <p>Then two more layers nobody talks about until they&#8217;re the bottleneck. <strong>Memory</strong>: the fast stacked memory that feeds a GPU, called <a href="https://en.wikipedia.org/wiki/High_Bandwidth_Memory" style="color:#56b6f2;text-decoration:none">high-bandwidth memory (HBM)</a>, comes from basically three firms — SK Hynix, Samsung, and Micron. And <strong>packaging</strong>: the step that bolts the logic die and the memory stacks onto one slab so they can talk fast enough. TSMC&#8217;s version is called CoWoS, and it turns out to matter as much as the chip itself.</p>
+
+    <!-- flow diagram -->
+    <div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#9fb0c0;margin:22px 0;overflow-x:auto">
+      <div><span style="color:#56b6f2">ASML</span> makes the machine that prints the chip</div>
+      <div>&nbsp;&nbsp;└─▶ <span style="color:#34d399">TSMC</span> runs the machine, etches the wafer</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─▶ <span style="color:#fbbf24">Nvidia / AMD / Apple</span> designed what gets etched</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─▶ <span style="color:#fbbf24">SK Hynix / Samsung / Micron</span> stack the memory beside it</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─▶ <span style="color:#f87171">the hyperscalers</span> buy the whole thing by the rack</div>
+      <div style="margin-top:8px;color:#5b6b7c">pull any one layer and the AI industry stops. that&#8217;s the fragility.</div>
+    </div>
+
+    <!-- ============ SECTION 2 ============ -->
+    <h2 id="howmade" style="color:#34d399;font-size:23px;border-left:3px solid #34d399;padding-left:12px;margin-top:40px">How a chip actually gets made</h2>
+
+    <p>A chip starts as a disc of ultra-pure silicon called a wafer. To carve a pattern into it you shine light through a stencil onto a light-sensitive coating, wash away what got exposed, and repeat. Do that a few hundred times, layer on layer, and you&#8217;ve built billions of transistors on a fingernail of silicon. The catch is the resolution. To draw features a few atoms wide, ordinary light is way too fat.</p>
+
+    <p>So the leading edge uses <a href="https://en.wikipedia.org/wiki/Extreme_ultraviolet_lithography" style="color:#56b6f2;text-decoration:none">extreme ultraviolet lithography (EUV)</a> — light with a wavelength of 13.5 nanometers, generated by blasting molten tin droplets with a laser fifty thousand times a second. Only one company builds the machines that do this: ASML in the Netherlands. Not &#8220;leads the market.&#8221; The only one. Their next-gen High-NA machine runs about <strong>$400 million</strong> a unit, and it&#8217;s so expensive that TSMC has said it&#8217;s sticking with its current EUV tools and a trick called multi-patterning — exposing the same wafer several times to fake the finer detail — rather than buy in yet.</p>
+
+    <div style="border-left:4px solid #fbbf24;background:#0d0b07;padding:12px 18px;margin:22px 0;border-radius:0 8px 8px 0">
+      <div style="font-family:ui-monospace,Menlo,monospace;color:#fbbf24;font-size:12px;letter-spacing:1px;margin-bottom:4px">WHY THIS IS THE MOAT</div>
+      <div style="color:#eaf1f8">A country can fund a fab. It can&#8217;t conjure the machine that goes inside it. One Dutch company gates the entire planet&#8217;s access to cutting-edge chips, and one Taiwanese company knows how to run those machines at scale. That&#8217;s two single points of failure holding up a multi-trillion-dollar industry.</div>
+    </div>
+
+    <!-- ============ SECTION 3 ============ -->
+    <h2 id="squeeze" style="color:#f87171;font-size:23px;border-left:3px solid #f87171;padding-left:12px;margin-top:40px">The triple squeeze: why chips are sold out</h2>
+
+    <p>Here&#8217;s the thing people miss when they ask why they can&#8217;t get GPUs. It isn&#8217;t one shortage. It&#8217;s three, stacked, and a chip needs all three to ship. The industry calls it the triple constraint:</p>
+
+    <div style="background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:18px 20px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.9;margin:22px 0;overflow-x:auto;color:#c9d4e0">
+      <div><span style="color:#34d399">1 LOGIC&nbsp;&nbsp;</span> 2nm fab capacity — TSMC&#8217;s 2nm line is reportedly booked through 2027</div>
+      <div><span style="color:#fbbf24">2 PACKAGE</span> CoWoS advanced packaging — Nvidia alone holds ~60&#8211;70% of it</div>
+      <div><span style="color:#f87171">3 MEMORY&nbsp;</span> HBM stacks — three suppliers, allocated a year out</div>
+      <div style="margin-top:8px;color:#5b6b7c">short ONE and the chip doesn&#8217;t exist. right now all three are tight.</div>
+    </div>
+
+    <p>TSMC&#8217;s newest 2nm process (they call it N2) started volume production around Q3 2026, with Nvidia, Apple, and AMD as the anchor customers. The frontend capacity for it is essentially spoken for through 2027. Even when the raw logic is available, the packaging step is its own bottleneck — you can etch the die and still wait months for a CoWoS slot to marry it to its memory. That&#8217;s why &#8220;we have the chips&#8221; and &#8220;we can ship the chips&#8221; are two very different sentences right now.</p>
+
+    <!-- ============ SECTION 4 ============ -->
+    <h2 id="whocontrols" style="color:#fbbf24;font-size:23px;border-left:3px solid #fbbf24;padding-left:12px;margin-top:40px">Who controls it, and where it&#8217;s moving</h2>
+
+    <p>Add it up and control is startlingly concentrated. Nvidia owns the demand side of AI compute. TSMC owns the making. ASML owns the machine that makes the making possible. Three companies, three countries, one long thin thread — and most of the critical manufacturing sitting on an island that a lot of very nervous governments would rather it didn&#8217;t all sit on.</p>
+
+    <p>That nervousness is the story of the next five years. TSMC is spending about <strong>$165 billion</strong> building fabs in Arizona. The first one started production in 2025 and is already making silicon for Nvidia&#8217;s Blackwell parts — the first time TSMC has made its most advanced chips anywhere outside Taiwan. There&#8217;s more going up in Japan and Germany. The U.S. CHIPS Act and its equivalents abroad are all chasing the same goal: stop having a single earthquake, or a single blockade, be able to switch off the modern economy.</p>
+
+    <p>It&#8217;s real diversification, and it&#8217;s slow. Fabs take years and the expertise doesn&#8217;t copy-paste. For a while yet, &#8220;where AI chips come from&#8221; still mostly answers to one address.</p>
+
+    <!-- ============ SECTION 5 — THE CODE ============ -->
+    <h2 id="code" style="color:#34d399;font-size:23px;border-left:3px solid #34d399;padding-left:12px;margin-top:40px">The one part you control: your code</h2>
+
+    <p>Here&#8217;s where I bring it home, because everything above is out of your hands. You&#8217;re not going to build a fab. You can&#8217;t call ASML. But the silicon is the single most expensive, most rationed thing in your whole stack — and whether you actually <em>use</em> it or waste it is entirely a software decision. I see people rent a GPU that cost more than a car and then feed it work one crumb at a time, on the CPU, while the expensive part sits there doing nothing.</p>
+
+    <p>This is the version almost everybody writes first. It runs. It&#8217;s also leaving most of the machine idle.</p>
+
+    <p style="font-family:ui-monospace,Menlo,monospace;color:#f87171;font-size:13px;margin-bottom:6px;margin-top:22px">// BAD — one item at a time, on the CPU. the GPU you&#8217;re paying for sits idle.</p>
+    <div style="background:#0a0e13;border:1px solid #2a1518;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8;margin:0 0 16px;overflow-x:auto;color:#c9d4e0">
+<div>results = []</div>
+<div><span style="color:#5b6b7c">for</span> text <span style="color:#5b6b7c">in</span> documents:<span style="color:#5b6b7c">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 50,000 of them = 50,000 round trips</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;out = model(text)<span style="color:#5b6b7c">&nbsp;&nbsp;&nbsp;&nbsp;# no batch, no device, full fp32</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;results.append(out)</div>
+    </div>
+
+    <p>Same model, same math, three small changes: hand the GPU a whole <em>batch</em> at once instead of one item, actually move the work onto the device, and drop the numbers to half precision so twice as many fit. On real workloads that&#8217;s the difference between a job that takes all night and one that&#8217;s done before coffee.</p>
+
+    <p style="font-family:ui-monospace,Menlo,monospace;color:#34d399;font-size:13px;margin-bottom:6px">// GOOD — batch it, move it onto the GPU, run fp16. same model, far more throughput.</p>
+    <div style="background:#0a0e13;border:1px solid #14241a;border-radius:10px;padding:16px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.8;margin:0 0 16px;overflow-x:auto;color:#c9d4e0">
+<div>model = model.half().to(<span style="color:#34d399">"cuda"</span>)<span style="color:#5b6b7c">&nbsp;&nbsp;&nbsp;&nbsp;# fp16, on the silicon you paid for</span></div>
+<div>loader = DataLoader(documents, batch_size=<span style="color:#fbbf24">256</span>)</div>
+<div>results = []</div>
+<div><span style="color:#5b6b7c">with</span> torch.inference_mode():<span style="color:#5b6b7c">&nbsp;&nbsp;&nbsp;&nbsp;# no autograd graph, no wasted memory</span></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5b6b7c">for</span> batch <span style="color:#5b6b7c">in</span> loader:</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;results.extend(model(batch.to(<span style="color:#34d399">"cuda"</span>)))</div>
+    </div>
+
+    <p>Two things earn most of the win. Batching means the GPU works on 256 items in parallel instead of stalling between single calls — that&#8217;s the entire reason the hardware is shaped the way it is. And <a href="https://pytorch.org/docs/stable/generated/torch.autograd.grad_mode.inference_mode.html" style="color:#56b6f2;text-decoration:none">torch.inference_mode()</a> tells the framework you&#8217;re not training, so it stops building the bookkeeping graph it&#8217;d need for gradients and hands that memory back to your actual work.</p>
+
+    <div style="border-left:4px solid #f87171;background:#0e0a0a;padding:12px 18px;margin:22px 0;border-radius:0 8px 8px 0">
+      <div style="font-family:ui-monospace,Menlo,monospace;color:#f87171;font-size:12px;letter-spacing:1px;margin-bottom:4px">WHAT PEOPLE GET WRONG</div>
+      <div style="color:#eaf1f8">They blame the model, or reach for a bigger GPU, when the real problem is a loop that never lets the current one work. Utilization is a code problem before it&#8217;s a hardware problem. Chase the idle time before you chase the invoice — the fab already made the chip scarce, don&#8217;t make it scarcer by wasting the cycles you rented.</div>
+    </div>
+
+    <p>That&#8217;s the honest takeaway from staring at this whole chain. The supply side is a marvel you and I have no say over. The demand side, the code, the part that decides whether a rationed chip does a full day&#8217;s work or a tenth of one — that&#8217;s the only lever in the whole system with your hand on it. So use it.</p>
+
+    <!-- ============ FAQ ============ -->
+    <h2 id="faq" style="color:#eaf1f8;font-size:23px;border-left:3px solid #ff7a3c;padding-left:12px;margin-top:40px">FAQ</h2>
+
+    <p style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:14px;margin-bottom:2px;margin-top:18px">Why does TSMC make almost all the advanced chips?</p>
+    <p>Cutting-edge fabs cost tens of billions and take years, and the process knowledge — running EUV machines at high yield — barely transfers. TSMC got there first at scale, so the whole industry designs around them. That&#8217;s why one company ended up making roughly 90% of the leading-edge silicon.</p>
+
+    <p style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:14px;margin-bottom:2px;margin-top:18px">What is the &#8220;triple constraint&#8221; on AI chips?</p>
+    <p>Three separate bottlenecks a chip needs all at once: 2nm logic capacity, CoWoS advanced packaging, and HBM memory. Any one being short stops the chip from shipping, and in 2026 all three are tight.</p>
+
+    <p style="font-family:ui-monospace,Menlo,monospace;color:#56b6f2;font-size:14px;margin-bottom:2px;margin-top:18px">Will Arizona fabs fix the supply problem?</p>
+    <p>They help, but slowly. TSMC&#8217;s Arizona build is real and already making advanced parts, yet fabs take years to ramp and the expertise doesn&#8217;t copy overnight. For a while the leading edge still mostly lives in Taiwan.</p>
+
+    <p style="margin-top:26px">If you want the builder side of how I actually run on this stuff, I wrote up <a href="https://jessemoraga.com/2026/06/25/i-built-a-voice-ai-that-lives-in-my-headset-full-source-code/" style="color:#56b6f2;text-decoration:none">the voice AI that lives in my headset</a>, <a href="https://jessemoraga.com/2026/06/14/how-to-build-an-ai-agent-that-audits-your-own-code/" style="color:#56b6f2;text-decoration:none">how I built an AI agent that audits my own code</a>, and <a href="https://jessemoraga.com/2026/06/10/how-i-coded-an-ai-assistant-that-runs-my-business-by-voice-and-text/" style="color:#56b6f2;text-decoration:none">how I coded an assistant that runs my business by voice and text</a>. And if you want the other half of my brain, the music side is where the guitars live — start with <a href="https://jessemoraga.com/2026/06/10/songs-i-can-play-metal-guitar-covers-by-band/" style="color:#56b6f2;text-decoration:none">Songs I Can Play</a>.</p>
+
+    <!-- whoami footer -->
+    <div style="margin-top:34px;background:#0a0e13;border:1px solid #1b2430;border-radius:10px;padding:18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#9fb0c0">
+      <div>$ <span style="color:#34d399">whoami</span></div>
+      <div style="color:#c9d4e0;margin-top:6px">Jesse Moraga — self-taught operator. I build the systems and run a real California service business on them. No CS degree required.</div>
+      <div style="margin-top:10px">$ <span style="color:#34d399">links</span></div>
+      <div style="margin-top:6px"><a href="https://github.com/JesseMoraga" style="color:#56b6f2;text-decoration:none">github.com/JesseMoraga</a> &nbsp;·&nbsp; <a href="https://jessemoraga.com" style="color:#56b6f2;text-decoration:none">jessemoraga.com</a> &nbsp;·&nbsp; <a href="mailto:jesse@jessemoraga.com" style="color:#56b6f2;text-decoration:none">jesse@jessemoraga.com</a></div>
+    </div>
+
+  </div>
+</div>
+
+  </div>
+</article>
+<section class="related" style="max-width:760px;margin:0 auto;padding:8px 24px 8px;"><h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(20px,2.6vw,26px);letter-spacing:-0.02em;margin:0 0 18px;">Keep reading</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;"><a href="/2026/07/01/silent-bug-ai-playbook-any-business/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">The Silent Bug That Ghosted My Customers — And the AI Playbook Any Business Can Steal</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Jul 2026</span></a><a href="/2026/07/01/coding-was-never-the-point/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">Coding Was Never the Point: The Real Fight Behind Vibe Coders vs. Traditional Devs</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Jul 2026</span></a><a href="/2026/06/25/i-built-a-voice-ai-that-lives-in-my-headset-full-source-code/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">I Built a Voice AI That Lives in My Headset — Full Source Code</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Jun 2026</span></a></div></section>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>
