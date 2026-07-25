@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Opus 5 Benchmarks: Every Number, Verified (2026) | Jesse Moraga</title>
+<meta name="description" content="Claude Opus 5 benchmarks straight from Anthropic&#x27;s system cards, not the roundups: 96.0 SWE-bench Verified, 43.3 Frontier-Bench v0.1, 30.2 ARC-AGI-3.">
+<meta name="author" content="Jesse Moraga">
+<link rel="canonical" href="https://jessemoraga.com/2026/07/25/claude-opus-5-benchmarks/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/07/25/claude-opus-5-benchmarks/">
+<meta property="og:title" content="Claude Opus 5 Benchmarks: Every Number, Verified (2026)">
+<meta property="og:description" content="Claude Opus 5 benchmarks straight from Anthropic&#x27;s system cards, not the roundups: 96.0 SWE-bench Verified, 43.3 Frontier-Bench v0.1, 30.2 ARC-AGI-3.">
+<meta property="og:image" content="https://jessemoraga.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-07-25T08:00:00-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Claude Opus 5 Benchmarks: Every Number, Verified (2026)">
+<meta name="twitter:description" content="Claude Opus 5 benchmarks straight from Anthropic&#x27;s system cards, not the roundups: 96.0 SWE-bench Verified, 43.3 Frontier-Bench v0.1, 30.2 ARC-AGI-3.">
+<meta name="twitter:image" content="https://jessemoraga.com/og-default.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#FFFFFF;background:#000000;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#C9C5B6}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#FFFFFF}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#FFFFFF}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img{max-width:100%;height:auto;border-radius:14px;display:block;margin:24px auto}
+  .post-content iframe{max-width:100%;width:100%;aspect-ratio:16/9;border:0;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#C9BEF5;padding:2px 7px;border-radius:6px}
+  .related a:hover{transform:translateY(-3px)}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Claude Opus 5 Benchmarks: Every Number, Verified (2026)", "description": "Claude Opus 5 benchmarks straight from Anthropic's system cards, not the roundups: 96.0 SWE-bench Verified, 43.3 Frontier-Bench v0.1, 30.2 ARC-AGI-3.", "datePublished": "2026-07-25T08:00:00-07:00", "dateModified": "2026-07-25T08:00:00-07:00", "articleSection": "Tech", "inLanguage": "en", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://jessemoraga.com/2026/07/25/claude-opus-5-benchmarks/"}, "url": "https://jessemoraga.com/2026/07/25/claude-opus-5-benchmarks/", "image": "https://jessemoraga.com/og-default.png", "author": {"@type": "Person", "name": "Jesse Moraga", "url": "https://jessemoraga.com", "@id": "https://jessemoraga.com/#jesse"}, "publisher": {"@type": "Person", "name": "Jesse Moraga", "@id": "https://jessemoraga.com/#jesse"}}</script>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(0,0,0,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#B2AD99; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">By Jesse Moraga &middot; Jul 25, 2026 &middot; 13 min read</span>
+    </div>
+  </div>
+  <div style="max-width:820px; margin:0 auto; padding:8px 24px 40px;">
+<div style="background:#06080a;color:#c9d1d9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.75;padding:0;margin:0;">
+
+<!-- ============ TERMINAL HERO ============ -->
+<div style="background:#0d1117;border:1px solid #21262d;border-radius:10px;overflow:hidden;margin:0 0 34px 0;box-shadow:0 0 40px rgba(52,211,153,0.07);">
+  <div style="background:#161b22;padding:10px 14px;border-bottom:1px solid #21262d;">
+    <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#f87171;margin-right:7px;"></span>
+    <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#fbbf24;margin-right:7px;"></span>
+    <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:#34d399;"></span>
+    <span style="color:#6e7681;font-family:'SF Mono',Menlo,Consolas,monospace;font-size:12px;margin-left:14px;">benchmarks — bash — 92×34</span>
+  </div>
+  <div style="padding:22px 20px;font-family:'SF Mono',Menlo,Consolas,monospace;font-size:14px;">
+    <div style="color:#fbbf24;font-size:11px;letter-spacing:2.5px;margin-bottom:16px;">// TECHNICALLY SPEAKING</div>
+    <div style="color:#34d399;">$ curl -s anthropic.com/opus-5-system-card | grep -i "swe-bench verified"</div>
+    <div style="color:#c9d1d9;margin:8px 0 0 0;">Claude Opus 5 achieved 96.0%</div>
+    <div style="color:#34d399;margin-top:14px;">$ curl -s openai.com/why-we-no-longer-evaluate-swe-bench-verified | grep -i "stopped"</div>
+    <div style="color:#f87171;margin:8px 0 0 0;">"This is why we have stopped reporting SWE-bench Verified scores"</div>
+    <div style="color:#6e7681;margin-top:14px;">$ <span style="background:#34d399;display:inline-block;width:8px;height:15px;vertical-align:-2px;"></span></div>
+  </div>
+</div>
+
+<h1 style="color:#e6edf3;font-size:37px;line-height:1.2;margin:0 0 14px 0;font-weight:800;letter-spacing:-0.5px;">Claude Opus 5 Benchmarks: Every Number, Verified Against the Source</h1>
+
+<p style="color:#8b949e;font-size:19px;line-height:1.6;margin:0 0 30px 0;">Opus 5 shipped July 24, 2026. I pulled the Claude Opus 5 benchmarks out of the actual system cards instead of the blog posts written about them, and found that two of the numbers everybody is quoting are attached to the wrong model.</p>
+
+<div style="color:#6e7681;font-family:'SF Mono',Menlo,Consolas,monospace;font-size:12px;letter-spacing:1px;margin:0 0 26px 0;">UPDATED 2026-07-25 &nbsp;·&nbsp; all scores re-checked against the source system cards</div>
+
+<div style="border-left:3px solid #fbbf24;background:#0d1117;padding:16px 20px;margin:0 0 34px 0;border-radius:0 6px 6px 0;">
+  <p style="margin:0;color:#c9d1d9;font-size:15px;">I run a small service business in California solo, and a system I wrote runs it end to end. Which model I point at that code is not a hobby question for me. So I stopped reading benchmark roundups and started reading system cards. This post is what is actually in them.</p>
+</div>
+
+<!-- ============ TOC ============ -->
+<div style="background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:18px 22px;margin:0 0 34px 0;">
+  <div style="color:#fbbf24;font-family:'SF Mono',Menlo,monospace;font-size:11px;letter-spacing:2px;margin-bottom:12px;">CONTENTS</div>
+  <div style="color:#56b6f2;font-size:15px;line-height:2;">
+    1. <a href="#numbers" style="color:#56b6f2;text-decoration:none;">The Claude Opus 5 benchmarks, verified</a><br>
+    2. <a href="#trap" style="color:#56b6f2;text-decoration:none;">The column everybody misreads</a><br>
+    3. <a href="#retracted" style="color:#56b6f2;text-decoration:none;">Both coding benchmarks got retracted this year</a><br>
+    4. <a href="#theory" style="color:#56b6f2;text-decoration:none;">The theory: Goodhart's Law and what a score measures</a><br>
+    5. <a href="#fable" style="color:#56b6f2;text-decoration:none;">Why Fable 5's numbers are product scores</a><br>
+    6. <a href="#myeval" style="color:#56b6f2;text-decoration:none;">How I actually test a model</a><br>
+    7. <a href="#verdict" style="color:#56b6f2;text-decoration:none;">My verdict on Opus 5</a><br>
+    8. <a href="#faq" style="color:#56b6f2;text-decoration:none;">FAQ</a>
+  </div>
+</div>
+
+<!-- ============ 1. THE NUMBERS ============ -->
+<h2 id="numbers" style="color:#34d399;font-size:28px;margin:44px 0 8px 0;font-weight:700;">The Claude Opus 5 benchmarks, verified</h2>
+<p style="color:#6e7681;font-family:'SF Mono',Menlo,monospace;font-size:12px;margin:0 0 20px 0;">Source: Claude Opus 5 System Card, July 24 2026 — Table 8.1.A and §8.2</p>
+
+<p style="color:#c9d1d9;font-size:17px;">Anthropic's announcement page for Opus 5 does not print a single SWE-bench number. It headlines Frontier-Bench v0.1 and shows most results as images. The numbers below come out of the system card PDF itself.</p>
+
+<!-- INFOGRAPHIC 1 -->
+<div style="background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:24px;margin:26px 0;">
+  <div style="color:#e6edf3;font-size:17px;font-weight:700;margin-bottom:4px;">Frontier-Bench v0.1 &nbsp;<span style="color:#6e7681;font-size:13px;font-weight:400;">agentic coding, mean reward over 5 attempts</span></div>
+  <div style="color:#6e7681;font-size:12px;margin-bottom:18px;font-family:'SF Mono',Menlo,monospace;">Opus 5 system card · mini-SWE-agent harness · higher is better</div>
+
+  <div style="margin-bottom:14px;">
+    <div style="color:#c9d1d9;font-size:14px;margin-bottom:5px;font-family:'SF Mono',Menlo,monospace;">Claude Opus 5 <span style="color:#34d399;font-weight:700;">43.3</span></div>
+    <div style="background:#161b22;border-radius:4px;height:22px;"><div style="background:#34d399;width:86.6%;height:22px;border-radius:4px;"></div></div>
+  </div>
+  <div style="margin-bottom:14px;">
+    <div style="color:#c9d1d9;font-size:14px;margin-bottom:5px;font-family:'SF Mono',Menlo,monospace;">GPT-5.6 Sol <span style="color:#8b949e;font-weight:700;">37.5</span></div>
+    <div style="background:#161b22;border-radius:4px;height:22px;"><div style="background:#56b6f2;width:75%;height:22px;border-radius:4px;"></div></div>
+  </div>
+  <div style="margin-bottom:14px;">
+    <div style="color:#c9d1d9;font-size:14px;margin-bottom:5px;font-family:'SF Mono',Menlo,monospace;">Claude Fable 5 <span style="color:#8b949e;font-weight:700;">33.7</span></div>
+    <div style="background:#161b22;border-radius:4px;height:22px;"><div style="background:#a78bfa;width:67.4%;height:22px;border-radius:4px;"></div></div>
+  </div>
+  <div>
+    <div style="color:#c9d1d9;font-size:14px;margin-bottom:5px;font-family:'SF Mono',Menlo,monospace;">Claude Opus 4.8 <span style="color:#8b949e;font-weight:700;">18.7</span></div>
+    <div style="background:#161b22;border-radius:4px;height:22px;"><div style="background:#6e7681;width:37.4%;height:22px;border-radius:4px;"></div></div>
+  </div>
+  <div style="color:#6e7681;font-size:12px;margin-top:16px;line-height:1.6;">The card's prose reports 44.4% at xhigh effort; the summary table says 43.3. Both are in the same document. That gap is worth remembering for the rest of this post.</div>
+</div>
+
+<!-- INFOGRAPHIC 2 -->
+<div style="background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:24px;margin:26px 0;">
+  <div style="color:#e6edf3;font-size:17px;font-weight:700;margin-bottom:4px;">ARC-AGI-3 &nbsp;<span style="color:#6e7681;font-size:13px;font-weight:400;">novel problem solving</span></div>
+  <div style="color:#6e7681;font-size:12px;margin-bottom:18px;font-family:'SF Mono',Menlo,monospace;">Opus 5 system card · higher is better</div>
+
+  <div style="margin-bottom:14px;">
+    <div style="color:#c9d1d9;font-size:14px;margin-bottom:5px;font-family:'SF Mono',Menlo,monospace;">Claude Opus 5 <span style="color:#34d399;font-weight:700;">30.2</span></div>
+    <div style="background:#161b22;border-radius:4px;height:22px;"><div style="background:#34d399;width:100%;height:22px;border-radius:4px;"></div></div>
+  </div>
+  <div style="margin-bottom:14px;">
+    <div style="color:#c9d1d9;font-size:14px;margin-bottom:5px;font-family:'SF Mono',Menlo,monospace;">GPT-5.6 Sol <span style="color:#8b949e;font-weight:700;">7.8</span></div>
+    <div style="background:#161b22;border-radius:4px;height:22px;"><div style="background:#56b6f2;width:25.8%;height:22px;border-radius:4px;"></div></div>
+  </div>
+  <div>
+    <div style="color:#c9d1d9;font-size:14px;margin-bottom:5px;font-family:'SF Mono',Menlo,monospace;">Claude Opus 4.8 <span style="color:#8b949e;font-weight:700;">1.5</span></div>
+    <div style="background:#161b22;border-radius:4px;height:22px;"><div style="background:#6e7681;width:5%;height:22px;border-radius:4px;"></div></div>
+  </div>
+  <div style="color:#6e7681;font-size:12px;margin-top:16px;line-height:1.6;">This is the number that made me sit up. Opus 4.8 to Opus 5 is 1.5 to 30.2 on the same eval. Twentyfold on a benchmark built specifically to resist memorization.</div>
+</div>
+
+<!-- MAIN TABLE -->
+<h3 style="color:#e6edf3;font-size:21px;margin:36px 0 14px 0;">Every Claude 5 model, side by side</h3>
+<p style="color:#c9d1d9;font-size:17px;">Each score below is quoted from the system card of the model it belongs to. Read the source column before you compare any two rows.</p>
+
+<div style="overflow-x:auto;margin:20px 0;">
+<table style="width:100%;border-collapse:collapse;background:#0d1117;font-size:14px;min-width:600px;">
+<thead>
+<tr style="background:#161b22;">
+<th style="padding:11px 13px;text-align:left;color:#fbbf24;border-bottom:2px solid #21262d;font-family:'SF Mono',Menlo,monospace;font-size:12px;">BENCHMARK</th>
+<th style="padding:11px 13px;text-align:center;color:#34d399;border-bottom:2px solid #21262d;font-family:'SF Mono',Menlo,monospace;font-size:12px;">OPUS 5</th>
+<th style="padding:11px 13px;text-align:center;color:#a78bfa;border-bottom:2px solid #21262d;font-family:'SF Mono',Menlo,monospace;font-size:12px;">FABLE 5</th>
+<th style="padding:11px 13px;text-align:center;color:#56b6f2;border-bottom:2px solid #21262d;font-family:'SF Mono',Menlo,monospace;font-size:12px;">SONNET 5</th>
+<th style="padding:11px 13px;text-align:center;color:#8b949e;border-bottom:2px solid #21262d;font-family:'SF Mono',Menlo,monospace;font-size:12px;">OPUS 4.8</th>
+<th style="padding:11px 13px;text-align:left;color:#6e7681;border-bottom:2px solid #21262d;font-family:'SF Mono',Menlo,monospace;font-size:12px;">CARD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:11px 13px;color:#c9d1d9;border-bottom:1px solid #21262d;">SWE-bench Verified</td>
+<td style="padding:11px 13px;text-align:center;color:#34d399;font-weight:700;border-bottom:1px solid #21262d;">96.0</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;border-bottom:1px solid #21262d;">95</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;border-bottom:1px solid #21262d;">85.2</td>
+<td style="padding:11px 13px;text-align:center;color:#8b949e;border-bottom:1px solid #21262d;">88.6</td>
+<td style="padding:11px 13px;color:#6e7681;font-size:12px;border-bottom:1px solid #21262d;">each model's own, §8.2 prose</td>
+</tr>
+<tr style="background:#0a0e13;">
+<td style="padding:11px 13px;color:#c9d1d9;border-bottom:1px solid #21262d;">SWE-bench Pro</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;border-bottom:1px solid #21262d;">79.2</td>
+<td style="padding:11px 13px;text-align:center;color:#a78bfa;font-weight:700;border-bottom:1px solid #21262d;">80</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;border-bottom:1px solid #21262d;">63.2</td>
+<td style="padding:11px 13px;text-align:center;color:#8b949e;border-bottom:1px solid #21262d;">69.2</td>
+<td style="padding:11px 13px;color:#6e7681;font-size:12px;border-bottom:1px solid #21262d;">Opus 5 card, Table 8.1.A</td>
+</tr>
+<tr>
+<td style="padding:11px 13px;color:#c9d1d9;border-bottom:1px solid #21262d;">Frontier-Bench v0.1</td>
+<td style="padding:11px 13px;text-align:center;color:#34d399;font-weight:700;border-bottom:1px solid #21262d;">43.3</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;border-bottom:1px solid #21262d;">33.7</td>
+<td style="padding:11px 13px;text-align:center;color:#6e7681;border-bottom:1px solid #21262d;">n/r</td>
+<td style="padding:11px 13px;text-align:center;color:#8b949e;border-bottom:1px solid #21262d;">18.7</td>
+<td style="padding:11px 13px;color:#6e7681;font-size:12px;border-bottom:1px solid #21262d;">Opus 5 card</td>
+</tr>
+<tr style="background:#0a0e13;">
+<td style="padding:11px 13px;color:#c9d1d9;border-bottom:1px solid #21262d;">ARC-AGI-3</td>
+<td style="padding:11px 13px;text-align:center;color:#34d399;font-weight:700;border-bottom:1px solid #21262d;">30.2</td>
+<td style="padding:11px 13px;text-align:center;color:#6e7681;border-bottom:1px solid #21262d;">n/r</td>
+<td style="padding:11px 13px;text-align:center;color:#6e7681;border-bottom:1px solid #21262d;">n/r</td>
+<td style="padding:11px 13px;text-align:center;color:#8b949e;border-bottom:1px solid #21262d;">1.5</td>
+<td style="padding:11px 13px;color:#6e7681;font-size:12px;border-bottom:1px solid #21262d;">Opus 5 card</td>
+</tr>
+<tr>
+<td style="padding:11px 13px;color:#c9d1d9;border-bottom:1px solid #21262d;">Terminal-Bench 2.1</td>
+<td style="padding:11px 13px;text-align:center;color:#6e7681;border-bottom:1px solid #21262d;">dropped</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;border-bottom:1px solid #21262d;">84.3</td>
+<td style="padding:11px 13px;text-align:center;color:#56b6f2;font-weight:700;border-bottom:1px solid #21262d;">80.4</td>
+<td style="padding:11px 13px;text-align:center;color:#8b949e;border-bottom:1px solid #21262d;">82.7</td>
+<td style="padding:11px 13px;color:#6e7681;font-size:12px;border-bottom:1px solid #21262d;">Fable + Sonnet cards</td>
+</tr>
+<tr style="background:#0a0e13;">
+<td style="padding:11px 13px;color:#c9d1d9;border-bottom:1px solid #21262d;">Price / M tokens</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;border-bottom:1px solid #21262d;">$5 / $25</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;border-bottom:1px solid #21262d;">$10 / $50</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;border-bottom:1px solid #21262d;">$3 / $15</td>
+<td style="padding:11px 13px;text-align:center;color:#8b949e;border-bottom:1px solid #21262d;">$5 / $25</td>
+<td style="padding:11px 13px;color:#6e7681;font-size:12px;border-bottom:1px solid #21262d;">models overview</td>
+</tr>
+<tr>
+<td style="padding:11px 13px;color:#c9d1d9;">Released</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;">Jul 24 '26</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;">Jun 9 '26</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;">Jun 30 '26</td>
+<td style="padding:11px 13px;text-align:center;color:#8b949e;">—</td>
+<td style="padding:11px 13px;color:#6e7681;font-size:12px;">Anthropic</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p style="color:#6e7681;font-size:13px;margin-top:-6px;">"n/r" means not reported in that model's card. Sonnet 5's introductory price of $2 / $10 runs through August 31, 2026. Opus 5, Fable 5 and Sonnet 5 all carry a 1M-token context window and 128k max output.</p>
+
+<!-- ============ 2. THE TRAP ============ -->
+<h2 id="trap" style="color:#34d399;font-size:28px;margin:52px 0 14px 0;font-weight:700;">The column everybody misreads</h2>
+
+<p style="color:#c9d1d9;font-size:17px;">Here is where most of the wrong numbers on the internet come from, and it is almost funny once you see it.</p>
+
+<p style="color:#c9d1d9;font-size:17px;">In the Fable 5 system card, the summary table's first score column is not Fable 5. It is <strong style="color:#fbbf24;">Mythos 5</strong>, the limited-release sibling that ships without the safety classifiers. Fable 5 is the second column. If you skim that table left to right the way you read everything else, you hand Fable a set of scores that belong to a different model.</p>
+
+<div style="background:#0d1117;border:1px solid #21262d;border-left:3px solid #f87171;border-radius:0 6px 6px 0;padding:18px 22px;margin:24px 0;font-family:'SF Mono',Menlo,Consolas,monospace;font-size:13.5px;">
+  <div style="color:#f87171;margin-bottom:10px;">— what the roundups print</div>
+  <div style="color:#8b949e;">Fable 5 &nbsp;·&nbsp; SWE-bench Pro &nbsp;<span style="color:#f87171;">80.3</span></div>
+  <div style="color:#8b949e;">Fable 5 &nbsp;·&nbsp; SWE-bench Verified &nbsp;<span style="color:#f87171;">95.5</span></div>
+  <div style="color:#34d399;margin:16px 0 10px 0;">+ what the card actually says</div>
+  <div style="color:#c9d1d9;">"Claude Mythos 5 achieved 80.3% and Claude Fable 5 achieved 80%."</div>
+  <div style="color:#c9d1d9;">"Mythos 5 achieved 95.5% and Fable 5 achieved 95%."</div>
+</div>
+
+<p style="color:#c9d1d9;font-size:17px;">Two Anthropic cards independently agree on 80 for Fable, because the Opus 5 card lists Fable's SWE-bench Pro in its own table too. The 80.3 floating around belongs to Mythos.</p>
+
+<p style="color:#c9d1d9;font-size:17px;">It gets worse on the other side of the fence. One widely-linked review publishes "SWE-Bench Verified 88.7%" for GPT-5.5 and cites OpenAI's launch announcement as the source. That announcement contains no SWE-bench Verified score at all. I checked the whole page. OpenAI reported GPT-5.5 at <strong style="color:#fbbf24;">58.6% on the public split of SWE-Bench Pro</strong>, with a footnote warning about memorization, and nothing else. The 88.7 was invented and given a real citation, which is worse than no citation.</p>
+
+<!-- ============ 3. RETRACTED ============ -->
+<h2 id="retracted" style="color:#34d399;font-size:28px;margin:52px 0 14px 0;font-weight:700;">Both coding benchmarks got retracted this year</h2>
+
+<p style="color:#c9d1d9;font-size:17px;">This is the part nobody put in a headline, and it changes how you should read every table above.</p>
+
+<div style="background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:0;margin:24px 0;overflow:hidden;">
+  <div style="background:#161b22;padding:10px 18px;color:#fbbf24;font-family:'SF Mono',Menlo,monospace;font-size:11px;letter-spacing:2px;">TIMELINE</div>
+  <div style="padding:20px 22px;">
+    <div style="margin-bottom:18px;padding-left:16px;border-left:2px solid #f87171;">
+      <div style="color:#f87171;font-family:'SF Mono',Menlo,monospace;font-size:12px;">FEB 23, 2026</div>
+      <div style="color:#c9d1d9;font-size:15.5px;margin-top:4px;">OpenAI publishes "Why SWE-bench Verified no longer measures frontier coding capabilities." Verbatim: <em>"This is why we have stopped reporting SWE-bench Verified scores, and we recommend that other model developers do so too."</em> They found 59.4% or more of audited failed problems had flawed tests.</div>
+    </div>
+    <div style="margin-bottom:18px;padding-left:16px;border-left:2px solid #fbbf24;">
+      <div style="color:#fbbf24;font-family:'SF Mono',Menlo,monospace;font-size:12px;">APR 23, 2026</div>
+      <div style="color:#c9d1d9;font-size:15.5px;margin-top:4px;">GPT-5.5 ships reporting 58.6% on SWE-Bench Pro, already footnoted with a memorization warning.</div>
+    </div>
+    <div style="margin-bottom:18px;padding-left:16px;border-left:2px solid #f87171;">
+      <div style="color:#f87171;font-family:'SF Mono',Menlo,monospace;font-size:12px;">JUL 8, 2026</div>
+      <div style="color:#c9d1d9;font-size:15.5px;margin-top:4px;">OpenAI audits SWE-Bench Pro's 731-task public split. Verbatim: <em>"we find widespread task issues in SWE-Bench Pro and estimate that ~30% of the tasks are broken."</em> Their agent pipeline flagged 200 tasks, five human engineers per task flagged 249. Then: <em>"we retract our earlier recommendation to adopt SWE-Bench Pro."</em></div>
+    </div>
+    <div style="padding-left:16px;border-left:2px solid #34d399;">
+      <div style="color:#34d399;font-family:'SF Mono',Menlo,monospace;font-size:12px;">JUL 24, 2026</div>
+      <div style="color:#c9d1d9;font-size:15.5px;margin-top:4px;">Opus 5 ships. Anthropic's headline coding benchmark is now Frontier-Bench v0.1, built by the Terminal-Bench team, 74 tasks spanning coding, finance, music, biology and hardware design.</div>
+    </div>
+  </div>
+</div>
+
+<p style="color:#c9d1d9;font-size:17px;">Read that again. Inside five months, the two coding benchmarks the entire industry quoted at each other were both publicly disowned by one of the labs that quoted them. Not by critics. By OpenAI, about evals OpenAI itself had recommended.</p>
+
+<p style="color:#c9d1d9;font-size:17px;">The flaws were not cheating. They were spec defects: tests that enforce implementation details the prompt never asked for, so a functionally correct fix fails. Underspecified prompts. Low-coverage tests. Misleading task descriptions. In other words, a model could be <em>right</em> and score wrong.</p>
+
+<!-- ============ 4. THE THEORY ============ -->
+<h2 id="theory" style="color:#34d399;font-size:28px;margin:52px 0 14px 0;font-weight:700;">The theory: what a benchmark score actually measures</h2>
+
+<p style="color:#c9d1d9;font-size:17px;">The transferable idea here is older than any of these models, and once you have it you cannot read a leaderboard the same way.</p>
+
+<div style="background:#0d1117;border-left:3px solid #34d399;padding:20px 24px;margin:24px 0;border-radius:0 6px 6px 0;">
+  <div style="color:#34d399;font-family:'SF Mono',Menlo,monospace;font-size:11px;letter-spacing:2px;margin-bottom:10px;">THE PRINCIPLE</div>
+  <p style="color:#e6edf3;font-size:19px;margin:0;line-height:1.6;">A benchmark score is a measurement of a model <em>and</em> a harness <em>and</em> a scoring rule, together. Change any one of the three and the number is no longer comparable, even for the same model on the same day.</p>
+</div>
+
+<p style="color:#c9d1d9;font-size:17px;"><strong style="color:#e6edf3;">Why it's true.</strong> This is <a href="https://en.wikipedia.org/wiki/Goodhart%27s_law" style="color:#56b6f2;">Goodhart's Law</a> with a compiler attached. Goodhart's formulation is that when a measure becomes a target, it stops being a good measure. The mechanism is that everyone optimizes the <em>proxy</em> rather than the thing the proxy was standing in for. Labs tune scaffolds, retry counts, effort settings and prompt formats against the eval, and the score climbs while the underlying capability moves less than the graph suggests. Meanwhile the eval itself ages: its tests were written against a snapshot of reality, and the parts of the task the test forgot to specify quietly become the parts models get punished for guessing.</p>
+
+<p style="color:#c9d1d9;font-size:17px;">Measurement people call the missing piece construct validity. The construct you care about is "can this thing fix my code." The measure is "did the repo's existing test suite go green." Those overlap. They are not the same thing, and the July audit is exactly what the gap looks like when someone finally checks: roughly a third of the tasks could not have measured the construct no matter which model ran them.</p>
+
+<p style="color:#c9d1d9;font-size:17px;"><strong style="color:#e6edf3;">Here is the proof inside Anthropic's own documents.</strong> GDPval-AA is an Elo score, run externally by Artificial Analysis. Watch what happens across three cards released seven weeks apart:</p>
+
+<div style="overflow-x:auto;margin:20px 0;">
+<table style="width:100%;border-collapse:collapse;background:#0d1117;font-size:14px;min-width:520px;">
+<thead><tr style="background:#161b22;">
+<th style="padding:11px 13px;text-align:left;color:#fbbf24;border-bottom:2px solid #21262d;font-family:'SF Mono',Menlo,monospace;font-size:12px;">MODEL</th>
+<th style="padding:11px 13px;text-align:center;color:#a78bfa;border-bottom:2px solid #21262d;font-family:'SF Mono',Menlo,monospace;font-size:12px;">IN FABLE'S CARD</th>
+<th style="padding:11px 13px;text-align:center;color:#34d399;border-bottom:2px solid #21262d;font-family:'SF Mono',Menlo,monospace;font-size:12px;">IN OPUS 5'S CARD</th>
+<th style="padding:11px 13px;text-align:center;color:#f87171;border-bottom:2px solid #21262d;font-family:'SF Mono',Menlo,monospace;font-size:12px;">DELTA</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:11px 13px;color:#c9d1d9;border-bottom:1px solid #21262d;">Claude Fable 5</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;border-bottom:1px solid #21262d;">1932</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;border-bottom:1px solid #21262d;">1747</td>
+<td style="padding:11px 13px;text-align:center;color:#f87171;font-weight:700;border-bottom:1px solid #21262d;">−185</td></tr>
+<tr style="background:#0a0e13;"><td style="padding:11px 13px;color:#c9d1d9;">Claude Opus 4.8</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;">1890</td>
+<td style="padding:11px 13px;text-align:center;color:#c9d1d9;">1593</td>
+<td style="padding:11px 13px;text-align:center;color:#f87171;font-weight:700;">−297</td></tr>
+</tbody>
+</table>
+</div>
+
+<p style="color:#c9d1d9;font-size:17px;">Same models. Same publisher. Same externally-run leaderboard. Nearly 300 Elo points of difference, because they are different snapshots and different versions of the eval. Neither number is a lie. They are simply not comparable, and any table that stacks them in one column is fiction assembled out of true parts.</p>
+
+<p style="color:#c9d1d9;font-size:17px;"><strong style="color:#e6edf3;">How you apply it.</strong> Three rules I now use before quoting any score. One: find the harness. If two numbers came from different scaffolds, they are two different experiments. GPT-5.5's 83.4 on Terminal-Bench was run on the Codex harness, Claude's on mini-SWE-agent, and putting them in adjacent cells implies a comparison that was never performed. Two: find the trial count. Opus 5's 96.0 is a mean over five trials; a single-run number next to it is a different kind of object. Three: read the footnotes before the table, because that is where the fallbacks, the effort settings and the memorization warnings live.</p>
+
+<!-- ============ 5. FABLE ============ -->
+<h2 id="fable" style="color:#34d399;font-size:28px;margin:52px 0 14px 0;font-weight:700;">Why Fable 5's numbers are product scores, not model scores</h2>
+
+<p style="color:#c9d1d9;font-size:17px;">I have been honest that Fable 5 never fully convinced me, and reading its card finally explained the feeling.</p>
+
+<p style="color:#c9d1d9;font-size:17px;">Fable ships with safety classifiers that can decline a request outright. When that happens mid-benchmark, the run falls back to Opus 4.8 for the rest of the trajectory. On Terminal-Bench 2.1, the card states that <strong style="color:#fbbf24;">20.9% of Fable's trials hit a safety refusal and finished on Opus 4.8</strong>. Fable's published 84.3 is therefore roughly four-fifths Fable and one-fifth the previous Opus.</p>
+
+<p style="color:#c9d1d9;font-size:17px;">Anthropic says so plainly in the card's own table note: Fable's scores reflect its production safeguards, including the fallback, which is why some benchmarks come in slightly lower for Fable than for Mythos. That is a fair and unusually transparent disclosure. It also means Fable's numbers describe a <em>product</em>, and Mythos's describe the model underneath it.</p>
+
+<p style="color:#c9d1d9;font-size:17px;">Which matches what it feels like to work with. Fable has the wider band. It reaches further on the problems it takes, and then some fraction of the time it simply declines and something else finishes the job. That inconsistency is the thing my gut was reacting to before I had a number for it.</p>
+
+<!-- ============ 6. MY EVAL ============ -->
+<h2 id="myeval" style="color:#34d399;font-size:28px;margin:52px 0 14px 0;font-weight:700;">How I actually test a model</h2>
+
+<p style="color:#c9d1d9;font-size:17px;">So I stopped outsourcing the question. I keep a set of my own scripts where I already know the exact bug count, because I put the bugs there. Then I hand the whole thing over cold and watch.</p>
+
+<p style="color:#c9d1d9;font-size:17px;">Catching them is the easy half. Every frontier model finds most seeded bugs now, and a pass rate on its own tells me almost nothing. What I grade is <strong style="color:#e6edf3;">how it fixes them</strong>, on three things:</p>
+
+<div style="background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:22px;margin:24px 0;">
+  <div style="margin-bottom:20px;">
+    <div style="color:#34d399;font-family:'SF Mono',Menlo,monospace;font-size:13px;margin-bottom:6px;">01 — BAND-AID OR SURGICAL</div>
+    <div style="color:#c9d1d9;font-size:16px;">Did it wrap the symptom in a try/except and move on, or did it go find why the value was wrong in the first place? A patch that makes the error stop appearing is not a fix. It is a louder silence.</div>
+  </div>
+  <div style="margin-bottom:20px;">
+    <div style="color:#34d399;font-family:'SF Mono',Menlo,monospace;font-size:13px;margin-bottom:6px;">02 — PROPORTIONALITY</div>
+    <div style="color:#c9d1d9;font-size:16px;">Is the size of the diff proportionate to the code it is attaching itself to? A one-line bug that comes back as a 200-line refactor is a model showing off, and it costs me the review. A structural bug that comes back as one line is a model that did not understand it.</div>
+  </div>
+  <div>
+    <div style="color:#34d399;font-family:'SF Mono',Menlo,monospace;font-size:13px;margin-bottom:6px;">03 — DOES IT FIT WHAT'S AROUND IT</div>
+    <div style="color:#c9d1d9;font-size:16px;">Does the fix match the conventions already in that file, or did it import a new pattern for one function? Code that reads like the code around it is code I can still maintain in six months.</div>
+  </div>
+</div>
+
+<p style="color:#c9d1d9;font-size:17px;">That is a rubric, not a leaderboard, and it is deliberately unfair to whichever model I happen to be testing, because my scripts are not in anyone's training data and the bugs are the kind I actually write. Which is the whole point. The construct I care about is "can this thing fix <em>my</em> code," so I measure that directly instead of trusting a proxy someone else validated against someone else's repos.</p>
+
+<p style="color:#c9d1d9;font-size:17px;">You can build the same thing in an afternoon. Take three files you know cold. Break them in ways you have genuinely broken things before, write down the count, and keep the file somewhere the model cannot see until you hand it over. Run every new release against it. Grade the diffs, not the pass rate. Inside two releases you will trust your own set more than any table on the internet, including the one further up this page.</p>
+
+<!-- ============ 7. VERDICT ============ -->
+<h2 id="verdict" style="color:#34d399;font-size:28px;margin:52px 0 14px 0;font-weight:700;">My verdict on Opus 5</h2>
+
+<p style="color:#c9d1d9;font-size:17px;">I am still early in my own runs, so take this as a first read rather than a final grade.</p>
+
+<p style="color:#c9d1d9;font-size:17px;">This is the first model since the last Sonnet that I believe is a real upgrade rather than a repackaging. Everything between them felt like the same capability with different padding. Opus 5 does not. The fixes come back smaller and more targeted, and it argues with me less about things it turned out to be wrong about.</p>
+
+<p style="color:#c9d1d9;font-size:17px;">The benchmark that backs the feeling is ARC-AGI-3, because it is the one built to resist memorization. 1.5 to 30.2 from Opus 4.8 is not a scaffold improvement. Something underneath moved. Frontier-Bench points the same way, and it is a brand new eval, which means nobody has had time to overfit to it yet. That is a genuinely useful property for about six more months.</p>
+
+<p style="color:#c9d1d9;font-size:17px;">And it has made Fable easy to forget, which I did not expect to write. Fable still has the wider reach on paper. But at half the input price, without the refusal fallback in the middle of a long run, Opus 5 is the one I keep pointing at my own code.</p>
+
+<p style="color:#c9d1d9;font-size:17px;">Ask me again in three weeks when my bug set has more data. That is the only number here I will fully vouch for, because it is the only one I ran myself.</p>
+
+<!-- ============ 8. FAQ ============ -->
+<h2 id="faq" style="color:#34d399;font-size:28px;margin:52px 0 18px 0;font-weight:700;">FAQ</h2>
+
+<div style="background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:6px 22px;margin:0 0 30px 0;">
+  <div style="padding:16px 0;border-bottom:1px solid #21262d;">
+    <div style="color:#e6edf3;font-size:17px;font-weight:700;margin-bottom:6px;">What is Claude Opus 5's SWE-bench Verified score?</div>
+    <div style="color:#c9d1d9;font-size:16px;">96.0%, averaged over five trials, reported in section 8.2 of the Opus 5 system card. It is not in the card's summary table and not in the announcement page at all, which is why most roundups miss it or invent one.</div>
+  </div>
+  <div style="padding:16px 0;border-bottom:1px solid #21262d;">
+    <div style="color:#e6edf3;font-size:17px;font-weight:700;margin-bottom:6px;">Is Opus 5 better than Fable 5?</div>
+    <div style="color:#c9d1d9;font-size:16px;">On Frontier-Bench v0.1, yes, 43.3 against 33.7. On SWE-bench Pro they are within a point, 79.2 against 80. Opus 5 is half the input price and has no safety-classifier fallback, so for sustained agentic coding it is the better buy right now.</div>
+  </div>
+  <div style="padding:16px 0;border-bottom:1px solid #21262d;">
+    <div style="color:#e6edf3;font-size:17px;font-weight:700;margin-bottom:6px;">Why did Anthropic switch to Frontier-Bench?</div>
+    <div style="color:#c9d1d9;font-size:16px;">Frontier-Bench v0.1 comes from the Terminal-Bench team and covers 74 tasks across coding, finance, music, biology and hardware design. Given that OpenAI publicly retired SWE-bench Verified in February 2026 and retracted its recommendation of SWE-bench Pro in July, moving to a newer eval is the reasonable call.</div>
+  </div>
+  <div style="padding:16px 0;border-bottom:1px solid #21262d;">
+    <div style="color:#e6edf3;font-size:17px;font-weight:700;margin-bottom:6px;">Is SWE-bench still worth reading?</div>
+    <div style="color:#c9d1d9;font-size:16px;">As a rough floor, yes. As a ranking between two models from different cards, no. About 30% of SWE-Bench Pro's public tasks are broken by OpenAI's own audit, and the failure mode punishes correct fixes, so small gaps between models are inside the noise.</div>
+  </div>
+  <div style="padding:16px 0;">
+    <div style="color:#e6edf3;font-size:17px;font-weight:700;margin-bottom:6px;">What does Claude Opus 5 cost?</div>
+    <div style="color:#c9d1d9;font-size:16px;">$5 per million input tokens and $25 per million output, unchanged from Opus 4.8. There is a Fast mode at twice the price running about 2.5 times the default speed. Context window is 1M tokens with 128k max output.</div>
+  </div>
+</div>
+
+<!-- ============ SOURCES ============ -->
+<h3 style="color:#e6edf3;font-size:20px;margin:40px 0 12px 0;">Sources</h3>
+<p style="color:#8b949e;font-size:15px;line-height:2;">
+<a href="https://www.anthropic.com/news/claude-opus-5" style="color:#56b6f2;">Anthropic — Claude Opus 5 announcement</a><br>
+<a href="https://www.anthropic.com/claude-fable-5-mythos-5-system-card" style="color:#56b6f2;">Anthropic — Claude Fable 5 &amp; Mythos 5 system card</a><br>
+<a href="https://platform.claude.com/docs/en/about-claude/models/overview" style="color:#56b6f2;">Anthropic — models overview (pricing, context windows, model IDs)</a><br>
+<a href="https://www.frontierbench.ai/announcement" style="color:#56b6f2;">Frontier-Bench v0.1 announcement</a><br>
+<a href="https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/" style="color:#56b6f2;">OpenAI — Why SWE-bench Verified no longer measures frontier coding capabilities</a><br>
+<a href="https://openai.com/index/separating-signal-from-noise-coding-evaluations/" style="color:#56b6f2;">OpenAI — Separating signal from noise in coding evaluations</a><br>
+<a href="https://en.wikipedia.org/wiki/Goodhart%27s_law" style="color:#56b6f2;">Goodhart's Law</a>
+</p>
+
+<!-- ============ MORE READING ============ -->
+<div style="background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:20px 24px;margin:34px 0;">
+  <div style="color:#fbbf24;font-family:'SF Mono',Menlo,monospace;font-size:11px;letter-spacing:2px;margin-bottom:12px;">MORE READING</div>
+  <div style="font-size:16px;line-height:2;">
+    <a href="https://jessemoraga.com/2026/06/12/i-almost-gave-up-on-fable-5-then-i-told-it-to-build-me-a-dev-team/" style="color:#56b6f2;">I almost gave up on Fable 5, then I told it to build me a dev team</a><br>
+    <a href="https://jessemoraga.com/2026/06/14/how-to-build-an-ai-agent-that-audits-your-own-code/" style="color:#56b6f2;">How to build an AI agent that audits your own code</a><br>
+    <a href="https://jessemoraga.com/2026/07/06/business-automation-for-solo-operators-stop-state-drift/" style="color:#56b6f2;">Business automation for solo operators: stop state drift</a><br>
+    <a href="https://jessemoraga.com/blog" style="color:#56b6f2;">All posts</a>
+  </div>
+</div>
+
+<!-- ============ WHOAMI FOOTER ============ -->
+<div style="background:#0d1117;border:1px solid #21262d;border-radius:10px;overflow:hidden;margin:40px 0 0 0;">
+  <div style="background:#161b22;padding:9px 14px;border-bottom:1px solid #21262d;">
+    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#f87171;margin-right:6px;"></span>
+    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#fbbf24;margin-right:6px;"></span>
+    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#34d399;"></span>
+  </div>
+  <div style="padding:22px 20px;font-family:'SF Mono',Menlo,Consolas,monospace;font-size:14px;line-height:1.9;">
+    <div style="color:#34d399;">$ whoami</div>
+    <div style="color:#c9d1d9;">Jesse Moraga — software developer who operates what he builds.</div>
+    <div style="color:#c9d1d9;">A real California company runs end to end on a system I wrote. One operator.</div>
+    <div style="color:#34d399;margin-top:12px;">$ links</div>
+    <div><a href="https://github.com/JesseMoraga" style="color:#56b6f2;text-decoration:none;">github.com/JesseMoraga</a></div>
+    <div><a href="https://jessemoraga.com/blog" style="color:#56b6f2;text-decoration:none;">jessemoraga.com/blog</a></div>
+    <div style="color:#6e7681;">jesse@jessemoraga.com</div>
+    <div style="color:#6e7681;margin-top:12px;">$ <span style="background:#34d399;display:inline-block;width:8px;height:14px;vertical-align:-2px;"></span></div>
+  </div>
+</div>
+
+</div>
+
+  </div>
+</article>
+<section class="related" style="max-width:760px;margin:0 auto;padding:8px 24px 8px;"><h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(20px,2.6vw,26px);letter-spacing:-0.02em;margin:0 0 18px;">Keep reading</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;"><a href="/2026/07/10/ai-chip-supply-chain-explained/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">The AI Chip Supply Chain: How It’s Made and Who Controls It</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Jul 2026</span></a><a href="/2026/07/10/writing-heavy-music-workflow/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#7A45D8,#BE4DBE);">Music</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">Writing Heavy Music with flat.io, Guitar Pro, and Ableton</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Jul 2026</span></a><a href="/2026/07/06/business-automation-for-solo-operators-stop-state-drift/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">Business Automation for Solo Operators: Stop State Drift</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Jul 2026</span></a></div></section>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>
