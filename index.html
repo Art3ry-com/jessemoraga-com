@@ -114,7 +114,7 @@
       <!-- live credibility strip -->
       <div data-reveal style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; max-width:760px; margin:54px auto 0;">
         <div style="padding:20px 16px; border-radius:16px; background:rgba(255,255,255,0.66); border:1px solid rgba(124,92,246,0.16); box-shadow:0 8px 26px rgba(99,102,241,0.1); backdrop-filter:blur(10px);">
-          <div data-count="53" style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:38px; line-height:1; background:linear-gradient(120deg,#9163EE,#4FA6D6); -webkit-background-clip:text; background-clip:text; color:transparent;">53</div>
+          <div data-count="54" style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:38px; line-height:1; background:linear-gradient(120deg,#9163EE,#4FA6D6); -webkit-background-clip:text; background-clip:text; color:transparent;">54</div>
           <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.04em; color:#8C8676; text-transform:uppercase;">posts published</div>
         </div>
         <div style="padding:20px 16px; border-radius:16px; background:rgba(255,255,255,0.66); border:1px solid rgba(124,92,246,0.16); box-shadow:0 8px 26px rgba(99,102,241,0.1); backdrop-filter:blur(10px);">
@@ -166,7 +166,7 @@
 
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:22px;">
       <!-- featured -->
-      <a href="/2026/09/02/idempotency-fundamentals-why-a-retry-is-only-safe-when-you/" data-reveal data-card style="grid-column:1 / -1; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0; border-radius:24px; overflow:hidden; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 14px 40px rgba(99,102,241,0.12); transition:transform .3s, box-shadow .3s;">
+      <a href="/2026/09/05/dead-letter-queues-where-failed-work-goes-so-it-never/" data-reveal data-card style="grid-column:1 / -1; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0; border-radius:24px; overflow:hidden; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 14px 40px rgba(99,102,241,0.12); transition:transform .3s, box-shadow .3s;">
         <div style="position:relative; min-height:240px; background:linear-gradient(135deg,#7C6AE2,#4FA6D6); display:flex; align-items:flex-end; padding:22px; overflow:hidden;">
           <div aria-hidden="true" style="position:absolute; inset:0; background-image:repeating-linear-gradient(45deg, rgba(255,255,255,0.08) 0 14px, transparent 14px 28px);"></div>
           <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.12) 1px,transparent 1px); background-size:30px 30px; opacity:0.5;"></div>
@@ -177,13 +177,27 @@
             <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 11px; border-radius:999px; background:linear-gradient(135deg,#7C6AE2,#4FA6D6);">Architecture</span>
             <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">Featured · Architecture &middot; Sep 2026</span>
           </div>
-          <h3 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,32px); line-height:1.12; letter-spacing:-0.02em; margin:16px 0 0;">Idempotency Fundamentals: Why a Retry Is Only Safe When You Planned for It</h3>
-          <p style="margin:14px 0 0; color:#C9C5B6; line-height:1.6; font-size:15.5px;">Idempotency explained plainly: why a timeout is not a failure, what an idempotency key really names, and the pattern that stops double charges.</p>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,32px); line-height:1.12; letter-spacing:-0.02em; margin:16px 0 0;">Dead Letter Queues: Where Failed Work Goes So It Never Disappears</h3>
+          <p style="margin:14px 0 0; color:#C9C5B6; line-height:1.6; font-size:15.5px;">Dead letter queues explained: why silent failures are the worst bug in a small business back office, and how to give every failed job a durable destination.</p>
           <span style="margin-top:auto; padding-top:22px; font-family:'Space Grotesk',sans-serif; font-weight:600; color:#7A45D8;">Read article →</span>
         </div>
       </a>
 
       <!-- grid posts -->
+      <a href="/2026/09/02/idempotency-fundamentals-why-a-retry-is-only-safe-when-you/" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; overflow:hidden; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
+        <div style="position:relative; height:150px; background:linear-gradient(135deg,#7C6AE2,#4FA6D6); overflow:hidden;">
+          <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.13) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.13) 1px,transparent 1px); background-size:26px 26px; opacity:0.6;"></div>
+        </div>
+        <div style="padding:20px 22px 24px; display:flex; flex-direction:column; flex:1;">
+          <div style="display:flex; align-items:center; gap:9px;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:4px 10px; border-radius:999px; background:linear-gradient(135deg,#7C6AE2,#4FA6D6);">Architecture</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#A39D8C;">Architecture &middot; Sep 2026</span>
+          </div>
+          <h3 style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:20px; line-height:1.18; letter-spacing:-0.01em; margin:13px 0 0;">Idempotency Fundamentals: Why a Retry Is Only Safe When You Planned for It</h3>
+          <p style="margin:10px 0 0; color:#C9C5B6; font-size:14px; line-height:1.55;">Idempotency explained plainly: why a timeout is not a failure, what an idempotency key really names, and the pattern that stops double charges.</p>
+        </div>
+      </a>
+
       <a href="/2026/07/25/claude-opus-5-benchmarks/" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; overflow:hidden; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
         <div style="position:relative; height:150px; background:linear-gradient(135deg,#9163EE,#4FA6D6); overflow:hidden;">
           <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.13) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.13) 1px,transparent 1px); background-size:26px 26px; opacity:0.6;"></div>
@@ -209,20 +223,6 @@
           </div>
           <h3 style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:20px; line-height:1.18; letter-spacing:-0.01em; margin:13px 0 0;">The AI Chip Supply Chain: How It’s Made and Who Controls It</h3>
           <p style="margin:10px 0 0; color:#C9C5B6; font-size:14px; line-height:1.55;">How AI chips actually get made, where, and who controls the supply chain in 2026 — TSMC, Nvidia, ASML, the 2nm/CoWoS/HBM squeeze — plus the code that decides whether you waste the silicon.</p>
-        </div>
-      </a>
-
-      <a href="/2026/07/10/writing-heavy-music-workflow/" data-reveal data-card style="display:flex; flex-direction:column; border-radius:20px; overflow:hidden; background:#111111; border:1px solid rgba(124,92,246,0.14); box-shadow:0 10px 30px rgba(99,102,241,0.1); transition:transform .3s, box-shadow .3s;">
-        <div style="position:relative; height:150px; background:linear-gradient(135deg,#7A45D8,#BE4DBE); overflow:hidden;">
-          <div aria-hidden="true" style="position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.13) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.13) 1px,transparent 1px); background-size:26px 26px; opacity:0.6;"></div>
-        </div>
-        <div style="padding:20px 22px 24px; display:flex; flex-direction:column; flex:1;">
-          <div style="display:flex; align-items:center; gap:9px;">
-            <span style="font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:4px 10px; border-radius:999px; background:linear-gradient(135deg,#7A45D8,#BE4DBE);">Music</span>
-            <span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#A39D8C;">Music &middot; Jul 2026</span>
-          </div>
-          <h3 style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:20px; line-height:1.18; letter-spacing:-0.01em; margin:13px 0 0;">Writing Heavy Music with flat.io, Guitar Pro, and Ableton</h3>
-          <p style="margin:10px 0 0; color:#C9C5B6; font-size:14px; line-height:1.55;">My actual workflow for writing heavy music — flat.io to Guitar Pro to Ableton — and why genre stops mattering once it&#x27;s all just sound, vibration, and a little distortion.</p>
         </div>
       </a>
     </div>
