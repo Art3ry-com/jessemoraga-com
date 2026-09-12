@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Queues Fundamentals: What a Queue Buys You and What It Costs | Jesse Moraga</title>
+<meta name="description" content="Message queue fundamentals: why putting a queue between your form and your worker trades latency for survivability, and why at-least-once means duplicates.">
+<meta name="author" content="Jesse Moraga">
+<link rel="canonical" href="https://jessemoraga.com/2026/09/12/queues-fundamentals-what-a-queue-buys-you-and-what-it-costs/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/09/12/queues-fundamentals-what-a-queue-buys-you-and-what-it-costs/">
+<meta property="og:title" content="Queues Fundamentals: What a Queue Buys You and What It Costs">
+<meta property="og:description" content="Message queue fundamentals: why putting a queue between your form and your worker trades latency for survivability, and why at-least-once means duplicates.">
+<meta property="og:image" content="https://jessemoraga.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-09-12T08:00:00-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Queues Fundamentals: What a Queue Buys You and What It Costs">
+<meta name="twitter:description" content="Message queue fundamentals: why putting a queue between your form and your worker trades latency for survivability, and why at-least-once means duplicates.">
+<meta name="twitter:image" content="https://jessemoraga.com/og-default.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#FFFFFF;background:#000000;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#C9C5B6}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#FFFFFF}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#FFFFFF}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img{max-width:100%;height:auto;border-radius:14px;display:block;margin:24px auto}
+  .post-content iframe{max-width:100%;width:100%;aspect-ratio:16/9;border:0;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#C9BEF5;padding:2px 7px;border-radius:6px}
+  .related a:hover{transform:translateY(-3px)}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Queues Fundamentals: What a Queue Buys You and What It Costs", "description": "Message queue fundamentals: why putting a queue between your form and your worker trades latency for survivability, and why at-least-once means duplicates.", "datePublished": "2026-09-12T08:00:00-07:00", "dateModified": "2026-09-12T08:00:00-07:00", "articleSection": "Architecture", "inLanguage": "en", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://jessemoraga.com/2026/09/12/queues-fundamentals-what-a-queue-buys-you-and-what-it-costs/"}, "url": "https://jessemoraga.com/2026/09/12/queues-fundamentals-what-a-queue-buys-you-and-what-it-costs/", "image": "https://jessemoraga.com/og-default.png", "author": {"@type": "Person", "name": "Jesse Moraga", "url": "https://jessemoraga.com", "@id": "https://jessemoraga.com/#jesse"}, "publisher": {"@type": "Person", "name": "Jesse Moraga", "@id": "https://jessemoraga.com/#jesse"}}</script>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(0,0,0,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#B2AD99; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#7C6AE2,#4FA6D6);">Architecture</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">By Jesse Moraga &middot; Sep 12, 2026 &middot; 8 min read</span>
+    </div>
+  </div>
+  <div style="max-width:820px; margin:0 auto; padding:8px 24px 40px;">
+<h1>Queues Fundamentals: What a Queue Buys You and What It Costs</h1>
+
+<p class="deck">A queue turns a traffic spike into a backlog, and a backlog is something you can survive.</p>
+
+<p>Here's the failure I see in almost every small-business back office I get handed: a web form that calls a slow thing directly. Somebody hits submit, and behind that submit button the code is charging a card, writing a row, generating a PDF, sending a text, and pinging an AI model, all while the customer sits there watching a spinner. It works fine right up until twelve people submit in the same minute, and then it doesn't work at all, and the twelve leads you paid for are gone.</p>
+
+<p>A queue fixes that. It also hands you a new problem, and if nobody tells you about the new problem you'll ship a system that texts the same person four times.</p>
+
+<p><strong>In this post:</strong></p>
+
+<ul>
+  <li>Why direct calls fall over under load, and what "fall over" actually looks like</li>
+  <li>The mechanism: producer, queue, consumer, and the acknowledgment</li>
+  <li>At-least-once delivery, and why duplicates are the price of not losing work</li>
+  <li>How I run queues in my own back office, including what I refuse to queue</li>
+  <li>When a queue is the wrong call</li>
+</ul>
+
+<h2>1. Why it breaks</h2>
+
+<p>Direct calls couple two things that have no business being coupled: how fast requests arrive, and how fast work gets done. Requests arrive in bursts. You run an ad, a storm rolls through, somebody posts your name in a local group, and suddenly the arrival rate spikes. The work rate doesn't spike. The work rate is whatever your worker and your third-party APIs can actually do, and that number is basically fixed.</p>
+
+<p>When arrivals outrun work in a directly coupled system, requests don't wait politely. They pile onto threads, threads run out, connections time out, your database connection pool gets exhausted by a bunch of requests that are all just sitting there waiting on an outbound API call, and the whole app browns out. The cruel part: the failures hit the people who are still trying to get in, not just the ones who caused the spike. You lose new business because old business is still in flight.</p>
+
+<p>And the retry story is worse. If your worker throws on lead number seven, what happens to lead seven? In a direct-call system, usually nothing. There's no record that it ever existed except a stack trace and a customer who thinks you ignored them. That's the part that actually costs money. Not the downtime. The silent loss.</p>
+
+<p>The common practice I'll push back on: "just make the handler faster." I've watched people spend a week shaving 400 milliseconds off a handler that calls three external APIs they don't control. You can't optimize your way out of a coupling problem. The vendor's latency is not yours to fix.</p>
+
+<h2>2. The mechanism</h2>
+
+<p>A <a href="https://en.wikipedia.org/wiki/Message_queue">message queue</a> is a buffer with a protocol. One side writes messages in, the other side reads them out, and the two sides never have to be up, fast, or healthy at the same time. That's the whole trick. The producer's job ends the second the message is durably stored.</p>
+
+<pre>
+   SPIKE                 BUFFER                   STEADY WORK
+   arrivals              (durable)                fixed rate
+
+  form  ──┐
+  form  ──┤            ┌──────────────────┐
+  form  ──┼──write──►  │ m1 m2 m3 m4 m5 m6│ ──read──►  [ worker ]
+  form  ──┤            └──────────────────┘                │
+  form  ──┘                   ▲                            │
+                              │                       do the work
+       returns 202            │                            │
+       immediately            │                            ▼
+                              │                      ack / delete
+                              │                            │
+                              └──── no ack in time ────────┘
+                                    message reappears
+                                    (redelivery)
+</pre>
+
+<p><em>Look at the loop on the right. The message is not deleted when the worker picks it up. It's deleted when the worker says it finished. Everything interesting about queues lives in that gap.</em></p>
+
+<p>Walk the path. The form writes a message and returns right away, usually with an ID and a "we got it." The queue holds that message on disk. A worker pulls it, does the slow stuff, then sends an acknowledgment, and only then does the queue drop it. If the worker crashes halfway through, or the machine reboots, or the network eats the ack, the message never got acknowledged, so after a visibility timeout it comes back and somebody else picks it up.</p>
+
+<p>That's at-least-once delivery, and it's the default in most real systems for a good reason: the alternative, at-most-once, means you delete the message on pickup and lose it if the worker dies. Queues choose duplicates over loss, because duplicates are a problem you can engineer around and loss is a problem you can only apologize for.</p>
+
+<h3>The two costs, named plainly</h3>
+
+<p><strong>Latency.</strong> The customer no longer gets the finished result on submit. They get a receipt. The real answer arrives later, by text, by email, by a page that updates. You have to design for that, and you have to tell the human what's happening, because "thanks, we'll be in touch" with no follow-through feels exactly like being ignored.</p>
+
+<p><strong>Duplicates.</strong> Every consumer has to be safe to run twice on the same message. That means idempotency: an operation you can repeat without changing the outcome. Usually a stable key on the message, plus a check before the side effect. Was this key already processed? Then ack and move on. It's not hard, it's just non-optional, and skipping it is how you end up charging somebody twice.</p>
+
+<p>There's a third cost people don't mention: ordering. Most queues don't strictly guarantee it once you have more than one consumer. If your work has order dependencies, either handle them in the message design or don't parallelize that lane.</p>
+
+<h2>3. How I run it</h2>
+
+<p>In my own company's back office, intake is the front door and it's the thing I trust the least, because it's the thing I control the least. A lead can come from a web form, from a phone call the assistant handles, from an email. All of them land in the same place: a durable write, then a receipt, then out. The slow work happens after.</p>
+
+<p>Downstream of that write, the work fans into lanes: enrich the record, draft the quote, notify me in the field, start the follow-up sequence. Each lane is its own consumer with its own retry behavior, because they don't fail the same way and they shouldn't be punished for each other's outages. If the model provider is having a rough afternoon, the drafting lane backs up and everything else keeps moving. The backlog drains when the provider comes back. Nobody downstream knows anything happened except that a quote landed later than usual.</p>
+
+<p>Every message carries an idempotency key tied to the lead, not to the attempt. Before any side effect that a human can see, a text, an email, a record write, the consumer checks whether that key already produced that effect. Redelivery is normal in my system, not an emergency. I expect it. I'd rather see the same job twice and no-op the second one than find out three days later that a lead evaporated between two services.</p>
+
+<p>What I deliberately don't queue: the acknowledgment to the human. The "we got your request" has to be synchronous, because the customer is standing there deciding whether we're real. Same with anything that determines what the next screen shows. If the user's next action depends on the answer, the answer can't be asynchronous. Everything else, the quoting, the sending, the invoicing runs, the follow-up nudges, the field updates, all of that goes in a lane and gets worked at whatever rate the world allows.</p>
+
+<p>And the boring but critical piece: dead letters. When a message fails past its retry budget, it goes to a dead-letter queue, and that queue has eyes on it. A dead-letter queue nobody reads is a landfill. That's where real work goes to quietly die while your dashboard stays green.</p>
+
+<h2>4. Tradeoffs</h2>
+
+<p>Don't put a queue in front of something that isn't slow, isn't spiky, and isn't allowed to fail. A queue adds a moving part, a deployment, a monitoring surface, a place where messages get stuck, and a whole class of bugs that only show up under redelivery, which is to say the bugs show up at 2 a.m. during the exact spike you built the thing for. If your volume is a handful of submissions a day and the handler is fast and self-contained, a direct call with a good error path and a logged record is simpler and honestly more reliable, because there's less of it. Queues also make debugging harder: the stack trace no longer spans the whole story, so you need correlation IDs threaded through every message or you'll be reading three sets of logs trying to figure out where a lead went. Add the queue when the coupling actually hurts. Not before, because "we might scale" is not a requirement, it's a mood.</p>
+
+<h2>Takeaway</h2>
+
+<ul>
+  <li>Buffer the spike: write the message, return a receipt, do the slow work behind the queue.</li>
+  <li>Make every consumer idempotent, because at-least-once delivery means you will process the same message twice.</li>
+  <li>Watch the dead-letter queue like it's a customer, because it is one.</li>
+</ul>
+
+<p><strong>One line: a queue doesn't make the work faster, it makes the work survivable, and you pay for that in latency and duplicates.</strong></p>
+
+<p>Jesse</p>
+  </div>
+</article>
+<section class="related" style="max-width:760px;margin:0 auto;padding:8px 24px 8px;"><h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(20px,2.6vw,26px);letter-spacing:-0.02em;margin:0 0 18px;">Keep reading</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;"><a href="/2026/09/09/consistency-models-explained-what-eventually-consistent/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#7C6AE2,#4FA6D6);">Architecture</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">Consistency Models Explained: What Eventually Consistent Means for Your Inbox</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Sep 2026</span></a><a href="/2026/09/07/single-source-of-truth-the-board-mirrors-reality-the-ledger/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#7C6AE2,#4FA6D6);">Architecture</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">Single Source of Truth: The Board Mirrors Reality, the Ledger Is Reality</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Sep 2026</span></a><a href="/2026/09/05/dead-letter-queues-where-failed-work-goes-so-it-never/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#7C6AE2,#4FA6D6);">Architecture</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">Dead Letter Queues: Where Failed Work Goes So It Never Disappears</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Sep 2026</span></a></div></section>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>
