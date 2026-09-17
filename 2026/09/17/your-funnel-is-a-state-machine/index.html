@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Funnel Is a State Machine | Jesse Moraga</title>
+<meta name="description" content="Funnel state machine design: model lead, quoted, confirmed, paid as named states so a decline can never legally become an invoice.">
+<meta name="author" content="Jesse Moraga">
+<link rel="canonical" href="https://jessemoraga.com/2026/09/17/your-funnel-is-a-state-machine/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/09/17/your-funnel-is-a-state-machine/">
+<meta property="og:title" content="Your Funnel Is a State Machine">
+<meta property="og:description" content="Funnel state machine design: model lead, quoted, confirmed, paid as named states so a decline can never legally become an invoice.">
+<meta property="og:image" content="https://jessemoraga.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-09-17T08:00:00-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Your Funnel Is a State Machine">
+<meta name="twitter:description" content="Funnel state machine design: model lead, quoted, confirmed, paid as named states so a decline can never legally become an invoice.">
+<meta name="twitter:image" content="https://jessemoraga.com/og-default.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#FFFFFF;background:#000000;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#C9C5B6}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#FFFFFF}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#FFFFFF}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img{max-width:100%;height:auto;border-radius:14px;display:block;margin:24px auto}
+  .post-content iframe{max-width:100%;width:100%;aspect-ratio:16/9;border:0;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#C9BEF5;padding:2px 7px;border-radius:6px}
+  .related a:hover{transform:translateY(-3px)}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Your Funnel Is a State Machine", "description": "Funnel state machine design: model lead, quoted, confirmed, paid as named states so a decline can never legally become an invoice.", "datePublished": "2026-09-17T08:00:00-07:00", "dateModified": "2026-09-17T08:00:00-07:00", "articleSection": "Business", "inLanguage": "en", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://jessemoraga.com/2026/09/17/your-funnel-is-a-state-machine/"}, "url": "https://jessemoraga.com/2026/09/17/your-funnel-is-a-state-machine/", "image": "https://jessemoraga.com/og-default.png", "author": {"@type": "Person", "name": "Jesse Moraga", "url": "https://jessemoraga.com", "@id": "https://jessemoraga.com/#jesse"}, "publisher": {"@type": "Person", "name": "Jesse Moraga", "@id": "https://jessemoraga.com/#jesse"}}</script>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(0,0,0,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#B2AD99; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#4FA6D6,#66D9EF);">Business</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">By Jesse Moraga &middot; Sep 17, 2026 &middot; 10 min read</span>
+    </div>
+  </div>
+  <div style="max-width:820px; margin:0 auto; padding:8px 24px 40px;">
+<h1>Your Funnel Is a State Machine</h1>
+
+<p class="deck">If you model your funnel as named states with legal transitions, a declined quote can never turn into an invoice, because the code won't let it.</p>
+
+<p>Most small business funnels are a spreadsheet plus vibes. A lead comes in, somebody moves a card, somebody remembers to send the quote, and three days later a worker fires off an invoice to a person who already said no. That's not a people problem. That's a missing state machine.</p>
+
+<p><strong>In this post:</strong></p>
+<ul>
+  <li>Why funnels rot when stages are labels instead of states</li>
+  <li>The finite state machine model, with money sitting on the edges</li>
+  <li>How I run named states and badge-matched email in my own intake pipeline</li>
+  <li>Where the rigidity hurts, and when a looser model is the right call</li>
+</ul>
+
+<h2>1. Why it breaks</h2>
+
+<p>The classic <a href="https://en.wikipedia.org/wiki/Purchase_funnel">purchase funnel model</a> is a marketing picture: awareness at the top, interest, desire, action at the bottom. It's a good picture. It is a terrible data model, because a picture of a funnel says nothing about what is forbidden. It's descriptive. Your back office needs something prescriptive.</p>
+
+<p>Here's what actually goes wrong. You build stages as strings on a record. "lead", "quoted", "won", "lost", whatever. Then you build automations that read those strings. Follow-up email reads "quoted". Invoice job reads "won". Review request reads "paid". Each one looks correct in isolation, and every one of them is a separate process reading a shared field at a moment it chose.</p>
+
+<p>Now the timing bites. A worker picks up a record, holds it for a bit, does a lookup, formats a document, sends. In the gap between read and send, somebody on the phone marked that client as declined. The worker doesn't know. It already loaded the row. It sends the invoice. In my own intake pipeline that exact thing happened: a worker invoiced a client off a record that was already stale by the time it ran. Nobody was careless. The system simply had no concept of an illegal move.</p>
+
+<p>And that's the real failure. Not the bad email. The fact that "decline, then invoice" was a perfectly ordinary thing for the software to do. It didn't crash. It didn't complain. It did what it was built to do, and the design allowed the worst possible sequence.</p>
+
+<p>I'll say the unpopular part: the CRM pipeline view is partly to blame. Drag-and-drop columns train you to think stages are cosmetic groupings, buckets you shove cards into, freely, in any direction. That interface teaches the wrong mental model to the person building the automation on top of it. A pipeline column is a view. A state is a contract.</p>
+
+<h2>2. The mechanism</h2>
+
+<p>A finite state machine is four things: a set of named states, a set of events, a transition table saying which event moves you from which state to which state, and a rule that anything not in the table is rejected. That's it. The power isn't in the states. It's in the rejection.</p>
+
+<p>Once you have that, you notice something about your funnel: the money doesn't live in the states, it lives on the edges. Nobody gets billed for being in the "quoted" state. They get billed by the transition that produces an invoice. Revenue is an edge. A refund is an edge. A follow-up email is an edge. So if you want to control what your business does with money and with a customer's inbox, you control edges, not labels.</p>
+
+<pre>
+  EVENTS (what may fire)          STATES (where a record may be)
+  ----------------------          ------------------------------
+
+        intake_received
+             |
+             v
+        [ LEAD ] ---- quote_sent ----&gt; [ QUOTED ]
+             |                              |
+             |                              +-- client_accepts --&gt; [ CONFIRMED ]
+             |                              |                            |
+             |                              |                       work_complete
+             |                              |                            |
+             |                              |                            v
+             |                              |                      [ INVOICED ]
+             |                              |                            |
+             |                              |                     payment_received
+             |                              |                            |
+             |                              |                            v
+             |                              |                       [ PAID ]
+             |                              |
+             +-- disqualified --+           +-- client_declines --&gt; [ DECLINED ]
+                                |                                       |
+                                v                                       |
+                           [ CLOSED ] &lt;-----------------------------------+
+
+  EDGES THAT DO NOT EXIST (rejected, logged, paged):
+    DECLINED --&gt; INVOICED        (the one that burned me)
+    LEAD     --&gt; INVOICED        (no quote, no bill)
+    QUOTED   --&gt; PAID            (skips confirmation and invoice)
+    CLOSED   --&gt; anything        (terminal means terminal)
+</pre>
+
+<p><em>Look at the bottom block, not the top. The value of this diagram is the list of transitions that are not drawn: those are the ones the code refuses, and refusing them is the entire feature.</em></p>
+
+<p>Three mechanical details make the difference between a diagram and a guarantee.</p>
+
+<h3>The transition is the only write path</h3>
+
+<p>No job sets state directly. Nothing does an update on the status field. Every change goes through one function that takes the current state, the event, and the record, checks the table, and either commits the new state or throws. If a worker wants to move a record, it asks for a transition. It doesn't get to assign.</p>
+
+<h3>The check happens at commit, not at read</h3>
+
+<p>This is the part people skip and it's the part that saved me. Checking the state when the job starts is useless, because the world can change while the job runs. The check has to happen at the moment of the write, against the current stored state, inside the same operation that records the send. Read early, verify late. If the record moved underneath you, the transition fails and nothing goes out.</p>
+
+<h3>Illegal means loud</h3>
+
+<p>An illegal transition is not a silent skip. It's not a warning in a log nobody reads. It stops the process and it tells a human, because an attempted decline-to-invoice means either my data is wrong or my logic is wrong, and both of those are things I want to know about the same day.</p>
+
+<h2>3. How I run it</h2>
+
+<p>I own and operate a real California field-services company, and I built the back office that runs it: intake, quoting, invoicing, follow-up, the phone assistant, field updates. So this isn't theory I read. It's the thing I fixed after it embarrassed me.</p>
+
+<p><strong>Every stage is a named state, not a label.</strong> Lead, quoted, confirmed, paid, declined, closed. Each one exists as a defined value the code knows about, with a transition table that says what may follow. When a record is in declined, the set of legal next moves does not include anything that generates an invoice. Not "shouldn't". Cannot. The function that would perform that move rejects it before anything is written.</p>
+
+<p><strong>The rule lives in code, not in a doc.</strong> In my own intake pipeline, "a decline never routes to an invoice" is a hard stop in code. I want to be clear about why I care so much about that distinction. I had the rule before. It was a note. Notes don't run. A note in a doc is a promise made by a person who might be on a jobsite when the worker fires. A guard clause is a promise made by the runtime, every single time, including at two in the morning when I'm asleep and a stale record is trying to do something dumb.</p>
+
+<p><strong>Every automated email carries a badge that must match the state.</strong> This is the piece that generalizes best and it's the piece nobody builds. Each outbound message template is stamped with the state it belongs to. The quote follow-up is badged for quoted. The invoice notice is badged for invoiced. The thank-you is badged for paid. At send time the system compares the badge on the message to the current state of the record. If they match, it goes. If they don't match, the send halts and it pages me instead of guessing.</p>
+
+<p>Instead of guessing. That phrase is the whole design philosophy. The tempting behavior is for the system to be helpful: "the record says declined but this invoice email was queued, the state probably just wasn't updated, I'll send it." No. A mismatch is a symptom, not an inconvenience. The system does not get to resolve ambiguity about money on its own. It stops and gets me.</p>
+
+<p><strong>The phone assistant produces events, not states.</strong> When a call comes in and something changes, the assistant doesn't reach in and set a status. It emits an event: the client accepted, the client declined, the client wants to reschedule. The state machine decides what that event means given where the record currently sits. Same for field updates coming in from the day's work. Every input channel proposes; one place decides. That's what keeps four different surfaces from disagreeing about where a job stands.</p>
+
+<p><strong>Terminal states are actually terminal.</strong> Closed doesn't transition. If a closed job needs to come back, that's a new record with a link to the old one, and a human does it deliberately. I lost time early on to records that ping-ponged out of closed and back into active because some automation thought it was being clever. Reopening is a decision. Decisions get people.</p>
+
+<p><strong>Rejections are a dataset.</strong> Every illegal transition attempt gets recorded: what state, what event, which worker, when. That log is the best bug report I have. When the same illegal move shows up over and over from the same place, that's not a data problem, that's a design problem, and it means there's a real business case my model doesn't cover yet. The rejections tell me where my funnel doesn't match reality. Twice now they've made me add a state I didn't know I needed.</p>
+
+<p>When I build this for other small businesses through Art3ry, the states change and the shape doesn't. Different trades have different middles. Everybody has an edge where money moves and a state where the customer said no, and the gap between those two is where the ugly mistakes live.</p>
+
+<h2>4. Tradeoffs</h2>
+
+<p>This is rigid, and rigidity costs you. Every legitimate weird case has to be modeled or it gets rejected, which means when a client pays before you invoice, or half-accepts a quote, or accepts by text while the record still says lead, somebody has to either add a transition or handle it by hand, and that friction lands on the person trying to close business today. Early on you will get paged for things that are fine. I've been paged over a mismatch that turned out to be nothing more than a race between two updates, and honestly that still beats the alternative, but it isn't free. There's also a real cost in discipline: the machine only works if nothing writes state directly, and the moment you allow one convenient shortcut for one quick fix, your guarantee is gone and you don't find out until it fails. If you're running a handful of jobs a month and you personally touch every single one, skip this. Do it in your head. This design pays off when automation is acting on records without a human looking, when multiple channels can change the same record, or when the failure is expensive, and billing someone who declined is expensive in a way that has nothing to do with the invoice amount. It costs you trust, and trust is the thing a small shop is actually selling.</p>
+
+<h2>Takeaway</h2>
+<ul>
+  <li>Write down your states and your transition table, then write down the transitions that must be impossible, because that second list is your actual safety spec.</li>
+  <li>Put every state change behind one function that validates at commit time, so no worker can assign a status directly and no stale read can cause a send.</li>
+  <li>Badge every automated message with the state it belongs to, and halt the send on a mismatch instead of letting the system guess.</li>
+</ul>
+
+<p><strong>One line: a funnel isn't stages, it's edges, and the edges that carry money need to be the ones your code refuses to take by accident.</strong></p>
+
+<p>Jesse</p>
+  </div>
+</article>
+<section class="related" style="max-width:760px;margin:0 auto;padding:8px 24px 8px;"><h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(20px,2.6vw,26px);letter-spacing:-0.02em;margin:0 0 18px;">Keep reading</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;"><a href="/2026/09/15/rate-limits-that-don-t-punish-your-best-customer-429-retry/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">Rate Limits That Don&#x27;t Punish Your Best Customer: 429, Retry-After, Per-Tenant Quotas</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Sep 2026</span></a><a href="/2026/09/12/queues-fundamentals-what-a-queue-buys-you-and-what-it-costs/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#7C6AE2,#4FA6D6);">Architecture</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">Queues Fundamentals: What a Queue Buys You and What It Costs</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Sep 2026</span></a><a href="/2026/09/09/consistency-models-explained-what-eventually-consistent/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#7C6AE2,#4FA6D6);">Architecture</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">Consistency Models Explained: What Eventually Consistent Means for Your Inbox</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Sep 2026</span></a></div></section>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>
