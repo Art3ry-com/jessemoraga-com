@@ -62,4 +62,5 @@
 <url><loc>https://jessemoraga.com/2026/09/15/rate-limits-that-don-t-punish-your-best-customer-429-retry/</loc><lastmod>2026-09-15</lastmod></url>
 <url><loc>https://jessemoraga.com/2026/09/17/your-funnel-is-a-state-machine/</loc><lastmod>2026-09-17</lastmod></url>
 <url><loc>https://jessemoraga.com/2026/09/21/retries-backoff-and-jitter-why-1-000-clients-retrying-at/</loc><lastmod>2026-09-21</lastmod></url>
+<url><loc>https://jessemoraga.com/2026/09/23/the-idempotency-key-header-how-payment-apis-make-post-safe/</loc><lastmod>2026-09-23</lastmod></url>
 </urlset>
