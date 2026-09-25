@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Follow-Up Automation Is a Queue: Delays, Retries, and the Stop Condition | Jesse Moraga</title>
+<meta name="description" content="Follow-up automation is a queue, not a calendar. Why every drip needs an exit transition, what happens without one, and how I fixed a 16-email loop.">
+<meta name="author" content="Jesse Moraga">
+<link rel="canonical" href="https://jessemoraga.com/2026/09/25/follow-up-automation-is-a-queue-delays-retries-and-the-stop/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/09/25/follow-up-automation-is-a-queue-delays-retries-and-the-stop/">
+<meta property="og:title" content="Follow-Up Automation Is a Queue: Delays, Retries, and the Stop Condition">
+<meta property="og:description" content="Follow-up automation is a queue, not a calendar. Why every drip needs an exit transition, what happens without one, and how I fixed a 16-email loop.">
+<meta property="og:image" content="https://jessemoraga.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-09-25T08:00:00-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Follow-Up Automation Is a Queue: Delays, Retries, and the Stop Condition">
+<meta name="twitter:description" content="Follow-up automation is a queue, not a calendar. Why every drip needs an exit transition, what happens without one, and how I fixed a 16-email loop.">
+<meta name="twitter:image" content="https://jessemoraga.com/og-default.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#FFFFFF;background:#000000;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#C9C5B6}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#FFFFFF}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#FFFFFF}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img{max-width:100%;height:auto;border-radius:14px;display:block;margin:24px auto}
+  .post-content iframe{max-width:100%;width:100%;aspect-ratio:16/9;border:0;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#C9BEF5;padding:2px 7px;border-radius:6px}
+  .related a:hover{transform:translateY(-3px)}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Follow-Up Automation Is a Queue: Delays, Retries, and the Stop Condition", "description": "Follow-up automation is a queue, not a calendar. Why every drip needs an exit transition, what happens without one, and how I fixed a 16-email loop.", "datePublished": "2026-09-25T08:00:00-07:00", "dateModified": "2026-09-25T08:00:00-07:00", "articleSection": "Business", "inLanguage": "en", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://jessemoraga.com/2026/09/25/follow-up-automation-is-a-queue-delays-retries-and-the-stop/"}, "url": "https://jessemoraga.com/2026/09/25/follow-up-automation-is-a-queue-delays-retries-and-the-stop/", "image": "https://jessemoraga.com/og-default.png", "author": {"@type": "Person", "name": "Jesse Moraga", "url": "https://jessemoraga.com", "@id": "https://jessemoraga.com/#jesse"}, "publisher": {"@type": "Person", "name": "Jesse Moraga", "@id": "https://jessemoraga.com/#jesse"}}</script>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(0,0,0,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#B2AD99; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#4FA6D6,#66D9EF);">Business</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">By Jesse Moraga &middot; Sep 25, 2026 &middot; 11 min read</span>
+    </div>
+  </div>
+  <div style="max-width:820px; margin:0 auto; padding:8px 24px 40px;">
+<h1>Follow-Up Automation Is a Queue: Delays, Retries, and the Stop Condition</h1>
+
+<p class="deck">A follow-up sequence without a terminal state isn't marketing, it's a loop that bills your reputation until someone notices.</p>
+
+<p>One client of mine got the same "your case is complete" email sixteen times in twenty-four hours. Sixteen. A dedup guard eventually caught it, but by then the damage was done, and the damage wasn't technical, it was that a real person opened their inbox and watched a machine stutter at them all day.</p>
+
+<p>I built that sequence. Nobody else to blame. And when I went in to look at it I found the thing that I now check first in every automation I touch: there was no state that meant <em>stop</em>.</p>
+
+<p><strong>In this post:</strong></p>
+
+<ul>
+  <li>Why a drip written as a calendar quietly turns into an infinite loop</li>
+  <li>The queue model: enqueue, delay, tick, guard, exit</li>
+  <li>How my own closeout sequence actually broke, and what the real fix was</li>
+  <li>When you shouldn't automate the follow-up at all</li>
+</ul>
+
+<h2>1. Why it breaks</h2>
+
+<p>Most people build follow-up the way they'd build a wall calendar. Day 0 send the intro. Day 2 send the reminder. Day 5 send the "just checking in". Day 9 the last one, with the slightly sad subject line. That's how <a href="https://en.wikipedia.org/wiki/Drip_marketing">the classic drip marketing model</a> gets described, and as a description of intent it's fine. As an implementation it's a trap, because a calendar describes what to send, not when to stop, and stopping is the only part that requires you to think.</p>
+
+<p>Here's the failure in one sentence: a calendar-shaped drip asks "has enough time passed?" when it should be asking "is this still true?"</p>
+
+<p>Time passing is a cheap condition. It's always true eventually. So if your only gate is a timer, and something downstream resets or re-evaluates, the timer is true again, and the message goes out again, and nothing in the system has an opinion about whether that's correct. The sequence has no memory of having finished, because finishing was never modeled. It only ever modeled starting.</p>
+
+<p>Then there's the second half, the part that actually hurts: dead leads. A lead goes cold. They bought from someone else, or the job evaporated, or they blocked your number and moved on with their life. The drip doesn't know that. The drip knows the clock. So it keeps firing into a void, and your sender reputation slowly degrades, and your reply-rate metrics get diluted by thousands of sends to people who were never going to answer, and you start making decisions off numbers that are mostly noise from the dead.</p>
+
+<p>I'll say the unpopular thing. Most of the follow-up automation I see people bragging about is a send loop with a manual off switch, and the manual off switch is a human noticing. That's not automation. That's a cron job with a babysitter. If your process for stopping is "someone will see it in the inbox and unsubscribe them", you built half a system and shipped the half that talks.</p>
+
+<h2>2. The mechanism</h2>
+
+<p>The mental model that fixes this is: a follow-up sequence is a queue with a state machine attached to each item, not a list of scheduled sends.</p>
+
+<p>Every item in the queue has four things. A payload, which is the message. A <em>next fire time</em>, which is the delay. A <em>state</em>, which is where this lead is in the sequence. And a <em>terminal set</em>, which is the list of states that mean this item leaves the queue and never comes back.</p>
+
+<p>The worker runs on a tick. Every tick it pulls everything whose next fire time has passed, and for each one it evaluates guards before it does anything else. Guards are questions about the world, not about the clock: did they reply, did they pay, did the job close, did they opt out, have we already sent this exact thing. If any guard says stop, the item transitions to a terminal state and gets dequeued. If no guard says stop, it sends, increments the step, computes the next delay, and goes back in the queue. If it's on the last step and nothing stopped it, it still transitions to terminal, because "we ran out of things to say" is a legitimate ending.</p>
+
+<pre>
+  ENQUEUE
+     |
+     v
+  +-----------+      tick       +--------------------+
+  |  PENDING  |---------------->|  EVALUATE GUARDS   |
+  |  (delay)  |  fire_at <= now |                    |
+  +-----------+                 |  replied?          |
+     ^                          |  paid / closed?    |
+     |                          |  opted out?        |
+     |  re-enqueue              |  already sent?     |
+     |  step+1                  |  max steps hit?    |
+     |  fire_at = now + delay   +--------------------+
+     |                            |              |
+     |                     no ----+              +---- yes
+     |                     |                           |
+     |                     v                           v
+     |              +-------------+            +----------------+
+     +--------------|    SEND     |            |    TERMINAL    |
+                    +-------------+            |  (dequeued)    |
+                          |                    |                |
+                          |  step == max?      | REPLIED        |
+                          +------------------->| CONVERTED      |
+                                               | OPTED_OUT      |
+                                               | EXHAUSTED      |
+                                               | SUPPRESSED     |
+                                               +----------------+
+                                                 no path back
+</pre>
+
+<p><em>Look at the right-hand box and notice there's no arrow leaving it. That's the whole point. A terminal state is terminal because nothing in the system can transition out of it, not because nobody happened to write code that does.</em></p>
+
+<p>Three details in that diagram do the real work, and they're the three people skip.</p>
+
+<h3>Guards run before the send, not after</h3>
+
+<p>Obvious when you say it, constantly violated in practice. A lot of tools check the stop condition when the item is scheduled, then send whatever was scheduled when the timer pops. That gap, between scheduling and sending, is where every awkward message lives. The customer replied Tuesday morning. The "haven't heard from you" was scheduled Monday. It goes out Tuesday afternoon anyway, and now you look like you're not reading your own mail.</p>
+
+<p>Evaluate at fire time. Always. The queue item is a request to reconsider, not a promise to send.</p>
+
+<h3>Terminal states are named, plural, and written down</h3>
+
+<p>"Done" isn't a state, it's a shrug. I want to know <em>why</em> it ended, because the reasons are operationally different. REPLIED means a human is now handling it. CONVERTED means the job is real and the sequence did its job. OPTED_OUT means never contact this person on this channel again, which is a stronger claim than the others and has to outlive the sequence. EXHAUSTED means we said everything we had to say and they never answered, and that's the state your reporting should actually care about. SUPPRESSED means something upstream, a bounce, a bad address, a duplicate record, made the item invalid.</p>
+
+<p>If all of those collapse into one boolean called <code>is_active</code>, you lose the ability to ask good questions later, and worse, you make it easy for some other process to flip the boolean back.</p>
+
+<h3>Retries and steps are different things</h3>
+
+<p>This one causes real bugs. A retry is "the send failed, try the same send again". A step is "the send succeeded, now advance the sequence". If you use the same counter for both, a transient failure at the mail provider eats one of your steps, or a successful send gets retried because the acknowledgement got lost. Keep two counters. Cap the retry counter hard, three attempts with backoff is plenty, and route the exhausted retries to SUPPRESSED rather than back into PENDING.</p>
+
+<h2>3. How I run it</h2>
+
+<p>I own a field-services company here in California and I built the whole back office for it myself: intake, quoting, invoicing, follow-up, the phone assistant, field updates. Follow-up is the part that touches the most people, which means it's the part where being wrong is loudest.</p>
+
+<p>So let me tell you exactly how I learned this, because I didn't learn it from a blog post, I learned it from a client's inbox.</p>
+
+<p>I had a closeout sequence. When a case wrapped, the system was supposed to send a "your case is complete" message, with the summary, the documents, the whole thing. Nice and clean. Except the closeout email had no terminal state. The completion condition was evaluated on a tick, and the condition stayed true, because of course it did, the case <em>was</em> complete, that's not a thing that stops being true. So on every tick the system looked at a complete case, saw no record that satisfied it, and generated the message again.</p>
+
+<p>One client received that same email sixteen times in twenty-four hours before a dedup guard caught it and shut the thing up.</p>
+
+<p>Now here's the part I actually want you to take away. My first instinct, and I'd bet it's yours, was to go delete the pending drafts. Clear the queue. Make the bad thing stop appearing. And that does make it stop appearing, for about as long as it takes the next tick to run, because deleting a bad draft without answering the underlying state just regenerates it. The draft wasn't the bug. The draft was a symptom of a state machine that had an entry condition and no exit. You can mop the floor all day, the pipe is still open.</p>
+
+<p>The fix was giving the sequence an exit transition. Not a filter, not a rate limit, not a smarter dedup key. An actual state the case could move into that meant <em>this sequence is finished for this record, forever</em>, and a worker that checks for that state before it does anything else. Once "complete and notified" was a thing the system could represent, the loop had somewhere to end.</p>
+
+<p>The dedup guard stayed, by the way. I didn't rip it out. Guards are cheap and they're the seatbelt, not the brakes. But I stopped treating it as the mechanism, because a dedup guard catching a runaway loop is the system telling you something upstream is unmodeled, and if you let it, that guard will happily suppress the sixteenth copy of a bug you never fixed for the next two years.</p>
+
+<p>The other things I run now, all downstream of that incident:</p>
+
+<ul>
+  <li><strong>Every sequence gets its terminal set defined before I write a single message.</strong> Literally before I write the copy. If I can't list the ways this ends, I don't know what I'm building, I know what I'm hoping.</li>
+  <li><strong>Guards evaluate at fire time against live records,</strong> not against a snapshot taken when the item was enqueued. Quoting, invoicing, and follow-up all read the same case state, so a payment landing kills the payment reminder without anybody telling it to.</li>
+  <li><strong>Opt-out lives above the sequence, not inside it.</strong> It's a suppression check every outbound send passes through regardless of which sequence asked. A stop condition that only one sequence knows about is a stop condition that will eventually be forgotten by a sequence you write next year.</li>
+  <li><strong>Outbound gets logged with the sequence, step, and the guard result that let it through.</strong> When something goes sideways I want to read why the system decided to talk, not just that it did. "Sent at 3:04" tells me nothing. "Sent at 3:04, step 2 of 4, replied=false, paid=false, dedup_key=miss" tells me exactly where to look.</li>
+  <li><strong>Exhausted leads go somewhere I can see them.</strong> EXHAUSTED isn't the trash, it's a list. That list is the most honest marketing report I have, because it's the set of people I said everything to and who said nothing back, and you learn more from that than from open rates.</li>
+</ul>
+
+<p>The phone assistant follows the same shape, which surprised me a little the first time I wired it. A call attempt is a queue item. Reached-a-human is a terminal state. Voicemail-left is a step. Number-disconnected is SUPPRESSED, and it has to write back to the record so the email side doesn't cheerfully keep going on a channel that's already proven the contact is stale. Channels that don't share a stop condition will contradict each other in front of the customer, and the customer doesn't experience your architecture, they experience a company that can't keep its story straight.</p>
+
+<h2>4. Tradeoffs</h2>
+
+<p>Honest version: this is more machinery than most follow-up needs, and I've watched people, including me, build a full state machine for a sequence that sends two emails to nine people a month. If your volume is genuinely small and every lead passes under a human's eyes anyway, a shared inbox and a snoozed thread will outperform anything you build, because the human is the guard and humans are very good guards right up until there are more than a few dozen of them. The other cost is rigidity: a strict terminal set means edge cases get stuck. Someone lands in EXHAUSTED, then calls back three weeks later, and now you need a deliberate re-enqueue path with its own rules, which is real work and also exactly the kind of work people skip, and then they widen the terminal conditions to make the stuck case go away, and congratulations, the exit is now a revolving door. The rule I use: automate the follow-up when the volume exceeds what you'd notice going wrong. If you'd have spotted sixteen duplicate emails inside an hour, you don't need this yet. If it took you a day, you needed it yesterday.</p>
+
+<h2>Takeaway</h2>
+
+<ul>
+  <li>Define the terminal states for a sequence before you write a word of the message copy.</li>
+  <li>Evaluate stop conditions at fire time against live data, never at schedule time.</li>
+  <li>When a bad message appears, fix the state that generated it instead of deleting the draft.</li>
+</ul>
+
+<p><strong>One line: a sequence you can't prove will stop is a sequence that won't.</strong></p>
+
+<p>Jesse</p>
+  </div>
+</article>
+<section class="related" style="max-width:760px;margin:0 auto;padding:8px 24px 8px;"><h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(20px,2.6vw,26px);letter-spacing:-0.02em;margin:0 0 18px;">Keep reading</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;"><a href="/2026/09/23/the-idempotency-key-header-how-payment-apis-make-post-safe/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">The Idempotency-Key Header: How Payment APIs Make POST Safe to Retry</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Sep 2026</span></a><a href="/2026/09/21/retries-backoff-and-jitter-why-1-000-clients-retrying-at/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#7C6AE2,#4FA6D6);">Architecture</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">Retries, Backoff, and Jitter: Why 1,000 Clients Retrying at Once Is an Outage</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Sep 2026</span></a><a href="/2026/09/17/your-funnel-is-a-state-machine/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#4FA6D6,#66D9EF);">Business</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">Your Funnel Is a State Machine</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Sep 2026</span></a></div></section>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>
