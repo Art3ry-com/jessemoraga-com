@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rate Limiting Fundamentals: The Token Bucket Explained With a Front Desk | Jesse Moraga</title>
+<meta name="description" content="Token bucket rate limiting explained with a front desk analogy: how tokens refill at a fixed rate, why bursts are separate, and how I run it.">
+<meta name="author" content="Jesse Moraga">
+<link rel="canonical" href="https://jessemoraga.com/2026/10/29/rate-limiting-fundamentals-the-token-bucket-explained-with-a/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/10/29/rate-limiting-fundamentals-the-token-bucket-explained-with-a/">
+<meta property="og:title" content="Rate Limiting Fundamentals: The Token Bucket Explained With a Front Desk">
+<meta property="og:description" content="Token bucket rate limiting explained with a front desk analogy: how tokens refill at a fixed rate, why bursts are separate, and how I run it.">
+<meta property="og:image" content="https://jessemoraga.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-10-29T08:00:00-07:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rate Limiting Fundamentals: The Token Bucket Explained With a Front Desk">
+<meta name="twitter:description" content="Token bucket rate limiting explained with a front desk analogy: how tokens refill at a fixed rate, why bursts are separate, and how I run it.">
+<meta name="twitter:image" content="https://jessemoraga.com/og-default.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#FFFFFF;background:#000000;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#C9C5B6}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#FFFFFF}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#FFFFFF}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img{max-width:100%;height:auto;border-radius:14px;display:block;margin:24px auto}
+  .post-content iframe{max-width:100%;width:100%;aspect-ratio:16/9;border:0;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#C9BEF5;padding:2px 7px;border-radius:6px}
+  .related a:hover{transform:translateY(-3px)}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Rate Limiting Fundamentals: The Token Bucket Explained With a Front Desk", "description": "Token bucket rate limiting explained with a front desk analogy: how tokens refill at a fixed rate, why bursts are separate, and how I run it.", "datePublished": "2026-10-29T08:00:00-07:00", "dateModified": "2026-10-29T08:00:00-07:00", "articleSection": "Architecture", "inLanguage": "en", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://jessemoraga.com/2026/10/29/rate-limiting-fundamentals-the-token-bucket-explained-with-a/"}, "url": "https://jessemoraga.com/2026/10/29/rate-limiting-fundamentals-the-token-bucket-explained-with-a/", "image": "https://jessemoraga.com/og-default.png", "author": {"@type": "Person", "name": "Jesse Moraga", "url": "https://jessemoraga.com", "@id": "https://jessemoraga.com/#jesse"}, "publisher": {"@type": "Person", "name": "Jesse Moraga", "@id": "https://jessemoraga.com/#jesse"}}</script>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(0,0,0,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#B2AD99; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#7C6AE2,#4FA6D6);">Architecture</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">By Jesse Moraga &middot; Oct 29, 2026 &middot; 8 min read</span>
+    </div>
+  </div>
+  <div style="max-width:820px; margin:0 auto; padding:8px 24px 40px;">
+<h1>Rate Limiting Fundamentals: The Token Bucket Explained With a Front Desk</h1>
+
+<p class="deck">Rate and burst are two different limits, and the token bucket is the cheapest way to set both without lying to your users.</p>
+
+<p>Picture a front desk with a stack of appointment cards. One new card gets set down every few minutes, and the stack tops out at some height because the desk is only so deep. If nobody's come in for an hour, there's a pile waiting and the next four people walk straight through. If the stack's empty, you wait for the next card.</p>
+
+<p>That's a token bucket. That's the whole thing. And the reason it matters is that most people building an API only think about the average, so they write "100 requests per minute" in the docs and then get surprised when a legitimate customer sends 40 in three seconds and gets a wall of 429s.</p>
+
+<p><strong>In this post:</strong></p>
+
+<ul>
+  <li>Why a single "requests per minute" number breaks in practice</li>
+  <li>How the token bucket separates refill rate from burst size</li>
+  <li>How I use it in my own back office, including on things that aren't HTTP at all</li>
+  <li>When a token bucket is the wrong tool</li>
+</ul>
+
+<h2>1. Why it breaks</h2>
+
+<p>Real traffic is lumpy. Nobody sends you a smooth, evenly spaced stream of requests, because the world doesn't work that way: a page loads and fires six calls at once, a sync job wakes up and pushes everything it buffered overnight, a customer taps the submit button three times because the spinner looked frozen. The average over a minute can be perfectly reasonable while the shape of it is a cliff.</p>
+
+<p>So you reach for the obvious thing, a counter that resets. Fixed window. Count requests in the current minute, reject past 100, zero it out when the clock ticks. It's easy and it's wrong in a specific way: a client can send 100 at 11:00:59 and 100 more at 11:01:00 and you just took 200 requests in two seconds while your dashboard swears nobody exceeded the limit. The window boundary is a free lunch and clients find it, usually by accident.</p>
+
+<p>The other failure is the opposite. You get strict, you enforce a hard minimum gap between requests, and now your well-behaved client that wants to send five calls to render one screen gets throttled for being normal. You've punished burstiness that costs you nothing, because the bucket had room and you refused to use it.</p>
+
+<p>Here's my opinion, and it's mild criticism of a very common practice: publishing one number as your rate limit is a documentation bug. "1000 requests per hour" tells me nothing about whether I can send ten in a row. Two numbers, rate and burst, and suddenly every integrator knows exactly how to build against you.</p>
+
+<h2>2. The mechanism</h2>
+
+<p>A token bucket has two parameters and one piece of state. The parameters: refill rate, how fast tokens drip in, and capacity, how many tokens the bucket can hold. The state: how many tokens are in there right now. Every request costs a token. If there's a token, you spend it and the request goes through. If there isn't, you reject or you queue.</p>
+
+<p>Capacity is your burst. Refill rate is your sustained throughput. They are independent dials and that's the entire point. The <a href="https://en.wikipedia.org/wiki/Token_bucket">token bucket algorithm as described on Wikipedia</a> goes further into the networking lineage, where it was used to shape packet flows, but the shape of it is identical whether you're policing bytes on a wire or calls to a quoting endpoint.</p>
+
+<pre>
+  TOKEN BUCKET
+
+  refill: 1 token every 6s  ───────┐
+  (sustained rate)                 │
+                                   ▼
+                        ┌────────────────────┐
+                        │  ● ● ● ● ●         │  capacity = 10
+                        │                    │  (BURST)
+                        └─────────┬──────────┘
+                                  │ overflow tokens
+                                  │ are discarded ──► (wasted)
+                                  │
+         request arrives ─────────┤
+                                  │
+                    ┌─────────────┴──────────────┐
+                    │                            │
+            tokens &gt; 0?                   tokens == 0?
+                    │                            │
+             spend 1 token              reject (429) or queue
+             ALLOW                      with Retry-After
+                    │
+                    ▼
+              downstream work
+
+
+  IDLE PERIOD        BURST
+  ───────────        ─────
+  t=0   ●●●●●●●●●●   10 saved up
+  t=1   ●●●●●        5 requests fire instantly, allowed
+  t=2   ●            4 more fire, allowed, bucket near empty
+  t=3   (empty)      next request waits ~6s for refill
+</pre>
+
+<p><em>Look at the bottom block: the saved tokens are what pay for the burst, and once they're spent the client drops to the refill rate. Nothing else changed.</em></p>
+
+<p>A few properties fall out of this for free. Idle clients accumulate credit, up to capacity and no further, so you can't bank a month of quiet and then detonate. Steady-state throughput is exactly the refill rate, no window boundary to exploit, because there's no window. And the state is tiny: a token count and a last-updated timestamp, which means you don't actually store a timer, you just compute how many tokens should have arrived since you last looked and clamp to capacity. Lazy refill. That's the implementation trick that makes this cheap enough to run per customer, per endpoint, per whatever.</p>
+
+<p>Worth knowing: the token bucket's cousin, the leaky bucket, smooths output to a constant rate and tolerates no burst at all. Both are useful. They answer different questions. If you want a hard ceiling on how fast work leaves your system, leaky. If you want to permit honest bursts while capping the average, token.</p>
+
+<h2>3. How I run it</h2>
+
+<p>My own company is a California field-services outfit and I built the back office that runs it, so I'm not theorizing here, I've had to pick numbers and live with them.</p>
+
+<p>The obvious place is outbound. Anything my system calls that I don't own gets a bucket in front of it, because the vendor has their own limits and I'd rather shape my traffic than discover theirs during a busy morning. The refill rate sits comfortably under whatever they publish, the capacity is sized to the biggest legitimate clump I actually produce, which for me is usually a batch of follow-ups going out together after a job closes. When the bucket empties, the caller doesn't fail, it waits. Outbound rate limiting with a queue behind it is a politeness feature, not an error path.</p>
+
+<p>The less obvious place, and the one I'd push harder on, is that half of my buckets have nothing to do with HTTP. The phone assistant has a bucket on how many times it will attempt to reach the same person in a day, because an assistant that doesn't get tired is an assistant that will absolutely harass a customer on your behalf. Follow-up messaging has a bucket per contact, with a small capacity so a legitimate back-and-forth flows naturally and a slow refill so nobody gets drip-fed into the spam folder. Field update notifications have one. Any loop that can run without a human watching it gets a token bucket, and I treat that as a rule rather than a judgment call, because the failure mode of an unbounded automated loop is embarrassment in front of a customer, and that costs more than a rejected request ever will.
+
+<p>Per-key, not global. One noisy integration shouldn't starve everybody, so the bucket lives keyed to the identity doing the work: the customer, the contact, the vendor connection. Global buckets are a last-resort fuse, not your primary control.</p>
+
+<p>And when I reject, I say why and I say when. A limit response with no indication of how long to wait is just a mystery, and mysteries turn into retry storms, which is how a rate limiter becomes the cause of the outage it was supposed to prevent. Tell the client the ceiling, tell it the reset, let it behave.</p>
+
+<h2>4. Tradeoffs</h2>
+
+<p>The token bucket's generosity is also its risk: capacity is, by definition, permission to exceed your sustained rate for a moment, so if your downstream genuinely cannot survive a spike, say a database that falls over at a certain concurrency, then a burst allowance is a loaded gun and you want a leaky bucket or a straight concurrency limiter instead. Distributed enforcement is the other honest cost. The moment you run more than one instance you need the token count somewhere shared, and then you're paying a round trip per request or accepting sloppy approximation by splitting the bucket across nodes, neither of which is free. And none of this protects you from a single expensive request: one token for a trivial read and one token for a report that scans everything is a fiction, so either weight the cost per operation or accept that your limiter is measuring the wrong thing. If your traffic is already smooth and your real problem is a handful of brutal queries, rate limiting isn't your fix.</p>
+
+<h2>Takeaway</h2>
+
+<ul>
+  <li>Set two dials, refill rate for the sustained ceiling and capacity for the burst, and publish both.</li>
+  <li>Store a token count and a timestamp, compute the refill lazily, and key the bucket to the identity doing the work.</li>
+  <li>Put a bucket on every automated loop that can reach a human, not just on your HTTP endpoints.</li>
+</ul>
+
+<p><strong>One line: a rate limit without a burst number is only half a limit.</strong></p>
+
+<p>Jesse</p>
+  </div>
+</article>
+<section class="related" style="max-width:760px;margin:0 auto;padding:8px 24px 8px;"><h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(20px,2.6vw,26px);letter-spacing:-0.02em;margin:0 0 18px;">Keep reading</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;"><a href="/2026/10/27/api-versioning-without-breaking-customers-date-pinned/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">API Versioning Without Breaking Customers: Date-Pinned Versions Explained</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Oct 2026</span></a><a href="/2026/10/25/api-versioning-without-breaking-customers-date-pinned/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">API Versioning Without Breaking Customers: Date-Pinned Versions Explained</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Oct 2026</span></a><a href="/2026/10/23/api-versioning-without-breaking-customers-date-pinned/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">API Versioning Without Breaking Customers: Date-Pinned Versions Explained</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Oct 2026</span></a></div></section>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>
