@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Closing the Loop: Sending Paid Invoices Back to Google Ads as Conversions | Jesse Moraga</title>
+<meta name="description" content="Offline conversion import for Google Ads: capture the click ID at intake, upload the sale when the invoice is paid, and teach your ad account what actually pays.">
+<meta name="author" content="Jesse Moraga">
+<link rel="canonical" href="https://jessemoraga.com/2026/11/02/closing-the-loop-sending-paid-invoices-back-to-google-ads-as/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jessemoraga.com/2026/11/02/closing-the-loop-sending-paid-invoices-back-to-google-ads-as/">
+<meta property="og:title" content="Closing the Loop: Sending Paid Invoices Back to Google Ads as Conversions">
+<meta property="og:description" content="Offline conversion import for Google Ads: capture the click ID at intake, upload the sale when the invoice is paid, and teach your ad account what actually pays.">
+<meta property="og:image" content="https://jessemoraga.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-11-02T08:00:00-08:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Closing the Loop: Sending Paid Invoices Back to Google Ads as Conversions">
+<meta name="twitter:description" content="Offline conversion import for Google Ads: capture the click ID at intake, upload the sale when the invoice is paid, and teach your ad account what actually pays.">
+<meta name="twitter:image" content="https://jessemoraga.com/og-default.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Inter',system-ui,sans-serif;color:#FFFFFF;background:#000000;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:#C9B8FF;color:#1a1030}
+  .post-content{max-width:720px;margin:0 auto;padding:8px 24px 40px;font-size:18px;line-height:1.75;color:#C9C5B6}
+  .post-content h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,3.4vw,32px);letter-spacing:-0.02em;margin:40px 0 16px;color:#FFFFFF}
+  .post-content h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:22px;margin:30px 0 12px;color:#FFFFFF}
+  .post-content p{margin:0 0 22px}
+  .post-content ul,.post-content ol{margin:0 0 22px;padding-left:24px}
+  .post-content li{margin:0 0 8px}
+  .post-content a{color:#7A45D8;border-bottom:1px solid rgba(124,92,246,0.35)}
+  .post-content img{max-width:100%;height:auto;border-radius:14px;display:block;margin:24px auto}
+  .post-content iframe{max-width:100%;width:100%;aspect-ratio:16/9;border:0;border-radius:14px;display:block;margin:24px auto}
+  .post-content blockquote{margin:30px 0;padding:18px 24px;border-left:4px solid #9163EE;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(59,130,246,0.08));border-radius:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;line-height:1.4}
+  .post-content pre{overflow-x:auto;border-radius:14px;padding:18px 20px;background:#272620;color:#D8D4C4;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.7}
+  .post-content code{font-family:'JetBrains Mono',monospace;font-size:0.9em}
+  .post-content :not(pre)>code{background:rgba(124,92,246,0.12);color:#C9BEF5;padding:2px 7px;border-radius:6px}
+  .related a:hover{transform:translateY(-3px)}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Closing the Loop: Sending Paid Invoices Back to Google Ads as Conversions", "description": "Offline conversion import for Google Ads: capture the click ID at intake, upload the sale when the invoice is paid, and teach your ad account what actually pays.", "datePublished": "2026-11-02T08:00:00-08:00", "dateModified": "2026-11-02T08:00:00-08:00", "articleSection": "Business", "inLanguage": "en", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://jessemoraga.com/2026/11/02/closing-the-loop-sending-paid-invoices-back-to-google-ads-as/"}, "url": "https://jessemoraga.com/2026/11/02/closing-the-loop-sending-paid-invoices-back-to-google-ads-as/", "image": "https://jessemoraga.com/og-default.png", "author": {"@type": "Person", "name": "Jesse Moraga", "url": "https://jessemoraga.com", "@id": "https://jessemoraga.com/#jesse"}, "publisher": {"@type": "Person", "name": "Jesse Moraga", "@id": "https://jessemoraga.com/#jesse"}}</script>
+</head>
+<body>
+<header style="position:sticky; top:0; z-index:80; backdrop-filter:saturate(160%) blur(18px); -webkit-backdrop-filter:saturate(160%) blur(18px); background:rgba(0,0,0,0.74); border-bottom:1px solid rgba(124,92,246,0.12);"><nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:20px;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; letter-spacing:-0.02em;"><span style="width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#9163EE,#4FA6D6 60%,#66D9EF); box-shadow:0 4px 14px rgba(99,102,241,0.45); display:inline-block;"></span>Jesse Moraga</a><div style="display:flex; align-items:center; gap:24px; margin-left:auto; font-size:14.5px; font-weight:500; color:#B2AD99; flex-wrap:wrap;"><a href="/blog.html" style="color:#7A45D8; font-weight:600;">Writing</a><a href="https://art3ry.com">Art3ry</a><a href="/#music">Music</a><a href="/#about">About</a><a href="https://art3ry.com" style="padding:9px 16px; border-radius:999px; color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; background:linear-gradient(135deg,#9163EE,#4FA6D6); box-shadow:0 6px 20px rgba(99,102,241,0.4);">Work with me &rarr; Art3ry</a></div></nav></header>
+<article style="position:relative;">
+  <div style="max-width:760px; margin:0 auto; padding:clamp(34px,5vw,64px) 24px clamp(8px,2vw,16px);">
+    <a href="/blog.html" style="font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#7A45D8;">&larr; all writing</a>
+    <div style="margin-top:18px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:999px; background:linear-gradient(135deg,#4FA6D6,#66D9EF);">Business</span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#A39D8C;">By Jesse Moraga &middot; Nov 2, 2026 &middot; 11 min read</span>
+    </div>
+  </div>
+  <div style="max-width:820px; margin:0 auto; padding:8px 24px 40px;">
+<h1>Closing the Loop: Sending Paid Invoices Back to Google Ads as Conversions</h1>
+
+<p class="deck">Your ad account optimizes for whatever you tell it is a win, so tell it the truth: the paid invoice, not the form fill.</p>
+
+<p>A form fill is a guess. Somebody typed their name into a box, which is nice, but nobody has handed you money yet and the algorithm bidding your budget has no idea whether that person was a real job or a tire kicker who found you at 11pm and ghosted. So every bid it makes is built on a lie you fed it. That's the whole problem, and the fix is older and less glamorous than people expect: you send the sale back.</p>
+
+<p><strong>In this post:</strong></p>
+
+<ul>
+<li>Why optimizing on form fills quietly trains your ad account to buy your worst leads</li>
+<li>The mechanism: click ID captured at intake, sale uploaded when the money lands</li>
+<li>How I run it in my own company, including the one flag that keeps a webhook from double counting</li>
+<li>Where this falls apart, and when I'd tell you not to bother</li>
+</ul>
+
+<h2>1. Why it breaks</h2>
+
+<p>Here's the shape of the failure. You run search ads. Somebody clicks, lands on your page, fills out the form. Your tag fires a conversion. Google records it, learns from it, and goes looking for more people who behave like that person.</p>
+
+<p>Except "that person" is a category that includes four very different humans. The one who books and pays. The one who wanted a number for an insurance claim and was never going to hire anybody. The one who is price shopping six companies and will take the cheapest. And the bot that fills out forms for fun. Your ad account weights all four identically, because from where it's standing they did the exact same thing: they submitted a form.
+
+</p>
+
+<p>So what happens over weeks is a slow drift. The keywords that produce a flood of cheap, low-intent form fills start looking fantastic on the dashboard. Cost per conversion drops. You feel good. Meanwhile the keywords that produce three leads a week, two of which turn into real paying work, look expensive and get starved. The algorithm is doing exactly what you asked. You just asked for the wrong thing.</p>
+
+<p>I'm not the type to blame the tool here. Smart Bidding is genuinely good at finding more of what you point it at. The problem is that most small businesses point it at the cheapest possible signal because that's the one that's easy to fire from a thank-you page, and then they complain that Google wasted their money. Google didn't waste it. You told it that a form fill was the finish line.</p>
+
+<p>And honestly, the common advice makes it worse. Half the agency playbooks out there say to count a phone call over 60 seconds as a conversion, or a page view of the contact page, or a chat open. Those are proxies stacked on proxies. Every layer of proxy between the signal and the money is another place for the account to get confused. The money is the only thing that isn't a proxy.</p>
+
+<h2>2. The mechanism</h2>
+
+<p>The mechanism is called offline conversion import, and the idea is simple enough that I think people skip it because it sounds too plain. Google hands you an identifier when someone clicks your ad. You store that identifier with the lead. Later, when that lead becomes revenue, you send the identifier back along with the conversion. Google matches it to the original click and credits the right keyword, the right ad, the right device, the right time of day.</p>
+
+<p>The identifier is the GCLID, the Google Click Identifier, appended to your landing page URL as a query parameter when auto-tagging is on. It's a long opaque string. It means nothing to you and everything to Google. There's a parallel one for Microsoft, and the newer Enhanced Conversions for Leads flow lets you match on hashed email instead if you'd rather not babysit a URL parameter, but the logic is identical either way. Google's own documentation on <a href="https://support.google.com/google-ads/answer/2998031">importing offline conversions from clicks</a> walks the setup, and I'd read it before you build anything, because the conversion action has to exist on their side before your upload has anywhere to land.</p>
+
+<p>The part that matters conceptually: this turns your ad account from an open loop into a closed one.</p>
+
+<pre>
+OPEN LOOP (what most people run)
+
+  Ad click ──► Landing page ──► Form fill ──► [tag fires]
+                                                  │
+                                                  ▼
+                                        Google learns: "WIN"
+                                                  │
+  ... job gets quoted, lost, never booked         │
+      invoice never exists                        │
+      Google never hears about it  ───X           ▼
+                                        Bids harder on this keyword
+
+
+CLOSED LOOP (what you want)
+
+  Ad click
+    │  gclid=Cj0KCQ...
+    ▼
+  Landing page ──► Intake form
+                      │  stores: gclid + timestamp + contact
+                      ▼
+                 Lead record ──► Quote ──► Job ──► INVOICE
+                      │                              │
+                      │                              │ marked PAID
+                      │                              ▼
+                      │                      Webhook fires
+                      │                              │
+                      │                   ┌──────────┴──────────┐
+                      │                   │ fired flag on       │
+                      │                   │ record already set? │
+                      │                   └──────────┬──────────┘
+                      │                     no │     │ yes
+                      │                        ▼     ▼
+                      │                     send   drop it
+                      │                        │
+                      └────── gclid ───────────┤
+                                               ▼
+                                   Offline conversion upload
+                                        (gclid + value + time)
+                                               │
+                                               ▼
+                                   Google learns: "REAL MONEY"
+                                               │
+                                               ▼
+                              Bids on keywords that produce invoices
+</pre>
+
+<p><em>Look at the two arrows leaving the lead record. The gclid goes in at intake and comes back out at payment, and the only thing between them is the fired flag that decides whether this upload has already happened.</em></p>
+
+<p>That gap between the two arrows is the whole game. In a small services business it might be a day. It might be three weeks, because the customer got a quote, thought about it, called their spouse, called you back, scheduled, got the work done, then paid net fifteen. Everything in between is just your business operating normally. The gclid sits there patiently in a database column waiting to be useful.</p>
+
+<p>Two implementation details that bite people. First, there's a lookback window on the match, so if your sales cycle runs long you can age out of it and Google will quietly reject the upload. Second, the conversion time you send has to be after the click time, which sounds obvious until you're backfilling historical data with sloppy timestamps and every row bounces.</p>
+
+<h2>3. How I run it</h2>
+
+<p>I own a field services company in California and I built the back office for it myself: intake, quoting, invoicing, follow-up, the phone assistant, field updates. So I'm not describing a theory I read about. I'm describing the thing that pays my mortgage.</p>
+
+<h3>Capture happens at intake, not later</h3>
+
+<p>Intake submissions in my system are attribution-matched to the click that brought them. That's the first half. When a form comes in, the record that gets created carries the click context with it, and that context rides along with that customer through every stage after. It isn't a separate analytics table I have to join against later and pray the timestamps line up. It's a field on the lead.</p>
+
+<p>This is the part people get wrong most often, and it's not a sophisticated mistake, it's just a sequencing mistake. They decide they want offline conversions six months into running ads, and then they go looking for the click data for leads that already came in, and it isn't there, because nobody wrote it down at the moment it existed. The gclid is only in the URL for one page load. If you don't grab it right then and stash it on the record, it's gone. You can't reconstruct it from a spreadsheet of names.</p>
+
+<p>So the rule I run by: capture is a first-class part of intake, same as the phone number. If the form can't save the click context, the form isn't done.</p>
+
+<h3>The sale fires at paid, not at booked</h3>
+
+<p>Every paid invoice in my system fires a purchase event. Not quoted. Not scheduled. Not "job completed." Paid. Money in the account, invoice marked closed, event fires.</p>
+
+<p>I picked that boundary on purpose and I'd defend it. Booked work falls through. People cancel, reschedule into oblivion, dispute, decide they want somebody else. If I counted booked jobs as conversions I'd be feeding my ad account a number that's optimistic by some unknown percentage that changes month to month, and then I'd be tuning bids against a fiction. Paid is the one state in the whole pipeline that can't be revised by someone changing their mind. It's the only honest one.</p>
+
+<p>The downside is latency, and it's real. Google doesn't hear about a job until the money clears, which means the bidding algorithm is always learning from a slightly stale picture of my business. I'll take it. Slow truth beats fast fiction, especially when the fiction is the thing deciding how to spend my ad budget.</p>
+
+<h3>The idempotency flag, which is the unglamorous part that actually matters</h3>
+
+<p>Here's the detail I'd put on a poster if I made posters. The purchase event in my system is idempotent on a "fired" flag stored directly on the record. Before anything goes out, the handler checks that flag. If it's set, the handler stops. If it isn't, the event goes out and the flag gets set.</p>
+
+<p>Why this exists: webhooks retry. That's not a bug in your payment processor, that's correct behavior. If the processor sends you a payment notification and doesn't get a clean response fast enough, maybe your server was restarting, maybe the network hiccuped, maybe your handler took too long doing something unrelated, it will send that notification again. Sometimes several times. A webhook that arrives twice is not an edge case, it's Tuesday.</p>
+
+<p>Without the flag, a retried webhook counts the sale twice. And the failure mode is nasty because it's silent. Nothing errors. Nothing logs red. Your conversion numbers are just quietly inflated by some unpredictable amount, and worse, they're inflated unevenly, because retries cluster around whatever was slow or flaky that day. So you don't just have wrong numbers, you have wrong numbers with a bias you can't characterize. You'll never find it by staring at the dashboard. It just looks like a good week.</p>
+
+<p>Storing the flag on the record itself, rather than in some separate dedupe cache with a TTL, means the guarantee is permanent and it lives where the thing it's protecting lives. If I pull up that invoice two years from now I can see that its conversion already went out. No expiry, no second system to keep alive, no cache to warm.</p>
+
+<h3>What the ad account learns</h3>
+
+<p>Because intake carries attribution and payment carries the event, the ad account ends up learning which keywords produced paying work rather than which keywords produced form fills. Those are not the same list. They have never been the same list in any account I've looked at.</p>
+
+<p>Some queries bring volume and almost no revenue. Some bring one lead a week that turns into real work nearly every time. On form-fill optimization, the first group wins and eats the budget. On revenue optimization, the ranking inverts. Same spend, same ads, completely different allocation, and the only thing that changed is which signal the account is chasing.</p>
+
+<p>That's the thing I want anyone reading this to take away. This is not an analytics upgrade. This is changing what the machine is hunting for.</p>
+
+<h2>4. Tradeoffs</h2>
+
+<p>This costs you real engineering, and if you don't have the volume to support a bidding algorithm it's wasted engineering. Smart Bidding wants a meaningful number of conversions to learn from, and if your business closes a handful of jobs a month, switching from form fills to paid invoices takes your conversion count from "barely enough" to "statistically nothing," and the algorithm will thrash. In that situation you're better off keeping form fills as the bidding signal, importing paid invoices as a secondary conversion action you only observe, and looking at the keyword report with your own eyes once a month. It's less elegant. It works fine at small scale. The other honest cost: you now have a data pipeline that can break quietly. The gclid column can stop getting populated because somebody redesigned the landing page and dropped the hidden field, and nothing will alert you, your conversions will just taper off into nothing while your ads keep running. Long sales cycles can blow past the match window. Offline attribution also means the customer has to come back through a channel you can tie to that record, so if half your work arrives by phone call and you're not capturing click context on those too, you're closing the loop on half your business and your data has a hole in exactly the shape of your best customers. Build the monitoring before you trust the numbers.</p>
+
+<h2>Takeaway</h2>
+
+<ul>
+<li>Capture the click identifier at the moment of intake and store it on the lead record, because it exists for one page load and then it's gone forever.</li>
+<li>Fire the conversion when the invoice is paid, not when the job is booked, so the signal you send can't be revised by somebody changing their mind.</li>
+<li>Make the upload idempotent on a flag stored on the record itself, because webhooks retry and double-counted revenue fails silently.</li>
+</ul>
+
+<p><strong>One line: your ad account will faithfully buy more of whatever you call a win, so make the win a paid invoice.</strong></p>
+
+<p>Jesse</p>
+  </div>
+</article>
+<section class="related" style="max-width:760px;margin:0 auto;padding:8px 24px 8px;"><h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(20px,2.6vw,26px);letter-spacing:-0.02em;margin:0 0 18px;">Keep reading</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;"><a href="/2026/10/31/speed-to-lead-is-a-systems-problem-not-a-hustle-problem/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#4FA6D6,#66D9EF);">Business</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">Speed to Lead Is a Systems Problem, Not a Hustle Problem</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Oct 2026</span></a><a href="/2026/10/29/rate-limiting-fundamentals-the-token-bucket-explained-with-a/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#7C6AE2,#4FA6D6);">Architecture</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">Rate Limiting Fundamentals: The Token Bucket Explained With a Front Desk</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Oct 2026</span></a><a href="/2026/10/27/api-versioning-without-breaking-customers-date-pinned/" style="display:flex;flex-direction:column;gap:9px;padding:18px;border-radius:16px;background:#111111;border:1px solid rgba(124,92,246,0.14);box-shadow:0 8px 24px rgba(99,102,241,0.08);transition:transform .25s;"><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#fff;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#9163EE,#4FA6D6);">Tech</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;line-height:1.25;">API Versioning Without Breaking Customers: Date-Pinned Versions Explained</span><span style="margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#A39D8C;">Oct 2026</span></a></div></section>
+<section style="max-width:760px; margin:0 auto; padding:8px 24px clamp(40px,5vw,60px);"><div style="position:relative; overflow:hidden; border-radius:24px; padding:clamp(28px,4vw,44px); background:linear-gradient(125deg,#2A2920,#6D44C2 40%,#2C8A9A); box-shadow:0 22px 56px rgba(74,46,180,0.4); text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#D9D5C5; text-transform:uppercase; letter-spacing:0.08em;">growth-as-a-service</div><h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3vw,34px); color:#fff; letter-spacing:-0.02em; margin:12px auto 0; max-width:22ch; line-height:1.15;">I build with AI so small businesses can take on the giants. Let me build yours.</h2><a href="https://art3ry.com" style="display:inline-flex; align-items:center; gap:9px; margin-top:22px; padding:15px 28px; border-radius:13px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; color:#2E2540; background:linear-gradient(135deg,#fff,#F0EDE1); box-shadow:0 12px 34px rgba(0,0,0,0.25);">Visit Art3ry <span style="font-family:'JetBrains Mono',monospace; color:#6D44C2;">&rarr; art3ry.com</span></a></div></section>
+<footer style="position:relative; overflow:hidden; background:linear-gradient(180deg,#222218,#1A1912); color:#D8D4C4;"><div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;"><a href="/" style="display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px; color:#fff;"><span style="width:24px; height:24px; border-radius:7px; background:linear-gradient(135deg,#9163EE,#66D9EF);"></span>Jesse Moraga</a><div style="display:flex; gap:22px; font-size:14px; flex-wrap:wrap;"><a href="/">Home</a><a href="/blog.html">Writing</a><a href="https://art3ry.com">Art3ry &rarr;</a><a href="mailto:jesse@jessemoraga.com">jesse@jessemoraga.com</a></div></div><div style="border-top:1px solid rgba(124,92,246,0.15); padding:18px 24px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#75715E;">&copy; 2026 Jesse Moraga &middot; built &amp; operated solo</div></footer>
+</body>
+</html>
